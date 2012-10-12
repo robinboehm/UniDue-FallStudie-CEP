@@ -1,6 +1,10 @@
 UniDue-FallStudie-CEP
 =====================
 
+Application Files are in the subfolder <b>application</b>.
+
+Following Commands you can use to get startet with the project.
+
 
 How to Build
 -----------------------
@@ -8,6 +12,7 @@ To build the war you need to execute the package goal.
 
 <code>mvn clean package</code>
 
+A new folder named target will be generated where you can find your artifact as .war file.
 
 Instant execution | Tomcat7 Maven Plugin
 -----------------------
