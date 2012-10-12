@@ -25,3 +25,10 @@ you are able to run it with the tomcat7 maven plugin directly from the shell.
 
 Tomcat starts at configured port ( Default 8080 ) 
 and you can reach it over the URL [http://localhost:8080](http://localhost:8080)
+
+
+Cosm Login Daten
+---------------------
+Username: robinb
+Password: Latape99
+API Key: 58zncCwUWvERGr31SYyKkwjhwN6SAKxzQWNKMUJYZFVtUT0g
