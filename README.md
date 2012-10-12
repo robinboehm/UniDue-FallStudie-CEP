@@ -5,6 +5,8 @@ Application Files are in the subfolder <b>application</b>.
 
 Following Commands you can use to get startet with the project.
 
+If you need some dependencies you can search them on [http://search.maven.org/](http://search.maven.org/)
+
 
 How to Build
 -----------------------
