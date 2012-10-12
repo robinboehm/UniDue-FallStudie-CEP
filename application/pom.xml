@@ -25,5 +25,12 @@
     </dependencies>
     <build>
         <finalName>UniDueCEP</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat.maven.plugin.version}</version>
+            </plugin>
+        </plugins>
     </build>
 </project>
