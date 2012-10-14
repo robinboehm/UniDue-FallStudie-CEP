@@ -30,16 +30,24 @@ and you can reach it over the URL [http://localhost:8080](http://localhost:8080)
 Cosm Login Daten
 ---------------------
 a)
+
 Username: robinb
+
 Password: Latape99
+
 API Key: 58zncCwUWvERGr31SYyKkwjhwN6SAKxzQWNKMUJYZFVtUT0g
 
+
 b)
+
 Username: futureLogistics
+
 Password: futureLogistics
 
 Googlemail 
 ---------------------
 (Liegt unter dem gemeinsamen COSM Account)
+
 Username: futurelogistics.ude@gmail.com
+
 Password: cosmcosm
