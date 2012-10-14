@@ -17,9 +17,10 @@ public class DefaultMouseListener implements MouseListener {
 			this.routeGenerator.saveRoute();
 		} else if (arg0.getComponent().getName().equals("clear")) {
 			this.routeGenerator.clear();
-		}
-		else if (arg0.getComponent().getName().equals("reload")) {
+		} else if (arg0.getComponent().getName().equals("reload")) {
 			this.routeGenerator.reloadRoutes();
+		} else if (arg0.getComponent().getName().equals("load")) {
+			this.routeGenerator.selectRoute();
 		}
 	}
 

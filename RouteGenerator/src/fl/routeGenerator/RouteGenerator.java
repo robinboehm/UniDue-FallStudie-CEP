@@ -2,6 +2,7 @@ package fl.routeGenerator;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -65,6 +66,7 @@ public class RouteGenerator extends JFrame {
 	private JButton clear;
 	private List<Environment> cosmRoutes;
 	private JComboBox<Environment> routeComboBox;
+	private Environment selectedEnvironment;
 
 	public RouteGenerator() {
 		GridBagConstraints c = new GridBagConstraints();
@@ -120,47 +122,53 @@ public class RouteGenerator extends JFrame {
 		c.gridy = 0;
 		c.fill = GridBagConstraints.NONE;
 		routeComboBox = new JComboBox<Environment>();
-		routeComboBox.addItemListener(new DefaultItemListener(this));
 		selectionPanel.add(routeComboBox, c);
 
-		JButton reloadButton = new JButton("Reload");
-		reloadButton.setName("reload");
-		reloadButton.addMouseListener(new DefaultMouseListener(this));
 		c.gridx = 1;
 		c.gridy = 1;
+		JButton reloadButton = new JButton("Reload List");
+		reloadButton.setName("reload");
+		reloadButton.addMouseListener(new DefaultMouseListener(this));
 		selectionPanel.add(reloadButton, c);
+
+		c.gridx = 1;
+		c.gridy = 2;
+		JButton loadButton = new JButton("Load");
+		loadButton.setName("load");
+		loadButton.addMouseListener(new DefaultMouseListener(this));
+		selectionPanel.add(loadButton, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		this.routeTable = new JTable();
 		this.routeTable.setModel(this.generateTableModel(null));
 		this.routeTable.setPreferredSize(new Dimension(300, 300));
-		this.routeTable.addKeyListener(new TreeKeyListener(this));
+		this.routeTable.addKeyListener(new TableKeyListener(this));
 
 		JScrollPane jsp = new JScrollPane(this.routeTable);
 		selectionPanel.add(jsp, c);
 
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		JLabel routeNameLabel = new JLabel("Route name:");
 		selectionPanel.add(routeNameLabel, c);
 
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.fill = GridBagConstraints.NONE;
 		this.routeName = new JTextField(20);
 		selectionPanel.add(this.routeName, c);
 
 		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 5;
 		this.clear = new JButton("Clear route");
 		this.clear.setName("clear");
 		this.clear.addMouseListener(new DefaultMouseListener(this));
 		selectionPanel.add(this.clear, c);
 
 		c.gridx = 1;
-		c.gridy = 5;
+		c.gridy = 6;
 		this.save = new JButton("Save route to COSM");
 		this.save.setName("save");
 		this.save.addMouseListener(new DefaultMouseListener(this));
@@ -324,13 +332,17 @@ public class RouteGenerator extends JFrame {
 		}
 	}
 
-	public void loadExistingRoute(Environment item) {
+	public void selectRoute() {
 		if (this.route == null)
 			this.route = new LinkedHashSet<Waypoint>();
 		else
 			this.route.clear();
 
-		Iterator<fl.routeGenerator.cosm.Data> i = item.getData().iterator();
+		this.selectedEnvironment = (Environment) this.routeComboBox
+				.getSelectedItem();
+
+		Iterator<fl.routeGenerator.cosm.Data> i = (this.selectedEnvironment)
+				.getData().iterator();
 		while (i.hasNext()) {
 			fl.routeGenerator.cosm.Data current = i.next();
 

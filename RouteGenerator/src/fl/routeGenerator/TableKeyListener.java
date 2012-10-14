@@ -3,11 +3,11 @@ package fl.routeGenerator;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class TreeKeyListener implements KeyListener {
+public class TableKeyListener implements KeyListener {
 
 	private RouteGenerator routeGenerator;
 
-	public TreeKeyListener(RouteGenerator routeGenerator) {
+	public TableKeyListener(RouteGenerator routeGenerator) {
 		this.routeGenerator = routeGenerator;
 	}
 
