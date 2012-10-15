@@ -2,14 +2,16 @@ package fl.routeGenerator;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -67,8 +69,12 @@ public class RouteGenerator extends JFrame {
 	private List<Environment> cosmRoutes;
 	private JComboBox<Environment> routeComboBox;
 	private Environment selectedEnvironment;
+	private JButton resetButton;
+	private Pachube cosm;
 
 	public RouteGenerator() {
+		this.cosm = new Pachube(COSM_KEY);
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 
@@ -124,31 +130,32 @@ public class RouteGenerator extends JFrame {
 		routeComboBox = new JComboBox<Environment>();
 		selectionPanel.add(routeComboBox, c);
 
-		c.gridx = 1;
-		c.gridy = 1;
+		c.gridx = 2;
+		c.gridy = 0;
 		JButton reloadButton = new JButton("Reload List");
 		reloadButton.setName("reload");
 		reloadButton.addMouseListener(new DefaultMouseListener(this));
 		selectionPanel.add(reloadButton, c);
 
-		c.gridx = 1;
-		c.gridy = 2;
-		JButton loadButton = new JButton("Load");
-		loadButton.setName("load");
+		c.gridx = 3;
+		c.gridy = 0;
+		JButton loadButton = new JButton("Select");
+		loadButton.setName("select");
 		loadButton.addMouseListener(new DefaultMouseListener(this));
 		selectionPanel.add(loadButton, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 3;
+		c.gridwidth = 3;
 		this.routeTable = new JTable();
 		this.routeTable.setModel(this.generateTableModel(null));
 		this.routeTable.setPreferredSize(new Dimension(300, 300));
 		this.routeTable.addKeyListener(new TableKeyListener(this));
-
 		JScrollPane jsp = new JScrollPane(this.routeTable);
 		selectionPanel.add(jsp, c);
 
+		c.gridwidth = 1;
 		c.gridx = 0;
 		c.gridy = 4;
 		JLabel routeNameLabel = new JLabel("Route name:");
@@ -157,22 +164,39 @@ public class RouteGenerator extends JFrame {
 		c.gridx = 1;
 		c.gridy = 4;
 		c.fill = GridBagConstraints.NONE;
+		c.gridwidth = 2;
 		this.routeName = new JTextField(20);
 		selectionPanel.add(this.routeName, c);
 
+		c.gridwidth = 1;
 		c.gridx = 1;
 		c.gridy = 5;
-		this.clear = new JButton("Clear route");
+		this.clear = new JButton("Cancel");
 		this.clear.setName("clear");
 		this.clear.addMouseListener(new DefaultMouseListener(this));
 		selectionPanel.add(this.clear, c);
 
+		c.gridx = 2;
+		c.gridy = 5;
+		this.resetButton = new JButton("Reset");
+		this.resetButton.setVisible(false);
+		this.resetButton.setName("reset");
+		this.resetButton.addMouseListener(new DefaultMouseListener(this));
+		selectionPanel.add(resetButton, c);
+
 		c.gridx = 1;
 		c.gridy = 6;
-		this.save = new JButton("Save route to COSM");
+		this.save = new JButton("Update / Save");
 		this.save.setName("save");
 		this.save.addMouseListener(new DefaultMouseListener(this));
 		selectionPanel.add(this.save, c);
+
+		c.gridx = 1;
+		c.gridy = 8;
+		JButton temperatureButton = new JButton("Save temperature");
+		temperatureButton.setName("saveTemperature");
+		temperatureButton.addMouseListener(new DefaultMouseListener(this));
+		selectionPanel.add(temperatureButton, c);
 
 		c.gridx = 1;
 		c.gridy = 0;
@@ -202,13 +226,27 @@ public class RouteGenerator extends JFrame {
 		}
 	}
 
-	private void loadRoutesFromCOSM() {
-		Client client = Client.create();
-		WebResource webResource = client
-				.resource("http://api.cosm.com/v2/feeds.xml");
+	private Environment loadRouteFromCOSM(int id) {
+		MultivaluedMap<String, String> queryParams = new MultivaluedMapImpl();
+		return this.query("https://api.cosm.com/v2/feeds/" + id + ".xml",
+				queryParams).get(0);
+	}
 
+	private void loadRoutesFromCOSM() {
 		MultivaluedMap<String, String> queryParams = new MultivaluedMapImpl();
 		queryParams.add("user", "futurelogistics");
+
+		this.cosmRoutes = query(queryParams);
+	}
+
+	private List<Environment> query(MultivaluedMap<String, String> queryParams) {
+		return this.query("http://api.cosm.com/v2/feeds.xml", queryParams);
+	}
+
+	private List<Environment> query(String url,
+			MultivaluedMap<String, String> queryParams) {
+		Client client = Client.create();
+		WebResource webResource = client.resource(url);
 
 		String s = webResource.queryParams(queryParams)
 				.header("X-ApiKey", COSM_KEY).get(String.class);
@@ -219,10 +257,12 @@ public class RouteGenerator extends JFrame {
 			Eeml feeds = (Eeml) context.createUnmarshaller().unmarshal(
 					new StringReader(s));
 
-			this.cosmRoutes = feeds.getEnvironment();
+			return feeds.getEnvironment();
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
+
+		return null;
 	}
 
 	public JXMapKit getMaps() {
@@ -235,6 +275,9 @@ public class RouteGenerator extends JFrame {
 	}
 
 	public void addPoint(GeoPosition position) {
+		if (this.route == null)
+			this.route = new LinkedHashSet<Waypoint>();
+
 		this.route.add(new RoutePoint(this.route.size(), position));
 
 		repaintMap();
@@ -268,31 +311,59 @@ public class RouteGenerator extends JFrame {
 	public void saveRoute() {
 		if (!this.routeName.getText().equals("") && (this.route.size() >= 2)) {
 			try {
-				Pachube cosm = new Pachube(COSM_KEY);
-
-				Feed routeFeed = new Feed();
-				routeFeed.setTitle(this.routeName.getText());
-
-				Iterator<Waypoint> i = this.route.iterator();
-				int j = 0;
-				while (i.hasNext()) {
-					RoutePoint current = (RoutePoint) i.next();
-
-					Data routePoint = new Data();
-					routePoint.setId(j);
-					routePoint.setMinValue(-30d);
-					routePoint.setMaxValue(-50d);
-					routePoint.setTag(getCoordinateString(current));
-					routeFeed.addData(routePoint);
-					j++;
+				if (this.selectedEnvironment != null) {
+					updateExistingFeed();
+				} else {
+					createFeedFromScratch();
 				}
-
-				cosm.createFeed(routeFeed);
 
 				this.reloadRoutes();
 			} catch (PachubeException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void updateExistingFeed() {
+		try {
+			Feed routeFeed = this.cosm.getFeed(this.selectedEnvironment.getId()
+					.intValue());
+			Iterator<Data> i = routeFeed.getData().iterator();
+			while (i.hasNext()) {
+				Data current = i.next();
+				routeFeed.deleteDatastream(current.getId());
+			}
+
+			convertRoutesToDatastreams(routeFeed);
+
+		} catch (PachubeException e) {
+		}
+	}
+
+	private void createFeedFromScratch() throws PachubeException {
+		Feed routeFeed;
+		routeFeed = new Feed();
+		routeFeed.setTitle(this.routeName.getText());
+
+		convertRoutesToDatastreams(routeFeed);
+
+		this.cosm.createFeed(routeFeed);
+	}
+
+	private void convertRoutesToDatastreams(Feed routeFeed)
+			throws PachubeException {
+		Iterator<Waypoint> i = this.route.iterator();
+		int j = 0;
+		while (i.hasNext()) {
+			RoutePoint current = (RoutePoint) i.next();
+
+			Data routePoint = new Data();
+			routePoint.setId(j);
+			routePoint.setMinValue(-30d);
+			routePoint.setMaxValue(-50d);
+			routePoint.setTag(getCoordinateString(current));
+			routeFeed.createDatastream(routePoint);
+			j++;
 		}
 	}
 
@@ -304,7 +375,13 @@ public class RouteGenerator extends JFrame {
 	public void clear() {
 		this.route.clear();
 		this.routeName.setText("");
+		this.routeName.setEditable(true);
+		this.resetButton.setVisible(false);
+		this.routeComboBox.setEnabled(true);
+
 		this.updateMapWithTree();
+
+		this.selectedEnvironment = null;
 	}
 
 	private void updateMapWithTree() {
@@ -338,8 +415,12 @@ public class RouteGenerator extends JFrame {
 		else
 			this.route.clear();
 
+		this.routeComboBox.setEnabled(false);
+		this.resetButton.setVisible(true);
 		this.selectedEnvironment = (Environment) this.routeComboBox
 				.getSelectedItem();
+		this.routeName.setText(this.selectedEnvironment.getTitle());
+		this.routeName.setEnabled(false);
 
 		Iterator<fl.routeGenerator.cosm.Data> i = (this.selectedEnvironment)
 				.getData().iterator();
@@ -357,5 +438,36 @@ public class RouteGenerator extends JFrame {
 
 		this.updateTable();
 		this.repaintMap();
+	}
+
+	public void resetRoute() {
+		this.selectRoute();
+	}
+
+	public void saveTemparature() {
+		try {
+			Feed feed = this.cosm.getFeed(this.selectedEnvironment.getId()
+					.intValue());
+
+			Map<String, String> values = new LinkedHashMap<String, String>();
+
+			for (int i = 0; i < this.routeTable.getRowCount(); i++) {
+				values.put(this.routeTable.getValueAt(i, 0) + ";"
+						+ this.routeTable.getValueAt(i, 1), this.routeTable
+						.getValueAt(i, 2).toString());
+			}
+
+			Iterator<String> i = values.keySet().iterator();
+			int j = 0;
+			while (i.hasNext()) {
+				String current = i.next();
+				String value = values.get(current);
+
+				feed.updateDatastream(j, Double.parseDouble(value));
+
+				j++;
+			}
+		} catch (PachubeException e) {
+		}
 	}
 }
