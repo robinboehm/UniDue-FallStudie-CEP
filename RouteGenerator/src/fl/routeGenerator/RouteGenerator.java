@@ -444,7 +444,7 @@ public class RouteGenerator extends JFrame {
 		this.selectRoute();
 	}
 
-	public void saveTemparature() {
+	public void saveTemperature() {
 		try {
 			Feed feed = this.cosm.getFeed(this.selectedEnvironment.getId()
 					.intValue());

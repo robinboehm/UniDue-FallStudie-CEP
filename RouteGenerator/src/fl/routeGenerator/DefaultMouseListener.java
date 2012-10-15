@@ -24,7 +24,7 @@ public class DefaultMouseListener implements MouseListener {
 		} else if (arg0.getComponent().getName().equals("reset")) {
 			this.routeGenerator.resetRoute();
 		} else if (arg0.getComponent().getName().equals("saveTemperature")) {
-			this.routeGenerator.saveTemparature();
+			this.routeGenerator.saveTemperature();
 		}
 	}
 
