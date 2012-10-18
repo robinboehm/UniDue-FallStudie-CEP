@@ -1,4 +1,5 @@
 package fl.esperTest;
+
 import java.util.Iterator;
 
 import Pachube.Data;
@@ -16,27 +17,6 @@ import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 
 public class EsperTest {
-
-	public static class Temperature {
-		int route;
-		Double temperature;
-
-		public int getRoute() {
-			return route;
-		}
-
-		public void setRoute(int route) {
-			this.route = route;
-		}
-
-		public Double getTemperature() {
-			return temperature;
-		}
-
-		public void setTemperature(Double temperature) {
-			this.temperature = temperature;
-		}
-	}
 
 	public static void loadTemperatureData(EPRuntime cepRT) {
 		Pachube cosm = new Pachube(
@@ -61,9 +41,10 @@ public class EsperTest {
 	public static class CEPListener implements UpdateListener {
 
 		public void update(EventBean[] newData, EventBean[] oldData) {
-			System.out.println("Event received: "
-					+ ((Temperature) newData[0].getUnderlying())
-							.getTemperature());
+			// System.out.println("Event received: "
+			// + ((Temperature) newData[0].getUnderlying())
+			// .getTemperature());
+			System.out.println("Event received: " + newData[0].getUnderlying());
 		}
 	}
 
@@ -71,14 +52,16 @@ public class EsperTest {
 
 		// The Configuration is meant only as an initialization-time object.
 		Configuration cepConfig = new Configuration();
+
 		cepConfig.addEventType("Temperature", Temperature.class.getName());
+
 		EPServiceProvider cep = EPServiceProviderManager.getProvider(
 				"myCEPEngine", cepConfig);
 		EPRuntime cepRT = cep.getEPRuntime();
 
 		EPAdministrator cepAdm = cep.getEPAdministrator();
-		EPStatement cepStatement = cepAdm.createEPL("select * from "
-				+ "Temperature(route=80264) having temperature > 20.0");
+		EPStatement cepStatement = cepAdm
+				.createEPL("select route, avg(temperature) from Temperature.win:length(5) group by route having count(temperature) = 3");
 
 		cepStatement.addListener(new CEPListener());
 

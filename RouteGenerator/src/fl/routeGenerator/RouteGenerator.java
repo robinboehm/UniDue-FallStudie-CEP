@@ -344,10 +344,9 @@ public class RouteGenerator extends JFrame {
 		Feed routeFeed;
 		routeFeed = new Feed();
 		routeFeed.setTitle(this.routeName.getText());
+		routeFeed = this.cosm.createFeed(routeFeed);
 
 		convertRoutesToDatastreams(routeFeed);
-
-		this.cosm.createFeed(routeFeed);
 	}
 
 	private void convertRoutesToDatastreams(Feed routeFeed)
