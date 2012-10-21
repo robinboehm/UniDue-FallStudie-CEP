@@ -1,5 +1,6 @@
 package de.uni.due.paluno.casestudy.cep;
 
+import de.uni.due.paluno.casestudy.cep.cosm.COSMWebSocketEngine;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ public class COSMWebSocketEngineTest {
 
         COSMWebSocketEngine engine = new COSMWebSocketEngine(list);
         engine.start();
+
+
 
         Thread.sleep(15000);
     }

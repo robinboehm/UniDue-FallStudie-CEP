@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.cep;
+package de.uni.due.paluno.casestudy.cep.cosm;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
@@ -6,10 +6,12 @@ import com.ning.http.client.ListenableFuture;
 import com.ning.http.client.websocket.WebSocket;
 import com.ning.http.client.websocket.WebSocketTextListener;
 import com.ning.http.client.websocket.WebSocketUpgradeHandler;
-import de.uni.due.paluno.casestudy.cep.model.Measurement;
-import de.uni.due.paluno.casestudy.cep.model.cosm.COSMServerRequest;
-import de.uni.due.paluno.casestudy.cep.model.cosm.COSMServerResponse;
+import de.uni.due.paluno.casestudy.cep.cosm.event.COSMWebSocketEvent;
+import de.uni.due.paluno.casestudy.cep.cosm.event.COSMWebSocketListener;
+import de.uni.due.paluno.casestudy.cep.cosm.model.cosm.COSMServerRequest;
+import de.uni.due.paluno.casestudy.cep.cosm.model.cosm.COSMServerResponse;
 
+import javax.swing.event.EventListenerList;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +27,10 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
     private final WebSocketUpgradeHandler webSocketUpgradeHandler;
     private final List<String> dataStreams;
 
+    private EventListenerList listeners = new EventListenerList();
+
     // Constants
-    private final String API_KEY = "jIejNGP9DFj-lHgQgNaUH52qPPGSAKxUQXd3OHBKdVZGQT0g";
+    private final String API_KEY = "5T64pgQVJiKlfgQU2Q9IvH_UyUKSAKxTNjZma1kyQnFsQT0g";
     private final String API_URL = "ws://api.cosm.com:8080";
 
 
@@ -52,9 +56,12 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
     @Override
     public void onMessage(String message) {
         COSMServerResponse response = (COSMServerResponse) helper.getObjectFromJson(message, COSMServerResponse.class);
-        Measurement measure = helper.createMeasurement(response);
+        //Measurement measure = helper.createMeasurement(response);
         // Generate Event
-        System.out.println(measure);
+        //System.out.println(measure);
+        COSMWebSocketEvent event = new COSMWebSocketEvent(this);
+        event.setEvent(helper.createEvent(response));
+        notifyCOSMWebSocketEvent(event);
     }
 
     @Override
@@ -98,5 +105,23 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
         cosmServerRequest.setMethod(COSMServerRequest.METHOD_SUBSCRIBE);
         cosmServerRequest.setAPIKey(API_KEY);
         return cosmServerRequest;
+    }
+
+
+    /*
+       Listener Pattern
+    */
+
+    public void addAdListener(COSMWebSocketListener listener) {
+        listeners.add(COSMWebSocketListener.class, listener);
+    }
+
+    public void removeAdListener(COSMWebSocketListener listener) {
+        listeners.remove(COSMWebSocketListener.class, listener);
+    }
+
+    protected synchronized void notifyCOSMWebSocketEvent(COSMWebSocketEvent event) {
+        for (COSMWebSocketListener l : listeners.getListeners(COSMWebSocketListener.class))
+            l.handleWebSocketEvent(event);
     }
 }

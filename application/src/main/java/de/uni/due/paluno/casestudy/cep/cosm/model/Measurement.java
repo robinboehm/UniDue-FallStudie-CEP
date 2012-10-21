@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.cep.model;
+package de.uni.due.paluno.casestudy.cep.cosm.model;
 
 import java.util.Date;
 
