@@ -1,5 +1,6 @@
 package fl.eventProcessing.event.command;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.espertech.esper.client.EPRuntime;
@@ -23,5 +24,15 @@ public abstract class ComplexEventCommand {
 
 	public abstract Map<String, String> getEventTypes();
 
-	public abstract Map<String, Object> toMap(EventBean eventBean);
+	public Map<String, Object> toMap(EventBean eventBean) {
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+
+		for (int i = 0; i < this.getColumns().length; i++) {
+			map.put(this.getColumns()[i], eventBean.get(this.getColumns()[i]));
+		}
+
+		return map;
+	}
+
+	public abstract String[] getColumns();
 }

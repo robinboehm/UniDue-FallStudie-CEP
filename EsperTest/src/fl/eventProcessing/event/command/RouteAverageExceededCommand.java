@@ -2,11 +2,9 @@ package fl.eventProcessing.event.command;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.espertech.esper.client.EPRuntime;
-import com.espertech.esper.client.EventBean;
 
 import fl.eventProcessing.event.complex.RouteAverageExceededEvent;
 import fl.eventProcessing.event.simple.WaypointTemperatureEvent;
@@ -31,7 +29,8 @@ public class RouteAverageExceededCommand extends RouteEventCommand {
 	@Override
 	public String getEPL() {
 		String epl = "select avg(data) as temperature from Temperature where target in ("
-				+ getWaypoints() + ") having count(data) = 3 and avg(data) > 20";
+				+ getWaypoints()
+				+ ") having count(data) = 3 and avg(data) > 20";
 
 		System.out.println("Registering listener on: " + epl);
 
@@ -63,11 +62,7 @@ public class RouteAverageExceededCommand extends RouteEventCommand {
 	}
 
 	@Override
-	public Map<String, Object> toMap(EventBean eventBean) {
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-
-		map.put("temperature", eventBean.get("temperature"));
-
-		return map;
+	public String[] getColumns() {
+		return new String[] { "temperature" };
 	}
 }
