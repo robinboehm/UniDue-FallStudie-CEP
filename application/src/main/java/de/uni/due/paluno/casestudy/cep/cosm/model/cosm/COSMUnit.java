@@ -3,6 +3,15 @@ package de.uni.due.paluno.casestudy.cep.cosm.model.cosm;
 public class COSMUnit {
     private String symbol;
     private String label;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public COSMUnit() {/* Object-Mapper */}
 

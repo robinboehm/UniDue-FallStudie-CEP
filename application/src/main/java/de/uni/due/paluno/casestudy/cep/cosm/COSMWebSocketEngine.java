@@ -8,6 +8,7 @@ import com.ning.http.client.websocket.WebSocketTextListener;
 import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 import de.uni.due.paluno.casestudy.cep.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.cep.cosm.event.COSMWebSocketListener;
+import de.uni.due.paluno.casestudy.cep.cosm.model.cosm.COSMDataStreamBody;
 import de.uni.due.paluno.casestudy.cep.cosm.model.cosm.COSMServerRequest;
 import de.uni.due.paluno.casestudy.cep.cosm.model.cosm.COSMServerResponse;
 
@@ -56,12 +57,15 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 
     @Override
     public void onMessage(String message) {
-        Map<String,String> map_response = (Map<String,String>) helper.getObjectFromJson(message, Map.class);
-        if(map_response.get("body") != null){
+        Map<String, String> map_response = (Map<String, String>) helper.getObjectFromJson(message, Map.class);
+        if (map_response.get("body") != null) {
             COSMServerResponse response = (COSMServerResponse) helper.getObjectFromJson(message, COSMServerResponse.class);
             COSMWebSocketEvent event = new COSMWebSocketEvent(this);
-            event.setEvent(helper.createEvent(response));
-            notifyCOSMWebSocketEvent(event);
+
+            for (COSMDataStreamBody dataStreamBody : response.getBody().getDatastreams()) {
+                event.setEvent(helper.createEvent(dataStreamBody));
+                notifyCOSMWebSocketEvent(event);
+            }
         }
     }
 

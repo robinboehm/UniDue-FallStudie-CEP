@@ -13,13 +13,13 @@ public class COSMWebSocketEngineTest {
     @Test
     public void testEngine() throws IOException, ExecutionException, InterruptedException {
         List<String> list = new LinkedList<String>();
-        list.add("/feeds/42055/datastreams/Strom_Gesamtverbrauch");
+        list.add("/feeds/42055");
 
         COSMWebSocketEngine engine = new COSMWebSocketEngine(list);
         engine.start();
 
 
 
-        Thread.sleep(15000);
+        Thread.sleep(15000000);
     }
 }

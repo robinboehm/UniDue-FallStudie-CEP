@@ -1,48 +1,36 @@
 package de.uni.due.paluno.casestudy.cep.cosm.model.cosm;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
+
 public class COSMResponseBody {
+    private String feed;
     private String version;
-    private double max_value;
-    private double min_value;
-    private String at;
+    private String title;
+    private String website;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @JsonProperty("private")
+    private boolean _private;
+    private String updated;
+    private String auto_feed_url;
+    private int id;
+    private String creator;
+    private String status;
+    private String description;
+    private String created;
+    private COSMDataStreamBody[] datastreams;
     private String[] tags;
-    private String id;
-    private COSMUnit unit;
-    private double current_value;
-
-    public COSMResponseBody() {/* Object-Mapper */}
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public double getMax_value() {
-        return max_value;
-    }
-
-    public void setMax_value(double max_value) {
-        this.max_value = max_value;
-    }
-
-    public double getMin_value() {
-        return min_value;
-    }
-
-    public void setMin_value(double min_value) {
-        this.min_value = min_value;
-    }
-
-    public String getAt() {
-        return at;
-    }
-
-    public void setAt(String at) {
-        this.at = at;
-    }
+    private Map location;
 
     public String[] getTags() {
         return tags;
@@ -52,27 +40,115 @@ public class COSMResponseBody {
         this.tags = tags;
     }
 
-    public String getId() {
+    public Map getLocation() {
+        return location;
+    }
+
+    public void setLocation(Map location) {
+        this.location = location;
+    }
+
+    public String getFeed() {
+        return feed;
+    }
+
+    public void setFeed(String feed) {
+        this.feed = feed;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public boolean is_private() {
+        return _private;
+    }
+
+    public void set_private(boolean _private) {
+        this._private = _private;
+    }
+
+    public String getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(String updated) {
+        this.updated = updated;
+    }
+
+    public String getAuto_feed_url() {
+        return auto_feed_url;
+    }
+
+    public void setAuto_feed_url(String auto_feed_url) {
+        this.auto_feed_url = auto_feed_url;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public COSMUnit getUnit() {
-        return unit;
+    public String getCreator() {
+        return creator;
     }
 
-    public void setUnit(COSMUnit unit) {
-        this.unit = unit;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
-    public double getCurrent_value() {
-        return current_value;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCurrent_value(double current_value) {
-        this.current_value = current_value;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public COSMDataStreamBody[] getDatastreams() {
+        return datastreams;
+    }
+
+    public void setDatastreams(COSMDataStreamBody[] datastreams) {
+        this.datastreams = datastreams;
     }
 }

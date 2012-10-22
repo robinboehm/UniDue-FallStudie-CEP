@@ -3,8 +3,7 @@ package de.uni.due.paluno.casestudy.cep.cosm;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni.due.paluno.casestudy.cep.cosm.model.Measurement;
-import de.uni.due.paluno.casestudy.cep.cosm.model.cosm.COSMServerResponse;
+import de.uni.due.paluno.casestudy.cep.cosm.model.cosm.COSMDataStreamBody;
 import de.uni.due.paluno.casestudy.cep.events.Event;
 import de.uni.due.paluno.casestudy.cep.events.simple.WaypointTemperatureEvent;
 
@@ -36,20 +35,17 @@ public class COSMHelper {
     }
 
 
-    public Measurement createMeasurement(COSMServerResponse response) {
-        Measurement measurement = new Measurement();
-        measurement.setId(response.getBody().getId());
-        measurement.setUnit(response.getBody().getUnit().getLabel());
-        measurement.setValue(response.getBody().getCurrent_value());
-        return measurement;
-    }
-
-
-    public Event createEvent(COSMServerResponse response){
+    public Event createEvent(COSMDataStreamBody dataStreamBody) {
         Event event = new WaypointTemperatureEvent();
-        event.setData(response.getBody().getCurrent_value());
+        event.setData(dataStreamBody.getCurrent_value());
         // TODO: Implement a unique identifier for a Event-Target
-        event.setTarget(response.getBody().getId()+";"+response.getBody().getTags()[0]);
+        String tags = "";
+        if(dataStreamBody.getTags() != null){
+            for(String tag : dataStreamBody.getTags()){
+                tags += tag;
+            }
+        }
+        event.setTarget(dataStreamBody.getId() + ";" + tags);
         return event;
     }
 }

@@ -42,9 +42,8 @@ public class WorldWebSocketServlet extends WebSocketServlet implements COSMWebSo
 
     private COSMWebSocketEngine createEngine() throws IOException, ExecutionException, InterruptedException {
         List<String> list = new LinkedList<String>();
-        list.add("/feeds/80263/datastreams/0");
-        list.add("/feeds/80263/datastreams/1");
-        list.add("/feeds/42055/datastreams/Strom_Gesamtverbrauch");
+        list.add("/feeds/80263");
+        list.add("/feeds/42055");
 
         COSMWebSocketEngine engine = new COSMWebSocketEngine(list);
         engine.start();
