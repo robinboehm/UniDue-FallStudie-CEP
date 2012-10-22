@@ -48,7 +48,8 @@ public class COSMHelper {
     public Event createEvent(COSMServerResponse response){
         Event event = new WaypointTemperatureEvent();
         event.setData(response.getBody().getCurrent_value());
-        event.setTarget(response.getBody().getId());
+        // TODO: Implement a unique identifier for a Event-Target
+        event.setTarget(response.getBody().getId()+";"+response.getBody().getTags()[0]);
         return event;
     }
 }
