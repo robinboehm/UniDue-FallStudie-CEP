@@ -63,7 +63,7 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
             COSMWebSocketEvent event = new COSMWebSocketEvent(this);
 
             for (COSMDataStreamBody dataStreamBody : response.getBody().getDatastreams()) {
-                event.setEvent(helper.createEvent(dataStreamBody));
+                event.setEvent(helper.createEvent(dataStreamBody,response.getBody().getTitle()));
                 notifyCOSMWebSocketEvent(event);
             }
         }

@@ -35,17 +35,17 @@ public class COSMHelper {
     }
 
 
-    public Event createEvent(COSMDataStreamBody dataStreamBody) {
+    public Event createEvent(COSMDataStreamBody dataStreamBody, String steamName) {
         Event event = new WaypointTemperatureEvent();
         event.setData(dataStreamBody.getCurrent_value());
         // TODO: Implement a unique identifier for a Event-Target
         String tags = "";
-        if(dataStreamBody.getTags() != null){
-            for(String tag : dataStreamBody.getTags()){
+        if (dataStreamBody.getTags() != null) {
+            for (String tag : dataStreamBody.getTags()) {
                 tags += tag;
             }
         }
-        event.setTarget(dataStreamBody.getId() + ";" + tags);
+        event.setTarget(steamName + ";" + dataStreamBody.getId() + ";" + tags);
         return event;
     }
 }
