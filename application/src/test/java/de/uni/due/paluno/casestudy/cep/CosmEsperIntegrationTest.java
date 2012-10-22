@@ -31,6 +31,7 @@ public class CosmEsperIntegrationTest {
         List<String> list = new LinkedList<String>();
         list.add("/feeds/80263/datastreams/0");
         list.add("/feeds/80263/datastreams/1");
+        list.add("/feeds/42055/datastreams/Strom_Gesamtverbrauch");
 
         COSMWebSocketEngine engine = new COSMWebSocketEngine(list);
         engine.start();
