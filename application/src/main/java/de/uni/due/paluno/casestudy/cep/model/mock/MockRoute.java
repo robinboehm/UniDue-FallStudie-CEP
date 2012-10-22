@@ -11,7 +11,7 @@ public class MockRoute extends Route {
     public MockRoute() {
         super();
         Random r = new Random();
-        int max = r.nextInt(10);
+        int max = r.nextInt(10)+1;
         for(int i=0;i<max;i++){
             points.add(new MockWayPoint(r.nextInt() + ";" + r.nextDouble() + "-" + r.nextDouble()));
         }

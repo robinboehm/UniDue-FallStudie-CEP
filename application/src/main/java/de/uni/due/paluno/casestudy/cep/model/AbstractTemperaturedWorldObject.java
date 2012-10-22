@@ -4,9 +4,12 @@ public class AbstractTemperaturedWorldObject extends AbstractWorldObject {
 
     private double temperature;
 
+    public AbstractTemperaturedWorldObject(){
+        super();
+    }
+
     public AbstractTemperaturedWorldObject(String id) {
         super(id);
-        this.temperature = 0.0d;
     }
 
     public double getTemperature() {
