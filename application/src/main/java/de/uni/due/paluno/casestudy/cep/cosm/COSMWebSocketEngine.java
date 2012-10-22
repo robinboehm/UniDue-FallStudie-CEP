@@ -32,8 +32,8 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
     private EventListenerList listeners = new EventListenerList();
 
     // Constants
-    private final String API_KEY = "5T64pgQVJiKlfgQU2Q9IvH_UyUKSAKxTNjZma1kyQnFsQT0g";
-    private final String API_URL = "ws://api.cosm.com:8080";
+    public static final String API_KEY = "5T64pgQVJiKlfgQU2Q9IvH_UyUKSAKxTNjZma1kyQnFsQT0g";
+    public final String API_URL = "ws://api.cosm.com:8080";
 
 
     public COSMWebSocketEngine(List<String> dataStreams) throws IOException, ExecutionException {
@@ -57,16 +57,22 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 
     @Override
     public void onMessage(String message) {
-        Map<String, String> map_response = (Map<String, String>) helper.getObjectFromJson(message, Map.class);
+        Map<String, Object> map_response = (Map<String, Object>) helper.getObjectFromJson(message, Map.class);
         if (map_response.get("body") != null) {
-            COSMServerResponse response = (COSMServerResponse) helper.getObjectFromJson(message, COSMServerResponse.class);
-            COSMWebSocketEvent event = new COSMWebSocketEvent(this);
+            Map<String,Object> bodyMap = (Map<String,Object>)map_response.get("body");
 
-            for (COSMDataStreamBody dataStreamBody : response.getBody().getDatastreams()) {
-                event.setEvent(helper.createEvent(dataStreamBody,response.getBody().getTitle()));
-                notifyCOSMWebSocketEvent(event);
+            if(bodyMap.get("status") != null){
+
+                COSMServerResponse response = (COSMServerResponse) helper.getObjectFromJson(message, COSMServerResponse.class);
+                COSMWebSocketEvent event = new COSMWebSocketEvent(this);
+
+                for (COSMDataStreamBody dataStreamBody : response.getBody().getDatastreams()) {
+                    event.setEvent(helper.createEvent(dataStreamBody,response.getBody().getTitle()));
+                    notifyCOSMWebSocketEvent(event);
+                }
             }
         }
+
     }
 
     @Override

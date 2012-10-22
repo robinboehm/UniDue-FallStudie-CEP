@@ -12,7 +12,12 @@ public class Route extends AbstractWorldObject {
         this.points = new LinkedList<WayPoint>();
     }
 
-    public Route(String id, List<WayPoint> points) {
+    public Route(String id) {
         super(id);
+        this.points = new LinkedList<WayPoint>();
+    }
+
+    public void addWaypoint(WayPoint wayPoint){
+        this.points.add(wayPoint);
     }
 }

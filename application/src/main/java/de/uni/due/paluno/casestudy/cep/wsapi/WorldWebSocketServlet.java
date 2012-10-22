@@ -6,7 +6,7 @@ import de.uni.due.paluno.casestudy.cep.cosm.event.COSMWebSocketListener;
 import de.uni.due.paluno.casestudy.cep.esper.eventProcessing.factory.ESPERTriggerFactory;
 import de.uni.due.paluno.casestudy.cep.events.command.WaypointTemperatureDumper;
 import de.uni.due.paluno.casestudy.cep.model.World;
-import de.uni.due.paluno.casestudy.cep.model.mock.MockWorld;
+import de.uni.due.paluno.casestudy.cep.model.WorldHelper;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
@@ -22,29 +22,39 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
-@WebServlet(name = "WorldWebSocketServlet", urlPatterns = {"/world"})
+@WebServlet(name = "WorldWebSocketServlet", urlPatterns = {"/world"},loadOnStartup = 1)
 public class WorldWebSocketServlet extends WebSocketServlet implements COSMWebSocketListener {
 
     private List<MessageInbound> connections = new CopyOnWriteArrayList<MessageInbound>();
-    private static final World world = new MockWorld();
+    private static World world;
 
     public WorldWebSocketServlet() throws IOException, ExecutionException, InterruptedException {
+
+        List<String> list = new LinkedList<String>();
+
+        list.add("/feeds/80152");
+        list.add("/feeds/80262");
+        list.add("/feeds/80263");
+        list.add("/feeds/80264");
+        //list.add("/feeds/42055");
+
+
+        world = WorldHelper.createWorldFromDataStreams(list);
+
+        System.out.println(world);
+
 
         ESPERTriggerFactory etf = new ESPERTriggerFactory();
         etf.addToConfig(new WaypointTemperatureDumper());
         etf.createTriggers();
 
-        COSMWebSocketEngine engine = createEngine();
+        COSMWebSocketEngine engine = createEngine(list);
         engine.addAdListener(etf);
         engine.addAdListener(this);
         engine.start();
     }
 
-    private COSMWebSocketEngine createEngine() throws IOException, ExecutionException, InterruptedException {
-        List<String> list = new LinkedList<String>();
-        list.add("/feeds/80263");
-        list.add("/feeds/42055");
-
+    private COSMWebSocketEngine createEngine(List<String> list) throws IOException, ExecutionException, InterruptedException {
         COSMWebSocketEngine engine = new COSMWebSocketEngine(list);
         engine.start();
         return engine;

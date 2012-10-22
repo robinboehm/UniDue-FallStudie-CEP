@@ -1,8 +1,5 @@
 package de.uni.due.paluno.casestudy.cep.model.mock;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni.due.paluno.casestudy.cep.model.Route;
 import de.uni.due.paluno.casestudy.cep.model.Truck;
 import de.uni.due.paluno.casestudy.cep.model.WayPoint;
@@ -29,16 +26,5 @@ public class MockWorld extends World {
             trucks.add(new MockTruck());
         }
         this.setTrucks(trucks);
-    }
-
-    @Override
-    public String toString() {
-        ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
-        try {
-            return (objectMapper.writeValueAsString(this));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return (e.getClass() + " : " + e.getMessage());
-        }
     }
 }
