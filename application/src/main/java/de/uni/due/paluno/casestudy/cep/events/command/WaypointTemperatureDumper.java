@@ -11,11 +11,12 @@ public class WaypointTemperatureDumper extends ComplexEventCommand {
     @Override
     protected void executeLogic(EPRuntime epr, Map<String, Object> eventParams) {
         System.out.println(eventParams.get("target"));
+        System.out.println(eventParams.get("data"));
     }
 
     @Override
     public String getEPL() {
-        return "select target from Temperature";
+        return "select target,data from Temperature";
     }
 
     @Override
@@ -29,6 +30,6 @@ public class WaypointTemperatureDumper extends ComplexEventCommand {
 
     @Override
     public String[] getColumns() {
-        return new String[]{"target", "target"};
+        return new String[]{"target", "data"};
     }
 }
