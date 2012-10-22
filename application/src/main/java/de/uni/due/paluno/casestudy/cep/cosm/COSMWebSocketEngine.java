@@ -15,6 +15,7 @@ import javax.swing.event.EventListenerList;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class COSMWebSocketEngine implements WebSocketTextListener {
@@ -55,13 +56,13 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 
     @Override
     public void onMessage(String message) {
-        COSMServerResponse response = (COSMServerResponse) helper.getObjectFromJson(message, COSMServerResponse.class);
-        //Measurement measure = helper.createMeasurement(response);
-        // Generate Event
-        //System.out.println(measure);
-        COSMWebSocketEvent event = new COSMWebSocketEvent(this);
-        event.setEvent(helper.createEvent(response));
-        notifyCOSMWebSocketEvent(event);
+        Map<String,String> map_response = (Map<String,String>) helper.getObjectFromJson(message, Map.class);
+        if(map_response.get("body") != null){
+            COSMServerResponse response = (COSMServerResponse) helper.getObjectFromJson(message, COSMServerResponse.class);
+            COSMWebSocketEvent event = new COSMWebSocketEvent(this);
+            event.setEvent(helper.createEvent(response));
+            notifyCOSMWebSocketEvent(event);
+        }
     }
 
     @Override
