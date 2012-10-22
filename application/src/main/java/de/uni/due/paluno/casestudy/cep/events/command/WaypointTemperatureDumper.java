@@ -1,7 +1,6 @@
 package de.uni.due.paluno.casestudy.cep.events.command;
 
 import com.espertech.esper.client.EPRuntime;
-import de.uni.due.paluno.casestudy.cep.events.command.ComplexEventCommand;
 import de.uni.due.paluno.casestudy.cep.events.simple.WaypointTemperatureEvent;
 
 import java.util.HashMap;
