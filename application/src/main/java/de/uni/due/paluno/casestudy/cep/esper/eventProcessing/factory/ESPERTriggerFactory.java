@@ -83,7 +83,7 @@ public class ESPERTriggerFactory implements TriggerFactory,COSMWebSocketListener
 		}
 	}
 
-    @Override
+    //@Override
     public void handleWebSocketEvent(COSMWebSocketEvent e) {
         getCep().getEPRuntime().sendEvent(e.getEvent());
     }

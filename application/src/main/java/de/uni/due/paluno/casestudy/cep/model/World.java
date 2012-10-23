@@ -10,6 +10,8 @@ import java.util.List;
 public class World {
 
     public List<Route> routes;
+    public List<Truck> trucks;
+
 
     public List<Route> getRoutes() {
         return routes;
@@ -36,7 +38,7 @@ public class World {
         this.trucks = trucks;
     }
 
-    public List<Truck> trucks;
+
 
     public World() {
         this.trucks = new LinkedList<Truck>();

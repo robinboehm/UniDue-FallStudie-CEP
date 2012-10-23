@@ -14,7 +14,7 @@ public class ESPERTrigger implements UpdateListener {
 		this.ec = ec;
 	}
 
-	@Override
+	//@Override
 	public void update(EventBean[] newData, EventBean[] oldData) {
 		Map<String, Object> map = ec.toMap(newData[0]);
 

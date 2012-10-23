@@ -55,7 +55,7 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
         websocket.close();
     }
 
-    @Override
+    //@Override
     public void onMessage(String message) {
         Map<String, Object> map_response = (Map<String, Object>) helper.getObjectFromJson(message, Map.class);
         if (map_response.get("body") != null) {
@@ -75,12 +75,12 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 
     }
 
-    @Override
+    //@Override
     public void onFragment(String s, boolean b) {
         // Not used by COSM API
     }
 
-    @Override
+    //@Override
     public void onOpen(WebSocket webSocket) {
         List<COSMServerRequest> requests;
         requests = generateSubscripeRequests(dataStreams);
@@ -92,12 +92,12 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
         }
     }
 
-    @Override
+    //@Override
     public void onClose(WebSocket webSocket) {
 
     }
 
-    @Override
+    //@Override
     public void onError(Throwable throwable) {
 
     }

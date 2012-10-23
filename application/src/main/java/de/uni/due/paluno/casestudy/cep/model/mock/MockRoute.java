@@ -18,6 +18,6 @@ public class MockRoute extends Route {
     }
 
     public MockRoute(String id, List<WayPoint> points) {
-        super(id, points);
+        super(id);
     }
 }
