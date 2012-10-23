@@ -11,6 +11,7 @@ import com.espertech.esper.client.EPRuntime;
 
 import fl.eventProcessing.event.command.AverageDumpCommand;
 import fl.eventProcessing.event.command.RouteAverageExceededCommand;
+import fl.eventProcessing.event.command.WaypointTemperatureDumper;
 import fl.eventProcessing.event.simple.WaypointTemperatureEvent;
 import fl.eventProcessing.factory.ESPERTriggerFactory;
 import fl.model.Route;
@@ -40,8 +41,9 @@ public class EsperTest {
 
 	public static void main(String[] args) {
 		ESPERTriggerFactory etf = new ESPERTriggerFactory();
-		etf.addToConfig(new RouteAverageExceededCommand(getRoute("80264")));
-		etf.addToConfig(new AverageDumpCommand());
+		// etf.addToConfig(new RouteAverageExceededCommand(getRoute("80264")));
+		// etf.addToConfig(new AverageDumpCommand());
+		etf.addToConfig(new WaypointTemperatureDumper());
 		etf.createTriggers();
 
 		etf.dumpTriggers();
