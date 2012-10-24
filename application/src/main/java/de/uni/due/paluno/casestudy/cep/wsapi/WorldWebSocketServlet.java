@@ -66,7 +66,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements COSMWebSo
         return new MyMessageInbound();
     }
 
-    //@Override
+    @Override
     public void handleWebSocketEvent(COSMWebSocketEvent e) {
         for (MessageInbound inbound : connections) {
             CharBuffer buffer = CharBuffer.wrap(world.toString());
