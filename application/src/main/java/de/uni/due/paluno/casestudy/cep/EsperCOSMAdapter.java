@@ -14,8 +14,8 @@ import com.espertech.esper.client.UpdateListener;
 
 import de.uni.due.paluno.casestudy.cep.events.command.AverageDumpCommand;
 import de.uni.due.paluno.casestudy.cep.events.command.ComplexEventCommand;
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketEvent;
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketListener;
+import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
+import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
 import de.uni.due.paluno.casestudy.service.CockpitService;
 
 public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
@@ -47,7 +47,6 @@ public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 
 	@Override
 	public void addToConfig(ComplexEventCommand cec) {
-		cec.setService(this.service);
 		this.commands.add(cec);
 
 		this.addEventTypes(cec.getEventTypes());
@@ -85,6 +84,7 @@ public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 		Iterator<ComplexEventCommand> i = this.commands.iterator();
 		while (i.hasNext()) {
 			ComplexEventCommand cec = i.next();
+			cec.setService(this.service);
 			cec.setEpr(this.cep.getEPRuntime());
 
 			ESPERTrigger et = new ESPERTrigger(cec);
@@ -93,12 +93,6 @@ public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.uni.due.paluno.casestudy.cep.factory.TriggerFactory2#dumpTriggers()
-	 */
 	@Override
 	public void dumpTriggers() {
 		for (int i = 0; i < this.cep.getEPAdministrator().getStatementNames().length; i++) {

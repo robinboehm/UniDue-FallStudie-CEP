@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.delivery.cosm.event;
+package de.uni.due.paluno.casestudy.cosm.event;
 
 import java.util.EventListener;
 

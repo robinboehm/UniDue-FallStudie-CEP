@@ -1,6 +1,6 @@
 package de.uni.due.paluno.casestudy.cep;
 
-import de.uni.due.paluno.casestudy.delivery.cosm.COSMWebSocketEngine;
+import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
 
 import org.junit.Test;
 

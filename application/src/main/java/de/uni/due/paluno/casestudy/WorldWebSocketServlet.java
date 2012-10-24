@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.delivery.wsapi;
+package de.uni.due.paluno.casestudy;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -9,41 +9,47 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
+import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
-import de.uni.due.paluno.casestudy.AbstractCockpitServlet;
 import de.uni.due.paluno.casestudy.cep.EsperCOSMAdapter;
-import de.uni.due.paluno.casestudy.delivery.cosm.COSMWebSocketEngine;
+import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.model.WorldHelper;
+import de.uni.due.paluno.casestudy.service.CockpitDemoService;
+import de.uni.due.paluno.casestudy.service.CockpitService;
 
 @WebServlet(name = "WorldWebSocketServlet", urlPatterns = { "/world" }, loadOnStartup = 1)
-public class WorldWebSocketServlet extends AbstractCockpitServlet {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -571317291238824893L;
+public class WorldWebSocketServlet extends WebSocketServlet {
+	private static final long serialVersionUID = -1439435191685551673L;
 	private List<MessageInbound> connections = new CopyOnWriteArrayList<MessageInbound>();
+	private CockpitService cockpitService;
 	private static World world;
 
 	public WorldWebSocketServlet() throws IOException, ExecutionException,
 			InterruptedException {
-		List<Route> routes = this.getService().lookUpRoutes();
-		List<String> list = convertToURL(routes);
-
-		world = WorldHelper.createWorldFromDataStreams(list);
+		// Create world domain
+		List<Route> routes = this.cockpitService.lookUpRoutes();
+		List<String> routeURLs = convertToURL(routes);
+		world = WorldHelper.createWorldFromDataStreams(routeURLs);
 
 		System.out.println(world);
 
+		// Start cosmwebsocket engine
+		initCOSMWebSocketEngine(routeURLs);
+	}
+
+	private void initCOSMWebSocketEngine(List<String> list) throws IOException,
+			ExecutionException, InterruptedException {
 		COSMWebSocketEngine engine = createEngine(list);
-		engine.addAdListener(new EsperCOSMAdapter(this.getService()));
+		engine.addAdListener(new EsperCOSMAdapter(this.cockpitService));
 		engine.start();
 	}
 
@@ -95,5 +101,11 @@ public class WorldWebSocketServlet extends AbstractCockpitServlet {
 			}
 		}
 
+	}
+
+	public void init() throws ServletException {
+		super.init();
+
+		this.cockpitService = new CockpitDemoService();
 	}
 }
