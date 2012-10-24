@@ -20,6 +20,6 @@ public class COSMWebSocketEngineTest {
 
 
 
-        Thread.sleep(15000);
+        Thread.sleep(15000000);
     }
 }
