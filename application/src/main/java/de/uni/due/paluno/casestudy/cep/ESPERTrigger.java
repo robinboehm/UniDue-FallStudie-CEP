@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.cep.factory;
+package de.uni.due.paluno.casestudy.cep;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;

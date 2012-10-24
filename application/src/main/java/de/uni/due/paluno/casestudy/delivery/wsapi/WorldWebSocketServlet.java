@@ -17,18 +17,14 @@ import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WsOutbound;
 
 import de.uni.due.paluno.casestudy.AbstractCockpitServlet;
-import de.uni.due.paluno.casestudy.cep.events.command.WaypointTemperatureDumper;
-import de.uni.due.paluno.casestudy.cep.factory.ESPERTriggerFactory;
+import de.uni.due.paluno.casestudy.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.delivery.cosm.COSMWebSocketEngine;
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketEvent;
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketListener;
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.model.WorldHelper;
 
 @WebServlet(name = "WorldWebSocketServlet", urlPatterns = { "/world" }, loadOnStartup = 1)
-public class WorldWebSocketServlet extends AbstractCockpitServlet implements
-		COSMWebSocketListener {
+public class WorldWebSocketServlet extends AbstractCockpitServlet {
 
 	/**
 	 * 
@@ -46,13 +42,8 @@ public class WorldWebSocketServlet extends AbstractCockpitServlet implements
 
 		System.out.println(world);
 
-		ESPERTriggerFactory etf = new ESPERTriggerFactory();
-		etf.addToConfig(new WaypointTemperatureDumper());
-		etf.createTriggers();
-
 		COSMWebSocketEngine engine = createEngine(list);
-		engine.addAdListener(etf);
-		engine.addAdListener(this);
+		engine.addAdListener(new EsperCOSMAdapter(this.getService()));
 		engine.start();
 	}
 
@@ -80,18 +71,6 @@ public class WorldWebSocketServlet extends AbstractCockpitServlet implements
 			HttpServletRequest request) {
 
 		return new MyMessageInbound();
-	}
-
-	// @Override
-	public void handleWebSocketEvent(COSMWebSocketEvent e) {
-		for (MessageInbound inbound : connections) {
-			CharBuffer buffer = CharBuffer.wrap(world.toString());
-			try {
-				inbound.getWsOutbound().writeTextMessage(buffer);
-			} catch (IOException ex) {
-				System.out.println(ex);
-			}
-		}
 	}
 
 	private final class MyMessageInbound extends MessageInbound {

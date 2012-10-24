@@ -1,29 +1,53 @@
-package de.uni.due.paluno.casestudy.cep.factory;
-
-import com.espertech.esper.client.*;
-import de.uni.due.paluno.casestudy.cep.events.command.ComplexEventCommand;
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketEvent;
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketListener;
+package de.uni.due.paluno.casestudy.cep;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class ESPERTriggerFactory implements TriggerFactory,COSMWebSocketListener {
+import com.espertech.esper.client.Configuration;
+import com.espertech.esper.client.EPAdministrator;
+import com.espertech.esper.client.EPServiceProvider;
+import com.espertech.esper.client.EPServiceProviderManager;
+import com.espertech.esper.client.EPStatement;
+import com.espertech.esper.client.UpdateListener;
+
+import de.uni.due.paluno.casestudy.cep.events.command.AverageDumpCommand;
+import de.uni.due.paluno.casestudy.cep.events.command.ComplexEventCommand;
+import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketEvent;
+import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketListener;
+import de.uni.due.paluno.casestudy.service.CockpitService;
+
+public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 
 	private Configuration cepConfig;
 	private EPServiceProvider cep;
 	private List<String> eventTypes;
 	private List<ComplexEventCommand> commands;
+	private CockpitService service;
 
-	public ESPERTriggerFactory() {
+	public EsperCOSMAdapter() {
 		this.cepConfig = new Configuration();
 		this.eventTypes = new ArrayList<String>();
 		this.commands = new ArrayList<ComplexEventCommand>();
+
+		this.addToConfig(new AverageDumpCommand());
+		this.createTriggers();
 	}
 
+	public EsperCOSMAdapter(CockpitService service) {
+		this.service = service;
+	}
+
+	@Override
+	public void handleWebSocketEvent(COSMWebSocketEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void addToConfig(ComplexEventCommand cec) {
+		cec.setService(this.service);
 		this.commands.add(cec);
 
 		this.addEventTypes(cec.getEventTypes());
@@ -48,10 +72,12 @@ public class ESPERTriggerFactory implements TriggerFactory,COSMWebSocketListener
 		cepStatement.addListener(et);
 	}
 
+	@Override
 	public EPServiceProvider getCep() {
 		return cep;
 	}
 
+	@Override
 	public void createTriggers() {
 		this.cep = EPServiceProviderManager.getProvider("myCEPEngine",
 				this.cepConfig);
@@ -67,6 +93,13 @@ public class ESPERTriggerFactory implements TriggerFactory,COSMWebSocketListener
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.uni.due.paluno.casestudy.cep.factory.TriggerFactory2#dumpTriggers()
+	 */
+	@Override
 	public void dumpTriggers() {
 		for (int i = 0; i < this.cep.getEPAdministrator().getStatementNames().length; i++) {
 
@@ -82,9 +115,4 @@ public class ESPERTriggerFactory implements TriggerFactory,COSMWebSocketListener
 			}
 		}
 	}
-
-    //@Override
-    public void handleWebSocketEvent(COSMWebSocketEvent e) {
-        getCep().getEPRuntime().sendEvent(e.getEvent());
-    }
 }

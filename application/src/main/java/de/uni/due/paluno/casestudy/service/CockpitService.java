@@ -1,10 +1,8 @@
 package de.uni.due.paluno.casestudy.service;
 
-import java.util.List;
+import de.uni.due.paluno.casestudy.model.AbstractWorldObject;
 
-import de.uni.due.paluno.casestudy.model.Route;
+public interface CockpitService extends LookupService {
 
-public interface CockpitService {
-
-	public List<Route> lookUpRoutes();
+	public void updateModel(AbstractWorldObject object);
 }
