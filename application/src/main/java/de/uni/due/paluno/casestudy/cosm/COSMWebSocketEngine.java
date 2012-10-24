@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.delivery.cosm;
+package de.uni.due.paluno.casestudy.cosm;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
@@ -7,11 +7,11 @@ import com.ning.http.client.websocket.WebSocket;
 import com.ning.http.client.websocket.WebSocketTextListener;
 import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketEvent;
-import de.uni.due.paluno.casestudy.delivery.cosm.event.COSMWebSocketListener;
-import de.uni.due.paluno.casestudy.delivery.cosm.model.cosm.COSMDataStreamBody;
-import de.uni.due.paluno.casestudy.delivery.cosm.model.cosm.COSMServerRequest;
-import de.uni.due.paluno.casestudy.delivery.cosm.model.cosm.COSMServerResponse;
+import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
+import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
+import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMDataStreamBody;
+import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMServerRequest;
+import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMServerResponse;
 
 import javax.swing.event.EventListenerList;
 import java.io.IOException;

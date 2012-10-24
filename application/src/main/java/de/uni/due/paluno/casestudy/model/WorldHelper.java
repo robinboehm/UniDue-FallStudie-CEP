@@ -3,10 +3,10 @@ package de.uni.due.paluno.casestudy.model;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
 
-import de.uni.due.paluno.casestudy.delivery.cosm.COSMHelper;
-import de.uni.due.paluno.casestudy.delivery.cosm.COSMWebSocketEngine;
-import de.uni.due.paluno.casestudy.delivery.cosm.model.cosm.COSMDataStreamBody;
-import de.uni.due.paluno.casestudy.delivery.cosm.model.cosm.COSMResponseBody;
+import de.uni.due.paluno.casestudy.cosm.COSMHelper;
+import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
+import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMDataStreamBody;
+import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMResponseBody;
 
 import java.util.List;
 import java.util.concurrent.Future;

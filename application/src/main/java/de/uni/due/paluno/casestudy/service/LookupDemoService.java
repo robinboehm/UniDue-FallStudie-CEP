@@ -3,16 +3,9 @@ package de.uni.due.paluno.casestudy.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uni.due.paluno.casestudy.model.AbstractWorldObject;
 import de.uni.due.paluno.casestudy.model.Route;
 
-public class CockpitDemoServiceImpl implements CockpitService {
-
-	@Override
-	public void updateModel(AbstractWorldObject object) {
-		// TODO Auto-generated method stub
-
-	}
+public class LookupDemoService implements LookupService {
 
 	@Override
 	public List<Route> lookUpRoutes() {
@@ -25,4 +18,5 @@ public class CockpitDemoServiceImpl implements CockpitService {
 
 		return routes;
 	}
+
 }

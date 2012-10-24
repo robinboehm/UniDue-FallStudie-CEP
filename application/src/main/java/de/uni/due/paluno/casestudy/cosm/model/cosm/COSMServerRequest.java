@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.delivery.cosm.model.cosm;
+package de.uni.due.paluno.casestudy.cosm.model.cosm;
 
 import java.util.HashMap;
 import java.util.Map;
