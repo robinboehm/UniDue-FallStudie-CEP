@@ -19,6 +19,8 @@ import org.apache.catalina.websocket.WsOutbound;
 
 import de.uni.due.paluno.casestudy.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
+import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
+import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.model.WorldHelper;
@@ -26,7 +28,8 @@ import de.uni.due.paluno.casestudy.service.CockpitDemoService;
 import de.uni.due.paluno.casestudy.service.CockpitService;
 
 @WebServlet(name = "WorldWebSocketServlet", urlPatterns = { "/world" }, loadOnStartup = 1)
-public class WorldWebSocketServlet extends WebSocketServlet {
+public class WorldWebSocketServlet extends WebSocketServlet implements
+		COSMWebSocketListener {
 	private static final long serialVersionUID = -1439435191685551673L;
 	private List<MessageInbound> connections = new CopyOnWriteArrayList<MessageInbound>();
 	private CockpitService cockpitService;
@@ -51,6 +54,7 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 			ExecutionException, InterruptedException {
 		COSMWebSocketEngine engine = createEngine(list);
 		engine.addAdListener(new EsperCOSMAdapter(this.cockpitService));
+		engine.addAdListener(this);
 		engine.start();
 	}
 
@@ -101,6 +105,17 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 				System.out.println(e);
 			}
 		}
+	}
 
+	// @Override
+	public void handleWebSocketEvent(COSMWebSocketEvent e) {
+		for (MessageInbound inbound : connections) {
+			CharBuffer buffer = CharBuffer.wrap(world.toString());
+			try {
+				inbound.getWsOutbound().writeTextMessage(buffer);
+			} catch (IOException ex) {
+				System.out.println(ex);
+			}
+		}
 	}
 }
