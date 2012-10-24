@@ -1,8 +1,8 @@
 package de.uni.due.paluno.casestudy.cep;
 
-import de.uni.due.paluno.casestudy.cep.cosm.COSMWebSocketEngine;
-import de.uni.due.paluno.casestudy.cep.esper.eventProcessing.factory.ESPERTriggerFactory;
 import de.uni.due.paluno.casestudy.cep.events.command.WaypointTemperatureDumper;
+import de.uni.due.paluno.casestudy.delivery.cosm.COSMWebSocketEngine;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class CosmEsperIntegrationTest {
     @Test
     public void testCosmEsperIntegration() throws IOException, ExecutionException, InterruptedException {
 
-        ESPERTriggerFactory etf = new ESPERTriggerFactory();
+        EsperCOSMAdapter etf = new EsperCOSMAdapter();
         etf.addToConfig(new WaypointTemperatureDumper());
         etf.createTriggers();
 

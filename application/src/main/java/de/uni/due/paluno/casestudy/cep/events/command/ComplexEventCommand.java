@@ -1,13 +1,24 @@
 package de.uni.due.paluno.casestudy.cep.events.command;
 
-import com.espertech.esper.client.EPRuntime;
-import com.espertech.esper.client.EventBean;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.espertech.esper.client.EPRuntime;
+import com.espertech.esper.client.EventBean;
+
+import de.uni.due.paluno.casestudy.service.CockpitService;
+
 public abstract class ComplexEventCommand {
 	private EPRuntime epr;
+	private CockpitService service;
+
+	public CockpitService getService() {
+		return service;
+	}
+
+	public void setService(CockpitService service) {
+		this.service = service;
+	}
 
 	public void setEpr(EPRuntime epr) {
 		this.epr = epr;

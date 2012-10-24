@@ -1,6 +1,6 @@
 package de.uni.due.paluno.casestudy.cep.events.command;
 
-import de.uni.due.paluno.casestudy.cep.esper.model.Route;
+import de.uni.due.paluno.casestudy.model.Route;
 
 public abstract class RouteEventCommand extends ComplexEventCommand {
 

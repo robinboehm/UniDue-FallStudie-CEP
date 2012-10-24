@@ -3,8 +3,10 @@ package de.uni.due.paluno.casestudy.cep;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni.due.paluno.casestudy.cep.model.World;
-import de.uni.due.paluno.casestudy.cep.model.mock.MockWorld;
+
+import de.uni.due.paluno.casestudy.model.World;
+import de.uni.due.paluno.casestudy.model.mock.MockWorld;
+
 import org.junit.Test;
 
 public class MockParseTest {

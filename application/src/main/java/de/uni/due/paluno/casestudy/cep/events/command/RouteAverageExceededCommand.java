@@ -1,14 +1,15 @@
 package de.uni.due.paluno.casestudy.cep.events.command;
 
-import com.espertech.esper.client.EPRuntime;
-import de.uni.due.paluno.casestudy.cep.esper.model.Route;
-import de.uni.due.paluno.casestudy.cep.esper.model.Waypoint;
-import de.uni.due.paluno.casestudy.cep.events.complex.RouteAverageExceededEvent;
-import de.uni.due.paluno.casestudy.cep.events.simple.WaypointTemperatureEvent;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.espertech.esper.client.EPRuntime;
+
+import de.uni.due.paluno.casestudy.cep.events.complex.RouteAverageExceededEvent;
+import de.uni.due.paluno.casestudy.cep.events.simple.WaypointTemperatureEvent;
+import de.uni.due.paluno.casestudy.model.Route;
+import de.uni.due.paluno.casestudy.model.WayPoint;
 
 public class RouteAverageExceededCommand extends RouteEventCommand {
 
@@ -19,7 +20,7 @@ public class RouteAverageExceededCommand extends RouteEventCommand {
 	@Override
 	protected void executeLogic(EPRuntime epr, Map<String, Object> eventParams) {
 		RouteAverageExceededEvent raee = new RouteAverageExceededEvent();
-		raee.setTarget(route.getUid());
+		raee.setTarget(route.getId());
 		raee.setData((Double) eventParams.get("temperature"));
 
 		epr.sendEvent(raee);
@@ -39,10 +40,10 @@ public class RouteAverageExceededCommand extends RouteEventCommand {
 	private String getWaypoints() {
 		String waypoints = "";
 
-		Iterator<Waypoint> i = this.route.getWaypoints().iterator();
+		Iterator<WayPoint> i = this.route.getPoints().iterator();
 		while (i.hasNext()) {
-			Waypoint wp = i.next();
-			waypoints += "'" + wp.getUid() + "',";
+			WayPoint wp = i.next();
+			waypoints += "'" + wp.getId() + "',";
 		}
 
 		if (!waypoints.equals(""))
