@@ -1,8 +1,9 @@
 package de.uni.due.paluno.casestudy.cep;
 
-import de.uni.due.paluno.casestudy.cep.cosm.COSMWebSocketEngine;
-import de.uni.due.paluno.casestudy.cep.esper.eventProcessing.factory.ESPERTriggerFactory;
 import de.uni.due.paluno.casestudy.cep.events.command.WaypointTemperatureDumper;
+import de.uni.due.paluno.casestudy.cep.factory.ESPERTriggerFactory;
+import de.uni.due.paluno.casestudy.delivery.cosm.COSMWebSocketEngine;
+
 import org.junit.Test;
 
 import java.io.IOException;
