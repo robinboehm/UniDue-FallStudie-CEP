@@ -15,6 +15,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+    <repositories>
+        <repository>
+            <id>Apache SNAPSHOTS</id>
+            <name>The Apache SnapShot Repo</name>
+            <url>https://repository.apache.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
 
 	<dependencies>
 
