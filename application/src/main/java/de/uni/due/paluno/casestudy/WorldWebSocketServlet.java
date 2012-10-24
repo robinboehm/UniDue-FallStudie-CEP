@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,6 +34,8 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 
 	public WorldWebSocketServlet() throws IOException, ExecutionException,
 			InterruptedException {
+		this.cockpitService = new CockpitDemoService();
+
 		// Create world domain
 		List<Route> routes = this.cockpitService.lookUpRoutes();
 		List<String> routeURLs = convertToURL(routes);
@@ -101,11 +102,5 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 			}
 		}
 
-	}
-
-	public void init() throws ServletException {
-		super.init();
-
-		this.cockpitService = new CockpitDemoService();
 	}
 }
