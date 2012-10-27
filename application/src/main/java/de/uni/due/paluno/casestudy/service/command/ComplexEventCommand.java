@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.cep.events.command;
+package de.uni.due.paluno.casestudy.service.command;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

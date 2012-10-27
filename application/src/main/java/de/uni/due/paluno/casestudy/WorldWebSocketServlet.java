@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,21 +36,45 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	private static final long serialVersionUID = -1439435191685551673L;
 	private List<MessageInbound> connections = new CopyOnWriteArrayList<MessageInbound>();
 	private CockpitService cockpitService;
-	private static World world;
 
 	public WorldWebSocketServlet() throws IOException, ExecutionException,
 			InterruptedException {
+		// Init Service Layer
+		this.initServiceLayer();
+
+		// Init WebSocket Engine
+		this.initWebSocketENgine();
+	}
+
+	private void initServiceLayer() {
 		this.cockpitService = new CockpitDemoService();
 
+		try {
+			Context ic = new InitialContext();
+
+			ic.addToEnvironment(Globals.IC_SERVICE_OBJECT, this.cockpitService);
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void initWebSocketENgine() throws IOException, ExecutionException,
+			InterruptedException {
 		// Create world domain
 		List<Route> routes = this.cockpitService.lookUpRoutes();
 		List<String> routeURLs = convertToURL(routes);
-		world = WorldHelper.createWorldFromDataStreams(routeURLs);
-
-		System.out.println(world);
+		this.createWorldObject(routeURLs);
 
 		// Start cosmwebsocket engine
 		initCOSMWebSocketEngine(routeURLs);
+	}
+
+	private void createWorldObject(List<String> routeURLs) {
+		World world = WorldHelper.createWorldFromDataStreams(routeURLs);
+
+		this.cockpitService.setWorld(world);
+
+		System.out.println(world.toString());
 	}
 
 	private void initCOSMWebSocketEngine(List<String> list) throws IOException,
@@ -81,10 +108,17 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	protected StreamInbound createWebSocketInbound(String subProtocol,
 			HttpServletRequest request) {
 
-		return new MyMessageInbound();
+		return new MyMessageInbound(this.cockpitService.getWorld());
 	}
 
 	private final class MyMessageInbound extends MessageInbound {
+
+		private World world;
+
+		public MyMessageInbound(World world) {
+			this.world = world;
+		}
+
 		@Override
 		protected void onBinaryMessage(ByteBuffer message) throws IOException {
 
@@ -98,7 +132,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 		@Override
 		protected void onOpen(WsOutbound outbound) {
 			connections.add(this);
-			CharBuffer buffer = CharBuffer.wrap(world.toString());
+			CharBuffer buffer = CharBuffer.wrap(this.world.toString());
 			try {
 				outbound.writeTextMessage(buffer);
 			} catch (IOException e) {
@@ -110,7 +144,8 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	// @Override
 	public void handleWebSocketEvent(COSMWebSocketEvent e) {
 		for (MessageInbound inbound : connections) {
-			CharBuffer buffer = CharBuffer.wrap(world.toString());
+			CharBuffer buffer = CharBuffer.wrap(this.cockpitService.getWorld()
+					.toString());
 			try {
 				inbound.getWsOutbound().writeTextMessage(buffer);
 			} catch (IOException ex) {

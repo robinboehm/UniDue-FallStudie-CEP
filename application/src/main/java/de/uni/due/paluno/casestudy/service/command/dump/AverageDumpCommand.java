@@ -1,7 +1,9 @@
-package de.uni.due.paluno.casestudy.cep.events.command;
+package de.uni.due.paluno.casestudy.service.command.dump;
 
 import com.espertech.esper.client.EPRuntime;
-import de.uni.due.paluno.casestudy.cep.events.complex.RouteAverageExceededEvent;
+
+import de.uni.due.paluno.casestudy.cep.events.RouteEvent;
+import de.uni.due.paluno.casestudy.service.command.ComplexEventCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class AverageDumpCommand extends ComplexEventCommand {
 		Map<String, String> eventTypes = new HashMap<String, String>();
 
 		eventTypes.put("RouteAverageExceededEvent",
-				RouteAverageExceededEvent.class.getName());
+				RouteEvent.class.getName());
 
 		return eventTypes;
 	}

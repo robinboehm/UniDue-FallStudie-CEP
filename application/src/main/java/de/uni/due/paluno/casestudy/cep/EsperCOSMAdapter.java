@@ -12,13 +12,13 @@ import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.UpdateListener;
 
-import de.uni.due.paluno.casestudy.cep.events.command.AverageDumpCommand;
-import de.uni.due.paluno.casestudy.cep.events.command.ComplexEventCommand;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
 import de.uni.due.paluno.casestudy.service.CockpitService;
+import de.uni.due.paluno.casestudy.service.command.ComplexEventCommand;
+import de.uni.due.paluno.casestudy.service.command.dump.AverageDumpCommand;
 
-public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
+public class EsperCOSMAdapter implements COSMWebSocketListener {
 
 	private Configuration cepConfig;
 	private EPServiceProvider cep;
@@ -45,7 +45,6 @@ public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 
 	}
 
-	@Override
 	public void addToConfig(ComplexEventCommand cec) {
 		this.commands.add(cec);
 
@@ -64,19 +63,17 @@ public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 		}
 	}
 
-	private void createAndConfigureCEPStatement(String epl, ESPERTrigger et) {
+	private void createAndConfigureCEPStatement(String epl, Trigger et) {
 		EPAdministrator cepAdm = this.cep.getEPAdministrator();
 		EPStatement cepStatement = cepAdm.createEPL(epl);
 
 		cepStatement.addListener(et);
 	}
 
-	@Override
 	public EPServiceProvider getCep() {
 		return cep;
 	}
 
-	@Override
 	public void createTriggers() {
 		this.cep = EPServiceProviderManager.getProvider("myCEPEngine",
 				this.cepConfig);
@@ -87,13 +84,12 @@ public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 			cec.setService(this.service);
 			cec.setEpr(this.cep.getEPRuntime());
 
-			ESPERTrigger et = new ESPERTrigger(cec);
+			Trigger et = new Trigger(cec);
 
 			createAndConfigureCEPStatement(cec.getEPL(), et);
 		}
 	}
 
-	@Override
 	public void dumpTriggers() {
 		for (int i = 0; i < this.cep.getEPAdministrator().getStatementNames().length; i++) {
 
@@ -105,7 +101,7 @@ public class EsperCOSMAdapter implements COSMWebSocketListener, TriggerFactory {
 			Iterator<UpdateListener> j = cepStatement.getUpdateListeners();
 			while (j.hasNext()) {
 				UpdateListener ul = j.next();
-				System.out.println(((ESPERTrigger) ul).getCEC());
+				System.out.println(((Trigger) ul).getCEC());
 			}
 		}
 	}

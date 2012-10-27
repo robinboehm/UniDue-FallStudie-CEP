@@ -6,6 +6,7 @@ import java.util.List;
 public class Route extends AbstractWorldObject {
 
 	public List<WayPoint> points;
+	public RouteStatus status;
 
 	public Route() {
 		super();
@@ -27,5 +28,13 @@ public class Route extends AbstractWorldObject {
 
 	public void setPoints(List<WayPoint> points) {
 		this.points = points;
+	}
+
+	public RouteStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RouteStatus status) {
+		this.status = status;
 	}
 }

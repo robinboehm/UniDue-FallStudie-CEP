@@ -1,7 +1,7 @@
 package de.uni.due.paluno.casestudy.cep;
 
-import de.uni.due.paluno.casestudy.cep.events.command.WaypointTemperatureDumper;
 import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
+import de.uni.due.paluno.casestudy.service.command.dump.WaypointTemperatureDumper;
 
 import org.junit.Test;
 

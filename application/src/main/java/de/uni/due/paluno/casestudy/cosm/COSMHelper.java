@@ -3,8 +3,9 @@ package de.uni.due.paluno.casestudy.cosm;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.uni.due.paluno.casestudy.cep.events.Event;
-import de.uni.due.paluno.casestudy.cep.events.simple.WaypointTemperatureEvent;
+import de.uni.due.paluno.casestudy.cep.events.WaypointTemperatureEvent;
 import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMDataStreamBody;
 
 import java.io.IOException;

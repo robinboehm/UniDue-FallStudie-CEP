@@ -2,15 +2,16 @@ package de.uni.due.paluno.casestudy.cep;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
-import de.uni.due.paluno.casestudy.cep.events.command.ComplexEventCommand;
+
+import de.uni.due.paluno.casestudy.service.command.ComplexEventCommand;
 
 import java.util.Map;
 
-public class ESPERTrigger implements UpdateListener {
+public class Trigger implements UpdateListener {
 
 	private ComplexEventCommand ec;
 
-	public ESPERTrigger(ComplexEventCommand ec) {
+	public Trigger(ComplexEventCommand ec) {
 		this.ec = ec;
 	}
 
