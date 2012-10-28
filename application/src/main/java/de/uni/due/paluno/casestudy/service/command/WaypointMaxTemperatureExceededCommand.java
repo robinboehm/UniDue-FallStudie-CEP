@@ -27,9 +27,8 @@ public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 
 	@Override
 	public String getEPL() {
-		String epl = "select count(data) as " + this.getColumns()[0] + " from "
-				+ Globals.E_TEMPERATURE_ENTITY + " where target in ("
-				+ getWaypoints() + ") having data > 40";
+		String epl = "select count(data) from " + Globals.E_TEMPERATURE_ENTITY
+				+ " where target in (" + getWaypoints() + ") having data > 40";
 
 		return epl;
 	}

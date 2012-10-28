@@ -12,11 +12,11 @@ import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.UpdateListener;
 
+import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
 import de.uni.due.paluno.casestudy.service.CockpitService;
 import de.uni.due.paluno.casestudy.service.command.ComplexEventCommand;
-import de.uni.due.paluno.casestudy.service.command.dump.AverageDumpCommand;
 
 public class EsperCOSMAdapter implements COSMWebSocketListener {
 
@@ -26,16 +26,10 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 	private List<ComplexEventCommand> commands;
 	private CockpitService service;
 
-	public EsperCOSMAdapter() {
+	public EsperCOSMAdapter(CockpitService service) {
 		this.cepConfig = new Configuration();
 		this.eventTypes = new ArrayList<String>();
 		this.commands = new ArrayList<ComplexEventCommand>();
-
-		this.addToConfig(new AverageDumpCommand());
-		this.createTriggers();
-	}
-
-	public EsperCOSMAdapter(CockpitService service) {
 		this.service = service;
 	}
 
@@ -87,6 +81,8 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 			Trigger et = new Trigger(cec);
 
 			createAndConfigureCEPStatement(cec.getEPL(), et);
+
+			Globals.dump(this.getClass(), "Trigger created: " + cec.getEPL());
 		}
 	}
 

@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 public class COSMWebSocketEngineTest {
 
-    @Test
+	@Test
     public void testEngine() throws IOException, ExecutionException, InterruptedException {
         List<String> list = new LinkedList<String>();
         list.add("/feeds/42055");

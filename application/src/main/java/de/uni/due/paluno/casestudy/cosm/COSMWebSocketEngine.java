@@ -132,7 +132,7 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 	 * Listener Pattern
 	 */
 
-	public void addAdListener(COSMWebSocketListener listener) {
+	public void addListener(COSMWebSocketListener listener) {
 		listeners.add(COSMWebSocketListener.class, listener);
 	}
 

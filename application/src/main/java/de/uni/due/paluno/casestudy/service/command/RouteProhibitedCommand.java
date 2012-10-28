@@ -24,7 +24,7 @@ public class RouteProhibitedCommand extends RouteEventCommand {
 	@Override
 	public String getEPL() {
 		String epl = "select key from " + Globals.E_ROUTE_ENTITY
-				+ " where target = " + route.getId();
+				+ " where target = '" + route.getId() + "'";
 
 		return epl;
 	}

@@ -43,7 +43,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 		this.initServiceLayer();
 
 		// Init WebSocket Engine
-		this.initWebSocketENgine();
+		this.initWebSocketEngine();
 	}
 
 	private void initServiceLayer() {
@@ -58,7 +58,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 		}
 	}
 
-	private void initWebSocketENgine() throws IOException, ExecutionException,
+	private void initWebSocketEngine() throws IOException, ExecutionException,
 			InterruptedException {
 		// Create world domain
 		List<Route> routes = this.cockpitService.lookUpRoutes();
@@ -80,8 +80,8 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	private void initCOSMWebSocketEngine(List<String> list) throws IOException,
 			ExecutionException, InterruptedException {
 		COSMWebSocketEngine engine = createEngine(list);
-		engine.addAdListener(new EsperCOSMAdapter(this.cockpitService));
-		engine.addAdListener(this);
+		engine.addListener(new EsperCOSMAdapter(this.cockpitService));
+		engine.addListener(this);
 		engine.start();
 	}
 

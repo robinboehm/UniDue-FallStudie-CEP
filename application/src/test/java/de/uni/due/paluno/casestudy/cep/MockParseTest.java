@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class MockParseTest {
 
-    @Test
+	@Test
     public void parseMockWorldToJSON() {
         System.out.println(new MockWorld());
         ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
