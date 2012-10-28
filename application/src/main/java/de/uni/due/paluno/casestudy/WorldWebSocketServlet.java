@@ -20,7 +20,6 @@ import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
-import de.uni.due.paluno.casestudy.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
@@ -80,7 +79,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	private void initCOSMWebSocketEngine(List<String> list) throws IOException,
 			ExecutionException, InterruptedException {
 		COSMWebSocketEngine engine = createEngine(list);
-		engine.addListener(new EsperCOSMAdapter(this.cockpitService));
+		engine.addListener(this.cockpitService.getECA());
 		engine.addListener(this);
 		engine.start();
 	}

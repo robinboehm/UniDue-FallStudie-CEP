@@ -35,8 +35,7 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 
 	@Override
 	public void handleWebSocketEvent(COSMWebSocketEvent e) {
-		// TODO Auto-generated method stub
-
+		this.cep.getEPRuntime().sendEvent(e.getEvent());
 	}
 
 	public void addToConfig(ComplexEventCommand cec) {
@@ -64,7 +63,7 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 		cepStatement.addListener(et);
 	}
 
-	public EPServiceProvider getCep() {
+	public EPServiceProvider getCEP() {
 		return cep;
 	}
 

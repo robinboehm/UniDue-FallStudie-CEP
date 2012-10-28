@@ -85,4 +85,9 @@ public class CockpitDemoService implements CockpitService {
 
 		this.initEsperCOSMAdapter();
 	}
+
+	@Override
+	public EsperCOSMAdapter getECA() {
+		return this.eca;
+	}
 }

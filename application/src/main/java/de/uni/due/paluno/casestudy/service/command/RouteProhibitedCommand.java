@@ -40,7 +40,7 @@ public class RouteProhibitedCommand extends RouteEventCommand {
 
 	@Override
 	public String[] getColumns() {
-		return null;
+		return new String[] { "key" };
 	}
 
 }

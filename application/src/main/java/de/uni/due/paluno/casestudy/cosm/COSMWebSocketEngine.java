@@ -60,6 +60,7 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 	}
 
 	// @Override
+	@SuppressWarnings("unchecked")
 	public void onMessage(String message) {
 		Map<String, Object> map_response = (Map<String, Object>) helper
 				.getObjectFromJson(message, Map.class);
@@ -68,15 +69,14 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 					.get("body");
 
 			if (bodyMap.get("status") != null) {
-
 				COSMServerResponse response = (COSMServerResponse) helper
 						.getObjectFromJson(message, COSMServerResponse.class);
 				COSMWebSocketEvent event = new COSMWebSocketEvent(this);
 
 				for (COSMDataStreamBody dataStreamBody : response.getBody()
 						.getDatastreams()) {
-					event.setEvent(helper.createEvent(dataStreamBody, response
-							.getBody().getTitle()));
+					event.setEvent(helper.createEvent(dataStreamBody,
+							(Integer) bodyMap.get("id")));
 					notifyCOSMWebSocketEvent(event);
 				}
 			}

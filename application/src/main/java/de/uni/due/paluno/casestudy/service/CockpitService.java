@@ -1,5 +1,6 @@
 package de.uni.due.paluno.casestudy.service;
 
+import de.uni.due.paluno.casestudy.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.model.World;
 
 public interface CockpitService extends LookupService {
@@ -8,4 +9,6 @@ public interface CockpitService extends LookupService {
 	public World getWorld();
 
 	public void setWorld(World world);
+
+	public EsperCOSMAdapter getECA();
 }

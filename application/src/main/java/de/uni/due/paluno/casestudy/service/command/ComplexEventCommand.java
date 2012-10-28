@@ -38,9 +38,11 @@ public abstract class ComplexEventCommand {
 	public Map<String, Object> toMap(EventBean eventBean) {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 
-		for (int i = 0; i < this.getColumns().length; i++) {
-			map.put(this.getColumns()[i], eventBean.get(this.getColumns()[i]));
-		}
+		if (this.getColumns() != null)
+			for (int i = 0; i < this.getColumns().length; i++) {
+				map.put(this.getColumns()[i],
+						eventBean.get(this.getColumns()[i]));
+			}
 
 		return map;
 	}
