@@ -28,6 +28,7 @@ import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.model.WorldHelper;
 import de.uni.due.paluno.casestudy.service.CockpitDemoService;
 import de.uni.due.paluno.casestudy.service.CockpitService;
+import de.uni.due.paluno.casestudy.ui.RouteDTO;
 
 @WebServlet(name = "WorldWebSocketServlet", urlPatterns = { "/world" }, loadOnStartup = 1)
 public class WorldWebSocketServlet extends WebSocketServlet implements
@@ -131,7 +132,14 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 		@Override
 		protected void onOpen(WsOutbound outbound) {
 			connections.add(this);
-			CharBuffer buffer = CharBuffer.wrap(this.world.toString());
+
+			RouteDTO r = new RouteDTO();
+			r.setId(1);
+			r.setDestination("Berlin");
+			r.setStart("Kleve");
+			r.setStatus("Ok");
+
+			CharBuffer buffer = CharBuffer.wrap(r.toString());
 			try {
 				outbound.writeTextMessage(buffer);
 			} catch (IOException e) {
@@ -143,8 +151,13 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	// @Override
 	public void handleWebSocketEvent(COSMWebSocketEvent e) {
 		for (MessageInbound inbound : connections) {
-			CharBuffer buffer = CharBuffer.wrap(this.cockpitService.getWorld()
-					.toString());
+			RouteDTO r = new RouteDTO();
+			r.setId(1);
+			r.setDestination("Berlin");
+			r.setStart("Kleve");
+			r.setStatus("Ok");
+
+			CharBuffer buffer = CharBuffer.wrap(r.toString());
 			try {
 				inbound.getWsOutbound().writeTextMessage(buffer);
 			} catch (IOException ex) {
