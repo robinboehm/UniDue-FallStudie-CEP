@@ -20,8 +20,7 @@
 	<script>
 		var socket;
 		function initialize() {
-
-			// create and connect web socket
+			var MapsUIDTO;
 
 			var host = "ws://localhost:8080/world";
 			try {
@@ -29,50 +28,16 @@
 				socket.onopen = function(msg) {
 				};
 				socket.onmessage = function(msg) {
-					var route = JSON.parse(msg.data)
-					alert(route.id);
+					alert('Received new data');
+					MapsUIDTO = JSON.parse(msg.data);
+					setMarkers(map, MapsUIDTO);
 				};
-				// 			socket.onclose = function(msg){ };
+				socket.onclose = function(msg) {
+				};
 
 			} catch (ex) {
 				console.log(ex);
 			}
-
-			// dummy data for markerArray
-			var markerAttributes1 = {
-				color : "yellow",
-				lat : 51.2277411,
-				lng : 6.7734556,
-				temperature : "25 °C"
-			};
-
-			var markerAttributes2 = {
-				color : "red",
-				lat : 51.53790786645464,
-				lng : 7.635498046875,
-				temperature : "66 °C"
-			};
-
-			var markerAttributes3 = {
-				color : "green",
-				lat : 51.28320115001736,
-				lng : 7.635498046177,
-				temperature : "20 °C"
-			};
-
-			var markerAttributes4 = {
-				color : "yellow",
-				lat : 51.5320115001736,
-				lng : 7.735498046177,
-				temperature : "21 °C"
-			};
-
-			// fill dummy array with dummy data
-			markerArray = new Array();
-			markerArray[markerArray.length] = markerAttributes1;
-			markerArray[markerArray.length] = markerAttributes2;
-			markerArray[markerArray.length] = markerAttributes3;
-			markerArray[markerArray.length] = markerAttributes4;
 
 			// some geo-locations for the markers
 			var latlng = new google.maps.LatLng(51.2277411, 6.7734556);
@@ -85,15 +50,10 @@
 			// creates google maps map
 			var map = new google.maps.Map(document.getElementById("map"),
 					mapOptions);
-
-			// put markers on map
-			setMarkers(map, markerArray);
-			drawColoredRoutes(map, markerArray);
-
 		}
 
 		// puts colored temperature markers on the map
-		function setMarkers(map, markerArray) {
+		function setMarkers(map, MapsUIDTO) {
 
 			// import different marker colors
 			// red marker
@@ -126,29 +86,32 @@
 			// declarated here but used in upcoming for-loop
 			var pinImageColor;
 
-			// iterates over the markerArray and creates GoogleMaps markers
-			for ( var i = 0; i < markerArray.length; i++) {
+			// iterates over the markerArray and creates GoogleMaps markers	
+			for ( var j = 0; j < MapsUIDTO.routes.length; j++) {
+				for ( var i = 0; i < MapsUIDTO.routes[j].waypoints.length; i++) {
 
-				// controll construct to differentiate between marker colors
-				if (markerArray[i].color == "red") {
-					pinImageColor = pinImageRed
-				} else if (markerArray[i].color == "yellow") {
-					pinImageColor = pinImageYellow
-				} else {
-					pinImageColor = pinImageGreen
+					// controll construct to differentiate between marker colors
+					if (MapsUIDTO.routes[j].waypoints[i].status == "critical") {
+						pinImageColor = pinImageRed
+					} else if (MapsUIDTO.routes[j].waypoints[i].status == "warning") {
+						pinImageColor = pinImageYellow
+					} else if (MapsUIDTO.routes[j].waypoints[i].status == "Ok") {
+						pinImageColor = pinImageGreen
+					}
+
+					// actual marker creation
+					var marker = new google.maps.Marker({
+						position : new google.maps.LatLng(
+								MapsUIDTO.routes[j].waypoints[i].x,
+								MapsUIDTO.routes[j].waypoints[i].y),
+						map : map,
+						icon : pinImageColor,
+						shadow : pinShadow,
+						title : MapsUIDTO.routes[j].waypoints[i].temperature
+					});
 				}
 
-				// actual marker creation
-				var marker = new google.maps.Marker({
-					position : new google.maps.LatLng(markerArray[i].lat,
-							markerArray[i].lng),
-					map : map,
-					icon : pinImageColor,
-					shadow : pinShadow,
-					title : markerArray[i].temperature
-				});
 			}
-
 		}
 
 		// draw coloured routes via polylines

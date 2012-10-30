@@ -9,14 +9,14 @@ public class DTOTest {
 		MapsUIDTO mui = new MapsUIDTO();
 
 		RouteDTO r = new RouteDTO();
-		r.setId(1);
+		r.setId("1");
 		r.setDestination("Berlin");
 		r.setStart("Kleve");
 		r.setStatus("Ok");
 		mui.getRoutes().add(r);
 
 		WayPointDTO wp = new WayPointDTO();
-		wp.setId(1);
+		wp.setId("1");
 		wp.setStatus("Ok");
 		wp.setTemperature("20");
 		wp.setX("1");
