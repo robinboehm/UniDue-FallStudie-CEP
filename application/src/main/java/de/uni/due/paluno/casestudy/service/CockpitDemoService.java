@@ -7,7 +7,9 @@ import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.RouteStatus;
+import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
+import de.uni.due.paluno.casestudy.service.command.ModelUpdateCommand;
 import de.uni.due.paluno.casestudy.service.command.RouteAverageExceededCommand;
 import de.uni.due.paluno.casestudy.service.command.RouteProhibitedCommand;
 import de.uni.due.paluno.casestudy.service.command.WaypointMaxTemperatureExceededCommand;
@@ -15,6 +17,10 @@ import de.uni.due.paluno.casestudy.service.command.WaypointMaxTemperatureExceede
 public class CockpitDemoService implements CockpitService {
 	public CockpitDemoService() {
 		this.lookupService = new LookupDemoService();
+
+		this.world = this.lookupService.getWorld();
+
+		this.initEsperCOSMAdapter();
 	}
 
 	private LookupService lookupService;
@@ -42,6 +48,8 @@ public class CockpitDemoService implements CockpitService {
 			eca.addToConfig(new WaypointMaxTemperatureExceededCommand(route));
 			eca.addToConfig(new RouteProhibitedCommand(route));
 		}
+
+		eca.addToConfig(new ModelUpdateCommand());
 	}
 
 	private List<Route> getRoutes() {
@@ -71,23 +79,29 @@ public class CockpitDemoService implements CockpitService {
 		return null;
 	}
 
-	@Override
-	public List<Route> lookUpRoutes() {
-		return this.lookupService.lookUpRoutes();
-	}
-
 	public World getWorld() {
 		return world;
-	}
-
-	public void setWorld(World world) {
-		this.world = world;
-
-		this.initEsperCOSMAdapter();
 	}
 
 	@Override
 	public EsperCOSMAdapter getECA() {
 		return this.eca;
+	}
+
+	@Override
+	public void updateWaypoint(String id, Double temperature) {
+		Iterator<Route> i = this.getWorld().getRoutes().iterator();
+		while (i.hasNext()) {
+			Route route = i.next();
+
+			Iterator<WayPoint> j = route.getPoints().iterator();
+			while (j.hasNext()) {
+				WayPoint wp = j.next();
+
+				if (wp.getId().equals(id))
+					wp.setTemperature(temperature);
+			}
+		}
+
 	}
 }

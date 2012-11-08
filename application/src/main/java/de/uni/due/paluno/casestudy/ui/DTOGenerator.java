@@ -26,12 +26,9 @@ public class DTOGenerator {
 
 				WayPointDTO wpDTO = new WayPointDTO();
 				wpDTO.setId(wp.getId());
-				String token = ";";
-				if (wp.getId().contains(":"))
-					token = ":";
-				wpDTO.setX(wp.getId().split(token)[0]);
-				wpDTO.setY(wp.getId().split(token)[1]);
-				wpDTO.setStatus("Ok");
+				wpDTO.setX(wp.getX());
+				wpDTO.setY(wp.getY());
+				wpDTO.setStatus(wp.getStatus());
 
 				rDto.getWaypoints().add(wpDTO);
 			}

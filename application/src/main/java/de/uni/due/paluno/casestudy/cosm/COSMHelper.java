@@ -1,5 +1,7 @@
 package de.uni.due.paluno.casestudy.cosm;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni.due.paluno.casestudy.cep.events.Event;
 import de.uni.due.paluno.casestudy.cep.events.WaypointTemperatureEvent;
 import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMDataStreamBody;
-
-import java.io.IOException;
 
 public class COSMHelper {
 
@@ -39,14 +39,7 @@ public class COSMHelper {
 	public Event createEvent(COSMDataStreamBody dataStreamBody, int streamId) {
 		Event event = new WaypointTemperatureEvent();
 		event.setData(dataStreamBody.getCurrent_value());
-		// TODO: Implement a unique identifier for a Event-Target
-		String tags = "";
-		if (dataStreamBody.getTags() != null) {
-			for (String tag : dataStreamBody.getTags()) {
-				tags += tag;
-			}
-		}
-		event.setTarget(streamId + ";" + tags);
+		event.setTarget(Integer.toString(streamId));
 		return event;
 	}
 }

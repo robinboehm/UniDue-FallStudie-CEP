@@ -28,7 +28,6 @@
 				socket.onopen = function(msg) {
 				};
 				socket.onmessage = function(msg) {
-					alert('Received new data');
 					MapsUIDTO = JSON.parse(msg.data);
 					setMarkers(map, MapsUIDTO);
 				};

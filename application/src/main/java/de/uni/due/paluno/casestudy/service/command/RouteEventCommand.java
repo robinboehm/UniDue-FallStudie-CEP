@@ -27,7 +27,7 @@ public abstract class RouteEventCommand extends ComplexEventCommand {
 		Iterator<WayPoint> i = this.route.getPoints().iterator();
 		while (i.hasNext()) {
 			WayPoint wp = i.next();
-			waypoints += "'" + route.getId() + ";" + wp.getId() + "',";
+			waypoints += "'" + wp.getId() + "',";
 		}
 
 		if (!waypoints.equals(""))

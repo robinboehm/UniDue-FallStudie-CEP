@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.event.EventListenerList;
@@ -18,7 +19,6 @@ import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
-import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMDataStreamBody;
 import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMServerRequest;
 import de.uni.due.paluno.casestudy.cosm.model.cosm.COSMServerResponse;
 
@@ -30,13 +30,13 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 	private final ListenableFuture<WebSocket> futureWebSocket;
 	private volatile WebSocket websocket;
 	private final WebSocketUpgradeHandler webSocketUpgradeHandler;
-	private final List<String> dataStreams;
+	private final Set<String> dataStreams;
 
 	private EventListenerList listeners = new EventListenerList();
 
 	// Constants
 
-	public COSMWebSocketEngine(List<String> dataStreams) throws IOException,
+	public COSMWebSocketEngine(Set<String> dataStreams) throws IOException,
 			ExecutionException {
 		this.config = new AsyncHttpClientConfig.Builder().build();
 		this.client = new AsyncHttpClient(config);
@@ -73,12 +73,9 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 						.getObjectFromJson(message, COSMServerResponse.class);
 				COSMWebSocketEvent event = new COSMWebSocketEvent(this);
 
-				for (COSMDataStreamBody dataStreamBody : response.getBody()
-						.getDatastreams()) {
-					event.setEvent(helper.createEvent(dataStreamBody,
-							(Integer) bodyMap.get("id")));
-					notifyCOSMWebSocketEvent(event);
-				}
+				event.setEvent(helper.createEvent(response.getBody()
+						.getDatastreams()[0], (Integer) bodyMap.get("id")));
+				notifyCOSMWebSocketEvent(event);
 			}
 		}
 
@@ -112,7 +109,7 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 	}
 
 	public List<COSMServerRequest> generateSubscripeRequests(
-			List<String> dataStreams) {
+			Set<String> dataStreams) {
 		List<COSMServerRequest> list = new LinkedList<COSMServerRequest>();
 		for (String dataStream : dataStreams) {
 			list.add(getAsSubscribeRequest(dataStream));

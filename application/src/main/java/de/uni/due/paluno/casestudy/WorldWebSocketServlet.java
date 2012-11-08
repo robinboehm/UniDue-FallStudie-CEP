@@ -3,9 +3,10 @@ package de.uni.due.paluno.casestudy;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -24,8 +25,8 @@ import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
 import de.uni.due.paluno.casestudy.model.Route;
+import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
-import de.uni.due.paluno.casestudy.model.WorldHelper;
 import de.uni.due.paluno.casestudy.service.CockpitDemoService;
 import de.uni.due.paluno.casestudy.service.CockpitService;
 import de.uni.due.paluno.casestudy.ui.DTOGenerator;
@@ -60,46 +61,44 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 
 	private void initWebSocketEngine() throws IOException, ExecutionException,
 			InterruptedException {
-		// Create world domain
-		List<Route> routes = this.cockpitService.lookUpRoutes();
-		List<String> routeURLs = convertToURL(routes);
-		this.createWorldObject(routeURLs);
 
 		// Start cosmwebsocket engine
+		Set<String> routeURLs = convertToURL(this.cockpitService.getWorld());
 		initCOSMWebSocketEngine(routeURLs);
 	}
 
-	private void createWorldObject(List<String> routeURLs) {
-		World world = WorldHelper.createWorldFromDataStreams(routeURLs);
-
-		this.cockpitService.setWorld(world);
-
-		System.out.println(world.toString());
-	}
-
-	private void initCOSMWebSocketEngine(List<String> list) throws IOException,
-			ExecutionException, InterruptedException {
-		COSMWebSocketEngine engine = createEngine(list);
+	private void initCOSMWebSocketEngine(Set<String> routeURLs)
+			throws IOException, ExecutionException, InterruptedException {
+		COSMWebSocketEngine engine = createEngine(routeURLs);
 		engine.addListener(this.cockpitService.getECA());
 		engine.addListener(this);
 		engine.start();
 	}
 
-	private List<String> convertToURL(List<Route> routes) {
-		List<String> urls = new ArrayList<String>();
+	private Set<String> convertToURL(World world) {
+		Set<String> urls = new HashSet<String>();
 
-		Iterator<Route> i = routes.iterator();
+		Iterator<Route> i = world.getRoutes().iterator();
 		while (i.hasNext()) {
-			Route current = i.next();
-			urls.add("/feeds/" + current.getId());
+			Route route = i.next();
+
+			Iterator<WayPoint> j = route.getPoints().iterator();
+			while (j.hasNext()) {
+				WayPoint wayPoint = j.next();
+				try {
+					urls.add("/feeds/" + wayPoint.getId());
+				} catch (IllegalArgumentException e) {
+					// Do nothing
+				}
+			}
 		}
 
 		return urls;
 	}
 
-	private COSMWebSocketEngine createEngine(List<String> list)
+	private COSMWebSocketEngine createEngine(Set<String> routeURLs)
 			throws IOException, ExecutionException, InterruptedException {
-		COSMWebSocketEngine engine = new COSMWebSocketEngine(list);
+		COSMWebSocketEngine engine = new COSMWebSocketEngine(routeURLs);
 		engine.start();
 		return engine;
 	}
