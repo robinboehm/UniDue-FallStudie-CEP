@@ -23,12 +23,12 @@ public final class Globals {
 	public static final String API_KEY = "5T64pgQVJiKlfgQU2Q9IvH_UyUKSAKxTNjZma1kyQnFsQT0g";
 
 	// Temperature
-	public static final Double MAXIMUM_WAYPOINT_TEMPERATURE = 10.0;
-	public static final Double MAXIMUM_AVERAGE = 5.0;
+	public static final Double MAXIMUM_WAYPOINT_TEMPERATURE = 40.0;
+	public static final Double MAXIMUM_AVERAGE = 30.0;
 
 	// Helper methods
 	public static void dump(Class<?> c, String msg) {
-		System.out.println("[" + (new Date()).toString() + "][" + c + "] "
-				+ msg);
+		System.out.println("[" + (new Date()).toString() + "]["
+				+ c.getSimpleName() + "] " + msg);
 	}
 }
