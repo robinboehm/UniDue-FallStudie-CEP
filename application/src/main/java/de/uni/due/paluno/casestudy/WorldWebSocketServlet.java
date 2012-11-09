@@ -29,7 +29,8 @@ import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.service.CockpitDemoService;
 import de.uni.due.paluno.casestudy.service.CockpitService;
-import de.uni.due.paluno.casestudy.ui.DTOGenerator;
+import de.uni.due.paluno.casestudy.ui.UIElement;
+import de.uni.due.paluno.casestudy.ui.dto.DTOGenerator;
 
 @WebServlet(name = "WorldWebSocketServlet", urlPatterns = { "/world" }, loadOnStartup = 1)
 public class WorldWebSocketServlet extends WebSocketServlet implements
@@ -37,6 +38,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	private static final long serialVersionUID = -1439435191685551673L;
 	private List<MessageInbound> connections = new CopyOnWriteArrayList<MessageInbound>();
 	private CockpitService cockpitService;
+	private List<UIElement> uiElements;
 
 	public WorldWebSocketServlet() throws IOException, ExecutionException,
 			InterruptedException {

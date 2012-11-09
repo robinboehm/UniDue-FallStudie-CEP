@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.ui;
+package de.uni.due.paluno.casestudy.ui.dto;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;

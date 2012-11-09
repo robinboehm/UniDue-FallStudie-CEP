@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.ui;
+package de.uni.due.paluno.casestudy.ui.dto;
 
 public class UIDTO extends AbstractDTO {
 	private String type;
