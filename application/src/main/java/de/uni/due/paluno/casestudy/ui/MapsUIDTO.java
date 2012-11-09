@@ -3,7 +3,7 @@ package de.uni.due.paluno.casestudy.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsUIDTO extends AbstractDTO {
+public class MapsUIDTO extends UIDTO {
 	List<RouteDTO> routes;
 
 	public MapsUIDTO() {

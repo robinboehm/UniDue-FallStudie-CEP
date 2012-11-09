@@ -125,7 +125,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 
 		@Override
 		protected void onTextMessage(CharBuffer message) throws IOException {
-
+			System.out.println(message);
 		}
 
 		@Override
