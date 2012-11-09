@@ -4,13 +4,11 @@ public class WayPoint extends AbstractTemperaturedWorldObject {
 
 	private String x;
 	private String y;
+	private int no;
 
-	public WayPoint() {
-		super();
-	}
-
-	public WayPoint(String id) {
+	public WayPoint(String id, int no) {
 		super(id);
+		this.no = no;
 	}
 
 	public String getX() {
@@ -27,6 +25,14 @@ public class WayPoint extends AbstractTemperaturedWorldObject {
 
 	public void setY(String y) {
 		this.y = y;
+	}
+
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
 	}
 
 	public String getStatus() {

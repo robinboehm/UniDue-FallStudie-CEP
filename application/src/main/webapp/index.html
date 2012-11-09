@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <style type="text/css">
 @import "DataTables/css/demo_table.css";
+
 @import "DataTables/css/demo_page.css";
 </style>
 
@@ -34,24 +35,42 @@
 
 	<script>
 	
-		var socket;
+		
 		function initialize() {
 			
 
-			// create and connect web socket
+// 			create and connect web socket
+		
+			var host = "ws://localhost:8080/world";
+			try {
+				
+				
+				socket = new WebSocket(host);
+				socket.onopen = function(msg) {
+					socket.send(JSON.stringify(
+						{
+						"id" : "world",
+						"uiElements" : [ {
+							"type": "mapsUIElement",
+							"id": "routeOverview"
+							},
+							{
+						 	"type": "tableUIElement",
+						 	"id": "routeOverviewList"
+							} ]
+						}
+					));					
+				};
+				socket.onmessage = function(msg) {
+					MapsUIDTO = JSON.parse(msg.data);
+					setMarkers(map, MapsUIDTO);
+				};
+				socket.onclose = function(msg) {
+				};
 
-			// 		var host = "ws://localhost:8080/world";
-			// 		try {
-			// 		socket = new WebSocket(host);
-			// 		socket.onopen = function(msg){ };
-			// 		socket.onmessage = function(msg){
-
-			// // 			// some code to pull jsonObject apart
-			// // 			dump(data);
-			// // 			};
-			// // 			socket.onclose = function(msg){ };
-
-			// 		} catch(ex){ console.log(ex); }
+			} catch (ex) {
+				console.log(ex);
+			}
 			
 			
 			

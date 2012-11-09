@@ -7,8 +7,8 @@ import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 
 public class DTOGenerator {
-	public static MapsUIDTO getMapsUIDTO(World world) {
-		MapsUIDTO mui = new MapsUIDTO();
+	public static MapsComponentDTO getMapsUIDTO(World world) {
+		MapsComponentDTO mui = new MapsComponentDTO();
 		mui.setId("0");
 
 		// Routes

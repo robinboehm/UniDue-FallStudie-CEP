@@ -1,6 +1,6 @@
 package de.uni.due.paluno.casestudy.ui.dto;
 
-public class UIDTO extends AbstractDTO {
+public abstract class UserInterfaceComponentDTO extends AbstractDTO {
 	private String type;
 
 	public String getType() {

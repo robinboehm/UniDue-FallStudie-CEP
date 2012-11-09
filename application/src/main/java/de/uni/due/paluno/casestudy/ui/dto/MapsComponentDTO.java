@@ -3,10 +3,10 @@ package de.uni.due.paluno.casestudy.ui.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsUIDTO extends UIDTO {
+public class MapsComponentDTO extends UserInterfaceComponentDTO {
 	List<RouteDTO> routes;
 
-	public MapsUIDTO() {
+	public MapsComponentDTO() {
 		this.routes = new ArrayList<RouteDTO>();
 	}
 

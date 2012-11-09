@@ -3,9 +3,12 @@ package de.uni.due.paluno.casestudy;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -21,6 +24,10 @@ import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.cosm.event.COSMWebSocketListener;
@@ -30,7 +37,9 @@ import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.service.CockpitDemoService;
 import de.uni.due.paluno.casestudy.service.CockpitService;
 import de.uni.due.paluno.casestudy.ui.UIElement;
+import de.uni.due.paluno.casestudy.ui.dto.ClientDTO;
 import de.uni.due.paluno.casestudy.ui.dto.DTOGenerator;
+import de.uni.due.paluno.casestudy.ui.dto.UserInterfaceComponentDTO;
 
 @WebServlet(name = "WorldWebSocketServlet", urlPatterns = { "/world" }, loadOnStartup = 1)
 public class WorldWebSocketServlet extends WebSocketServlet implements
@@ -38,10 +47,13 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	private static final long serialVersionUID = -1439435191685551673L;
 	private List<MessageInbound> connections = new CopyOnWriteArrayList<MessageInbound>();
 	private CockpitService cockpitService;
-	private List<UIElement> uiElements;
+	private Map<String, List<UIElement>> uiListeners;
 
 	public WorldWebSocketServlet() throws IOException, ExecutionException,
 			InterruptedException {
+		// UI Listeners
+		this.uiListeners = new HashMap<String, List<UIElement>>();
+
 		// Init Service Layer
 		this.initServiceLayer();
 
@@ -108,18 +120,10 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	@Override
 	protected StreamInbound createWebSocketInbound(String subProtocol,
 			HttpServletRequest request) {
-
-		return new MyMessageInbound(this.cockpitService.getWorld());
+		return new MyMessageInbound();
 	}
 
 	private final class MyMessageInbound extends MessageInbound {
-
-		private World world;
-
-		public MyMessageInbound(World world) {
-			this.world = world;
-		}
-
 		@Override
 		protected void onBinaryMessage(ByteBuffer message) throws IOException {
 
@@ -127,33 +131,77 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 
 		@Override
 		protected void onTextMessage(CharBuffer message) throws IOException {
-			System.out.println(message);
+			if (message.toString().equals(Globals.INITIAL_UI_DATA_REQUEST))
+				updateClient(this);
+			else
+				processUIRegistration(message);
+		}
+
+		private void processUIRegistration(CharBuffer message)
+				throws IOException, JsonProcessingException {
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode registration = mapper.readTree(message.toString());
+
+			String worldId = registration.get("id").textValue();
+			JsonNode elements = registration.get("uiElements");
+			List<UIElement> uiElements = new ArrayList<UIElement>();
+
+			Iterator<JsonNode> i = elements.iterator();
+			while (i.hasNext()) {
+				JsonNode element = i.next();
+
+				UIElement uiElement = new UIElement();
+				uiElement.setId(element.get("id").textValue());
+				uiElement.setType(element.get("type").textValue());
+				uiElements.add(uiElement);
+			}
+
+			uiListeners.put(worldId, uiElements);
 		}
 
 		@Override
 		protected void onOpen(WsOutbound outbound) {
 			connections.add(this);
+		}
+	}
 
-			CharBuffer buffer = CharBuffer.wrap(DTOGenerator
-					.getMapsUIDTO(world).toString());
-			try {
-				outbound.writeTextMessage(buffer);
-			} catch (IOException e) {
-				System.out.println(e);
-			}
+	private void updateClients() {
+		for (MessageInbound inbound : connections) {
+			updateClient(inbound);
+		}
+	}
+
+	private void updateClient(MessageInbound inbound) {
+		CharBuffer buffer = this.generateDTOForClient("world");
+		try {
+			inbound.getWsOutbound().writeTextMessage(buffer);
+		} catch (IOException ex) {
+			System.out.println(ex);
 		}
 	}
 
 	// @Override
 	public void handleWebSocketEvent(COSMWebSocketEvent e) {
-		for (MessageInbound inbound : connections) {
-			CharBuffer buffer = CharBuffer.wrap(DTOGenerator.getMapsUIDTO(
-					this.cockpitService.getWorld()).toString());
-			try {
-				inbound.getWsOutbound().writeTextMessage(buffer);
-			} catch (IOException ex) {
-				System.out.println(ex);
+		this.updateClients();
+	}
+
+	private CharBuffer generateDTOForClient(String id) {
+		ClientDTO clientDTO = new ClientDTO();
+		clientDTO.setId(id);
+
+		List<UIElement> uiElements = this.uiListeners.get(id);
+		Iterator<UIElement> i = uiElements.iterator();
+		while (i.hasNext()) {
+			UIElement uiElement = i.next();
+
+			if (uiElement.equals(Globals.COMPONENT_MAP_UI)) {
+				UserInterfaceComponentDTO uicDTO = DTOGenerator
+						.getMapsUIDTO(this.cockpitService.getWorld());
+				uicDTO.setId(uiElement.getId());
+				clientDTO.getUiElements().add(uicDTO);
 			}
 		}
+
+		return CharBuffer.wrap(clientDTO.toString());
 	}
 }

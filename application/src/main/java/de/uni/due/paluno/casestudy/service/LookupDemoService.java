@@ -16,12 +16,12 @@ public class LookupDemoService implements LookupService {
 		Route route = new Route();
 		route.setId("1");
 
-		WayPoint wayPoint = new WayPoint("84536");
+		WayPoint wayPoint = new WayPoint("84536", 1);
 		wayPoint.setX("51.4540069100598");
 		wayPoint.setY("7.0037841796875");
 		route.getPoints().add(wayPoint);
 
-		wayPoint = new WayPoint("84537");
+		wayPoint = new WayPoint("84537", 2);
 		wayPoint.setX("51.2249478477161");
 		wayPoint.setY("6.78131103515625");
 		route.getPoints().add(wayPoint);

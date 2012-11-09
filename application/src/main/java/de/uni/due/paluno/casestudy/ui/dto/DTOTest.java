@@ -6,7 +6,7 @@ public class DTOTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MapsUIDTO mui = new MapsUIDTO();
+		MapsComponentDTO mui = new MapsComponentDTO();
 
 		RouteDTO r = new RouteDTO();
 		r.setId("1");

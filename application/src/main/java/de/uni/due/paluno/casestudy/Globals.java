@@ -26,6 +26,11 @@ public final class Globals {
 	public static final Double MAXIMUM_WAYPOINT_TEMPERATURE = 40.0;
 	public static final Double MAXIMUM_AVERAGE = 30.0;
 
+	// UI Component Type Keys
+	public static final String COMPONENT_MAP_UI = "mapsUIElement";
+	public static final String COMPONENT_LIST_UI = "tableUIElement";
+	public static final Object INITIAL_UI_DATA_REQUEST = "INITIAL_UI_DATA_REQUEST";
+
 	// Helper methods
 	public static void dump(Class<?> c, String msg) {
 		System.out.println("[" + (new Date()).toString() + "]["
