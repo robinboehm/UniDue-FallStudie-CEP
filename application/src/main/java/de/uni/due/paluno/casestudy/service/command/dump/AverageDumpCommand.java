@@ -26,8 +26,7 @@ public class AverageDumpCommand extends ComplexEventCommand {
 	public Map<String, String> getEventTypes() {
 		Map<String, String> eventTypes = new HashMap<String, String>();
 
-		eventTypes.put("RouteAverageExceededEvent",
-				RouteEvent.class.getName());
+		eventTypes.put("RouteAverageExceededEvent", RouteEvent.class.getName());
 
 		return eventTypes;
 	}

@@ -1,22 +1,33 @@
 package de.uni.due.paluno.casestudy.cep.events;
 
+import java.util.Date;
+
 public abstract class Event {
-    private String target;
-    private Double data;
+	private String target;
+	private Double data;
+	private Date timestamp;
 
-    public String getTarget() {
-        return target;
-    }
+	public Event() {
+		this.timestamp = new Date();
+	}
 
-    public void setTarget(String target) {
-        this.target = target;
-    }
+	public String getTarget() {
+		return target;
+	}
 
-    public Double getData() {
-        return data;
-    }
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    public void setData(Double data) {
-        this.data = data;
-    }
+	public Double getData() {
+		return data;
+	}
+
+	public void setData(Double data) {
+		this.data = data;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
 }

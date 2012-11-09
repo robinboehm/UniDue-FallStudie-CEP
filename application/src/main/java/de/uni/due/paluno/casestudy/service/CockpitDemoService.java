@@ -10,9 +10,11 @@ import de.uni.due.paluno.casestudy.model.RouteStatus;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.service.command.ModelUpdateCommand;
-import de.uni.due.paluno.casestudy.service.command.RouteAverageExceededCommand;
-import de.uni.due.paluno.casestudy.service.command.RouteProhibitedCommand;
-import de.uni.due.paluno.casestudy.service.command.WaypointMaxTemperatureExceededCommand;
+import de.uni.due.paluno.casestudy.service.command.RouteStatusUpdateCommand;
+import de.uni.due.paluno.casestudy.service.command.prohibition.RouteAverageExceededCommand;
+import de.uni.due.paluno.casestudy.service.command.prohibition.WaypointMaxTemperatureExceededCommand;
+import de.uni.due.paluno.casestudy.service.command.release.NoWaypointMaxTemperatureExceededCommand;
+import de.uni.due.paluno.casestudy.service.command.release.RouteAverageNotExceededCommand;
 
 public class CockpitDemoService implements CockpitService {
 	public CockpitDemoService() {
@@ -46,7 +48,9 @@ public class CockpitDemoService implements CockpitService {
 
 			eca.addToConfig(new RouteAverageExceededCommand(route));
 			eca.addToConfig(new WaypointMaxTemperatureExceededCommand(route));
-			eca.addToConfig(new RouteProhibitedCommand(route));
+			eca.addToConfig(new RouteStatusUpdateCommand(route));
+			eca.addToConfig(new RouteAverageNotExceededCommand(route));
+			eca.addToConfig(new NoWaypointMaxTemperatureExceededCommand(route));
 		}
 
 		eca.addToConfig(new ModelUpdateCommand());

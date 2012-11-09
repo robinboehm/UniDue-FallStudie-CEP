@@ -19,8 +19,7 @@ public class ModelUpdateCommand extends ComplexEventCommand {
 
 	@Override
 	public String getEPL() {
-		String epl = "select target, data from "
-				+ Globals.E_TEMPERATURE_ENTITY;
+		String epl = "select target, data from " + Globals.E_TEMPERATURE_ENTITY;
 
 		return epl;
 	}
@@ -38,5 +37,12 @@ public class ModelUpdateCommand extends ComplexEventCommand {
 	@Override
 	public String[] getColumns() {
 		return new String[] { "target", "data" };
+	}
+
+	@Override
+	protected String getInfoMessage(Map<String, Object> eventParams) {
+		return "[Waypoint][" + ((String) eventParams.get(this.getColumns()[0]))
+				+ "][Update][Model] Temperature: "
+				+ eventParams.get(this.getColumns()[1]);
 	}
 }

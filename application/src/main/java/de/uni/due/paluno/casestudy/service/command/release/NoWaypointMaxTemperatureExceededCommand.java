@@ -1,4 +1,4 @@
-package de.uni.due.paluno.casestudy.service.command;
+package de.uni.due.paluno.casestudy.service.command.release;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +9,11 @@ import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.cep.events.RouteEvent;
 import de.uni.due.paluno.casestudy.cep.events.WaypointTemperatureEvent;
 import de.uni.due.paluno.casestudy.model.Route;
+import de.uni.due.paluno.casestudy.service.command.RouteEventCommand;
 
-public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
+public class NoWaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 
-	public WaypointMaxTemperatureExceededCommand(Route route) {
+	public NoWaypointMaxTemperatureExceededCommand(Route route) {
 		super(route);
 	}
 
@@ -20,7 +21,7 @@ public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 	protected void executeLogic(EPRuntime epr, Map<String, Object> eventParams) {
 		RouteEvent routeEvent = new RouteEvent();
 		routeEvent.setTarget(route.getId());
-		routeEvent.setKey(Globals.E_EVENT_WAYPOINT_MAX_EXCEEDED);
+		routeEvent.setKey(Globals.E_EVENT_WAYPOINT_MAX_NOT_EXCEEDED);
 
 		epr.sendEvent(routeEvent);
 	}
@@ -29,7 +30,8 @@ public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 	public String getEPL() {
 		String epl = "select count(data) as no from "
 				+ Globals.E_TEMPERATURE_ENTITY + " where target in ("
-				+ getWaypoints() + ") having data > 40";
+				+ getWaypoints() + ") having data <= "
+				+ Globals.MAXIMUM_WAYPOINT_TEMPERATURE;
 
 		return epl;
 	}
@@ -49,4 +51,8 @@ public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 		return null;
 	}
 
+	@Override
+	protected String getRouteInfoMessage(Map<String, Object> eventParams) {
+		return "No Waypoint maximum temperature exceeded";
+	}
 }

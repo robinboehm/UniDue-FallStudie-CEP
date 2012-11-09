@@ -6,6 +6,7 @@ import java.util.Map;
 import com.espertech.esper.client.EPRuntime;
 import com.espertech.esper.client.EventBean;
 
+import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.service.CockpitService;
 
 public abstract class ComplexEventCommand {
@@ -25,7 +26,12 @@ public abstract class ComplexEventCommand {
 	}
 
 	public void execute(Map<String, Object> eventParams) {
+		Globals.dump(this.getClass(), this.getInfoMessage(eventParams));
 		this.executeLogic(epr, eventParams);
+	}
+
+	protected String getInfoMessage(Map<String, Object> eventParams) {
+		return "";
 	}
 
 	protected abstract void executeLogic(EPRuntime epr,

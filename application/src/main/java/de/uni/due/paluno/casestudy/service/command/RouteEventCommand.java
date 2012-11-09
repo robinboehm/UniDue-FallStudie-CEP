@@ -1,6 +1,7 @@
 package de.uni.due.paluno.casestudy.service.command;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.WayPoint;
@@ -35,4 +36,12 @@ public abstract class RouteEventCommand extends ComplexEventCommand {
 
 		return waypoints;
 	}
+
+	@Override
+	protected String getInfoMessage(Map<String, Object> eventParams) {
+		return "[Route][" + this.getRoute().getId() + "][Update][Status] "
+				+ this.getRouteInfoMessage(eventParams);
+	}
+
+	protected abstract String getRouteInfoMessage(Map<String, Object> eventParams);
 }

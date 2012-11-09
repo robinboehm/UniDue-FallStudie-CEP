@@ -9,9 +9,9 @@ import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.cep.events.RouteEvent;
 import de.uni.due.paluno.casestudy.model.Route;
 
-public class RouteProhibitedCommand extends RouteEventCommand {
+public class RouteStatusUpdateCommand extends RouteEventCommand {
 
-	public RouteProhibitedCommand(Route route) {
+	public RouteStatusUpdateCommand(Route route) {
 		super(route);
 	}
 
@@ -43,4 +43,8 @@ public class RouteProhibitedCommand extends RouteEventCommand {
 		return new String[] { "key" };
 	}
 
+	@Override
+	protected String getRouteInfoMessage(Map<String, Object> eventParams) {
+		return (String) eventParams.get("key");
+	}
 }
