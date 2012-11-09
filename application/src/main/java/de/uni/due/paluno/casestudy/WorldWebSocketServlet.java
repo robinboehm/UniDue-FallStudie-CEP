@@ -172,7 +172,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 	}
 
 	private void updateClient(MessageInbound inbound) {
-		CharBuffer buffer = this.generateDTOForClient("world");
+		CharBuffer buffer = this.generateDTOForClient("WebClient");
 		try {
 			inbound.getWsOutbound().writeTextMessage(buffer);
 		} catch (IOException ex) {
@@ -194,10 +194,11 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 		while (i.hasNext()) {
 			UIElement uiElement = i.next();
 
-			if (uiElement.equals(Globals.COMPONENT_MAP_UI)) {
+			if (uiElement.getType().equals(Globals.COMPONENT_MAP_UI)) {
 				UserInterfaceComponentDTO uicDTO = DTOGenerator
 						.getMapsUIDTO(this.cockpitService.getWorld());
 				uicDTO.setId(uiElement.getId());
+				uicDTO.setType(Globals.COMPONENT_MAP_UI);
 				clientDTO.getUiElements().add(uicDTO);
 			}
 		}

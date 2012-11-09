@@ -9,7 +9,6 @@ import de.uni.due.paluno.casestudy.model.World;
 public class DTOGenerator {
 	public static MapsComponentDTO getMapsUIDTO(World world) {
 		MapsComponentDTO mui = new MapsComponentDTO();
-		mui.setId("0");
 
 		// Routes
 		Iterator<Route> iRoutes = world.getRoutes().iterator();
@@ -18,6 +17,7 @@ public class DTOGenerator {
 
 			RouteDTO rDto = new RouteDTO();
 			rDto.setId(currentRoute.getId());
+			rDto.setStatus("critical");
 
 			// Waypoints
 			Iterator<WayPoint> iWP = currentRoute.getPoints().iterator();
@@ -29,6 +29,7 @@ public class DTOGenerator {
 				wpDTO.setX(wp.getX());
 				wpDTO.setY(wp.getY());
 				wpDTO.setStatus(wp.getStatus());
+				wpDTO.setTemperature(Double.toString(wp.getTemperature()));
 
 				rDto.getWaypoints().add(wpDTO);
 			}

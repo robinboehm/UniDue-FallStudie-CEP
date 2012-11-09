@@ -77,7 +77,6 @@
 		function getUIElement(id) {
 			for ( var j = 0; j < window.uiElements.length; j++) {
 				if (window.uiElements[j].id == id) {
-					alert('Found Google Maps');
 					return window.uiElements[j].reference;
 				}
 			}
@@ -103,6 +102,8 @@
 							setMarkers(
 									getUIElement(clientDTO.uiElements[j].id),
 									clientDTO.uiElements[j]);
+							drawColoredRoutes(getUIElement(clientDTO.uiElements[j].id),
+							clientDTO.uiElements[j]);
 						}
 					}
 				};
@@ -112,9 +113,7 @@
 			} catch (ex) {
 				console.log(ex);
 			}
-
-			// put markers on map
-			// 			drawColoredRoutes(map, MapsUIDTO);
+ 			
 			fillTablesUIElement();
 		}
 
