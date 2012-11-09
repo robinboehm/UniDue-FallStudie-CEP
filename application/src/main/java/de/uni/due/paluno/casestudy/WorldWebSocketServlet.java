@@ -143,7 +143,7 @@ public class WorldWebSocketServlet extends WebSocketServlet implements
 			JsonNode registration = mapper.readTree(message.toString());
 
 			String worldId = registration.get("id").textValue();
-			JsonNode elements = registration.get("uiElements");
+			JsonNode elements = registration.get("UIElements");
 			List<UIElement> uiElements = new ArrayList<UIElement>();
 
 			Iterator<JsonNode> i = elements.iterator();

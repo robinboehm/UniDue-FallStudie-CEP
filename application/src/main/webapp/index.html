@@ -3,9 +3,11 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Master Control Station</title>
+
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script src="DataTables/js/jquery.js"></script>
 <script src="DataTables/js/jquery.dataTables.js"></script>
+
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <style type="text/css">
 @import "DataTables/css/demo_table.css";
@@ -16,142 +18,45 @@
 
 </head>
 <body>
-
 	<!-- div is container for google maps map  -->
-	<div id="map" class="upperUIElement"></div>
-	<div id="tTable" class="lowerUIelement">
+	<div id="mapUIContainer" data-relevant="true" class="upperUIElement"></div>
+	<div id="tableUI" title="tableUIElement" data-relevant="true"
+		class="lowerUIelement">
 		<table id="truckTable" cellpadding="0" cellspacing="0" border="0"
 			class="display" width=70%>
 			<thead>
-
 			</thead>
 			<tbody>
-
 			</tbody>
 		</table>
-
 	</div>
 
-
 	<script>
-	
-		
-		function initialize() {
-			
+		function ClientObject() {
+			this.id;
+			this.UIElements = new Array();
+		}
 
-// 			create and connect web socket
-		
-			var host = "ws://localhost:8080/world";
-			try {
-				
-				
-				socket = new WebSocket(host);
-				socket.onopen = function(msg) {
-					socket.send(JSON.stringify(
-						{
-						"id" : "world",
-						"uiElements" : [ {
-							"type": "mapsUIElement",
-							"id": "routeOverview"
-							},
-							{
-						 	"type": "tableUIElement",
-						 	"id": "routeOverviewList"
-							} ]
-						}
-					));					
-				};
-				socket.onmessage = function(msg) {
-					MapsUIDTO = JSON.parse(msg.data);
-					setMarkers(map, MapsUIDTO);
-				};
-				socket.onclose = function(msg) {
-				};
+		function UIElement(id, type, reference) {
+			this.id = id;
+			this.type = type;
+			this.reference = reference;
+		}
 
-			} catch (ex) {
-				console.log(ex);
-			}
-			
-			
-			
+		function buildRegistration() {
+			var regObj = new ClientObject();
+			regObj.id = "WebClient";
 
-			var MapsUIDTO = {
-				"id" : null,
-				"routes" : [ {
-					"id" : 1,
-					"status" : "Ok",
-					"start" : "Kleve",
-					"destination" : "Berlin",
-					"waypoints" : [ {
-						"id" : 1,
-						"x" : "51.2277411",
-						"y" : "6.7734556",
-						"status" : "Ok",
-						"temperature" : "20"
-					},
-
-					{
-						"id" : 2,
-						"x" : "50.9277411",
-						"y" : "6.9734556",
-						"status" : "Ok",
-						"temperature" : "21"
-					},
-
-					{
-						"id" : 3,
-						"x" : "51.1887411",
-						"y" : "6.0134556",
-						"status" : "Ok",
-						"temperature" : "22"
-					},
-
-					{
-						"id" : 4,
-						"x" : "51.9117411",
-						"y" : "6.9134556",
-						"status" : "Ok",
-						"temperature" : "23"
-					} ]
-				}, {
-					"id" : 2,
-					"status" : "warning",
-					"start" : "Düsseldorf",
-					"destination" : "Hameln",
-					"waypoints" : [ {
-						"id" : 1,
-						"x" : "52.2277411",
-						"y" : "6.8734556",
-						"status" : "Ok",
-						"temperature" : "15"
-					},
-
-					{
-						"id" : 2,
-						"x" : "51.9277333",
-						"y" : "6.5734333",
-						"status" : "Ok",
-						"temperature" : "16"
-					},
-
-					{
-						"id" : 3,
-						"x" : "51.9881411",
-						"y" : "6.5134676",
-						"status" : "Ok",
-						"temperature" : "17"
-					},
-
-					{
-						"id" : 4,
-						"x" : "50.9117411",
-						"y" : "6.9144556",
-						"status" : "Ok",
-						"temperature" : "18"
-					} ]
-				} ]
+			for (i = 0; i < window.uiElements.length; i++) {
+				var uiElement = new UIElement(window.uiElements[i].id,
+						window.uiElements[i].type, "")
+				regObj.UIElements[i] = uiElement;
 			}
 
+			return regObj;
+		}
+
+		function createGoogleMapsComponent() {
 			// some geo-locations for the markers
 			var latlng = new google.maps.LatLng(51.2277411, 6.7734556);
 			var mapOptions = {
@@ -161,85 +66,128 @@
 			};
 
 			// creates google maps map
-			var map = new google.maps.Map(document.getElementById("map"),
-					mapOptions);
+			var map = new google.maps.Map(document
+					.getElementById("mapUIContainer"), mapOptions);
+
+			// Add to global ui component storage
+			var uiElement = new UIElement("mapUI", "mapsUIElement", map);
+			window.uiElements[window.uiElements.length] = uiElement;
+		}
+
+		function getUIElement(id) {
+			for ( var j = 0; j < window.uiElements.length; j++) {
+				if (window.uiElements[j].id == id) {
+					alert('Found Google Maps');
+					return window.uiElements[j].reference;
+				}
+			}
+		}
+
+		function initialize() {
+			window.uiElements = new Array();
+			createGoogleMapsComponent();
+
+			// Create and connect web socket
+			var host = "ws://localhost:8080/world";
+			try {
+
+				socket = new WebSocket(host);
+				socket.onopen = function(msg) {
+					socket.send(JSON.stringify(buildRegistration()));
+				};
+				socket.onmessage = function(msg) {
+					var clientDTO = JSON.parse(msg.data);
+
+					for ( var j = 0; j < clientDTO.uiElements.length; j++) {
+						if (clientDTO.uiElements[j].type == "mapsUIElement") {
+							setMarkers(
+									getUIElement(clientDTO.uiElements[j].id),
+									clientDTO.uiElements[j]);
+						}
+					}
+				};
+				socket.onclose = function(msg) {
+				};
+
+			} catch (ex) {
+				console.log(ex);
+			}
 
 			// put markers on map
-			setMarkers(map, MapsUIDTO);
-			drawColoredRoutes(map, MapsUIDTO);
+			// 			drawColoredRoutes(map, MapsUIDTO);
 			fillTablesUIElement();
-			
-			
-
 		}
-		
-		function fillTablesUIElement()
-		{
-			$('#truckTable').dataTable( {
-	    		
-	    		"bPaginate": false,
-	    		
-	    		"aaData": [
-	    			// sample data set 
-	    			[ "#MC1", "22° C", "Munich", "Celle", "critical" ],
-	    			[ "#DR1", "28° C", "Düsseldorf", "Rothenburg", "critical" ],
-	    			[ "#MC2", "19° C", "Marburg", "Chemnitz", "ok" ],
-	    			[ "#BR1", "22° C", "Berlin", "Rüsselsheim", "ok" ],
-	    			[ "#OE1", "12° C", "Oldenburg", "Erfurt", "warning" ],
-	    			[ "#WD1", "25° C", "Wolfsburg" ,"Darmstadt", "warning" ],
-	    			[ "#BR2", "22° C", "Belial", "Rinsal", "warning" ],
-	    			[ "#PR1", "29° C", "Paderborn", "Reel", "warning" ],
-	    			[ "#QA1", "17° C", "Quecklinburg", "Aschaffenburg", "critical" ],
-	    			[ "#HS1", "2° C", "Hameln", "Salzburg", "ok" ],
-	    			[ "#HS2", "12° C", "Hannover", "Saale", "critical" ],
-	    			[ "#ET1", "24° C", "Enschede", "Trier", "warning" ]
-	    		],
-	    		"aoColumns": [
-	    			{ "sTitle": "Truck ID" },
-	    			{ "sTitle": "Truck Temperature" },
-	    			{ "sTitle": "Route Start" },
-	    			{ "sTitle": "Route Destination" },
-	    			{ "sTitle": "Order Status",	"sClass": "center"}
-	    		]
-	    	
-	    	
-	    	} );
-	    	
-	    	// iterate over rows and change their color
-	    	var rows = document.getElementById("truckTable").getElementsByTagName('tr');
-	    	
-	     
-	        
-	        for ( var j = 1; j < rows.length; j++) {
-	        	
-	        	var columns = rows[j].getElementsByTagName('td');
-	        
+
+		function fillTablesUIElement() {
+			$('#truckTable')
+					.dataTable(
+							{
+
+								"bPaginate" : false,
+
+								"aaData" : [
+										// sample data set 
+										[ "#MC1", "22° C", "Munich", "Celle",
+												"critical" ],
+										[ "#DR1", "28° C", "Düsseldorf",
+												"Rothenburg", "critical" ],
+										[ "#MC2", "19° C", "Marburg",
+												"Chemnitz", "ok" ],
+										[ "#BR1", "22° C", "Berlin",
+												"Rüsselsheim", "ok" ],
+										[ "#OE1", "12° C", "Oldenburg",
+												"Erfurt", "warning" ],
+										[ "#WD1", "25° C", "Wolfsburg",
+												"Darmstadt", "warning" ],
+										[ "#BR2", "22° C", "Belial", "Rinsal",
+												"warning" ],
+										[ "#PR1", "29° C", "Paderborn", "Reel",
+												"warning" ],
+										[ "#QA1", "17° C", "Quecklinburg",
+												"Aschaffenburg", "critical" ],
+										[ "#HS1", "2° C", "Hameln", "Salzburg",
+												"ok" ],
+										[ "#HS2", "12° C", "Hannover", "Saale",
+												"critical" ],
+										[ "#ET1", "24° C", "Enschede", "Trier",
+												"warning" ] ],
+								"aoColumns" : [ {
+									"sTitle" : "Truck ID"
+								}, {
+									"sTitle" : "Truck Temperature"
+								}, {
+									"sTitle" : "Route Start"
+								}, {
+									"sTitle" : "Route Destination"
+								}, {
+									"sTitle" : "Order Status",
+									"sClass" : "center"
+								} ]
+
+							});
+
+			// iterate over rows and change their color
+			var rows = document.getElementById("truckTable")
+					.getElementsByTagName('tr');
+
+			for ( var j = 1; j < rows.length; j++) {
+				var columns = rows[j].getElementsByTagName('td');
 
 				for ( var i = 0; i < columns.length; i++) {
-					
-					if (jQuery( columns[i] ).html() == "critical")
-						{        
-	       				 jQuery( columns[i] ).css("background-color", "#FF0000");
-						}
-					else if (jQuery( columns[i] ).html() == "warning")
-					{
-						jQuery( columns[i] ).css("background-color", "#FFFF00");
-					}
-					else if (jQuery( columns[i] ).html() == "ok")
-					{
-						jQuery( columns[i] ).css("background-color", "#00CC00");
+					if (jQuery(columns[i]).html() == "critical") {
+						jQuery(columns[i]).css("background-color", "#FF0000");
+					} else if (jQuery(columns[i]).html() == "warning") {
+						jQuery(columns[i]).css("background-color", "#FFFF00");
+					} else if (jQuery(columns[i]).html() == "ok") {
+						jQuery(columns[i]).css("background-color", "#00CC00");
 					}
 				}
-	        };
-	        
-			
-			
-			
+			}
+			;
 		}
 
 		// puts colored temperature markers on the map
 		function setMarkers(map, MapsUIDTO) {
-
 			// import different marker colors
 			// red marker
 			var pinColorRed = "FF0000";
@@ -332,7 +280,6 @@
 
 		// draw coloured routes via polylines
 		function drawColoredRoutes(map, MapsUIDTO) {
-
 			// created for upcoming fill with LatLng data
 			drawnRouteArray = new Array();
 			dummyRouteArray = new Array();
@@ -341,7 +288,6 @@
 
 			// loop over markerArray and create waypoints for routes to be drawn
 			for ( var j = 0; j < MapsUIDTO.routes.length; j++) {
-
 				for ( var i = 0; i < MapsUIDTO.routes[j].waypoints.length; i++) {
 					drawnRouteArray[drawnRouteArray.length] = new google.maps.LatLng(
 							MapsUIDTO.routes[j].waypoints[i].x,
