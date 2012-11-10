@@ -22,7 +22,7 @@ public final class Globals {
 	public static final String API_URL = "ws://api.cosm.com:8080";
 	public static final String API_KEY = "5T64pgQVJiKlfgQU2Q9IvH_UyUKSAKxTNjZma1kyQnFsQT0g";
 
-	// Temperature
+	// Temperature limits
 	public static final Double MAXIMUM_WAYPOINT_TEMPERATURE = 40.0;
 	public static final Double MAXIMUM_AVERAGE = 30.0;
 

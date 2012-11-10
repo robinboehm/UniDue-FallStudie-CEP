@@ -17,7 +17,7 @@ public class DTOGenerator {
 
 			RouteDTO rDto = new RouteDTO();
 			rDto.setId(currentRoute.getId());
-			rDto.setStatus("critical");
+			rDto.setStatus(currentRoute.getStatus().toString());
 
 			// Waypoints
 			Iterator<WayPoint> iWP = currentRoute.getPoints().iterator();

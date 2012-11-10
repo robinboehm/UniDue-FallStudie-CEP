@@ -64,10 +64,13 @@ public class CockpitDemoService implements CockpitService {
 	public void updateRoute(String id, String key) {
 		Route route = this.getRouteById(id);
 
-		if ((route != null)
-				&& key.matches(Globals.E_EVENT_ROUTE_AVERAGE_EXCEEDED + "|"
-						+ Globals.E_EVENT_WAYPOINT_MAX_EXCEEDED)) {
-			route.setStatus(RouteStatus.PROHIBITED);
+		if (route != null) {
+			if (key.matches(Globals.E_EVENT_ROUTE_AVERAGE_EXCEEDED + "|"
+					+ Globals.E_EVENT_WAYPOINT_MAX_EXCEEDED)) {
+				route.setStatus(RouteStatus.critical);
+			} else {
+				route.setStatus(RouteStatus.ok);
+			}
 		}
 	}
 

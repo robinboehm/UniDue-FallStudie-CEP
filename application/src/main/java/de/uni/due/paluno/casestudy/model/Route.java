@@ -11,6 +11,7 @@ public class Route extends AbstractWorldObject {
 	public Route() {
 		super();
 		this.points = new LinkedList<WayPoint>();
+		this.status = RouteStatus.ok;
 	}
 
 	public Route(String id) {
