@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 
-import de.uni.due.paluno.casestudy.cosm.COSMWebSocketEngine;
+import de.uni.due.paluno.casestudy.services.cosm.COSMWebSocketEngine;
 
 public class COSMWebSocketEngineTest {
 
