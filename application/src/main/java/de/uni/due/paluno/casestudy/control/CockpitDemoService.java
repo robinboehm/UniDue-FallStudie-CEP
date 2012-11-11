@@ -17,9 +17,11 @@ import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.services.lookup.LookupDemoService;
 import de.uni.due.paluno.casestudy.services.lookup.LookupService;
+import de.uni.due.paluno.casestudy.servlet.UIUpdateController;
 
 public class CockpitDemoService implements CockpitService {
-	public CockpitDemoService() {
+	public CockpitDemoService(UIUpdateController uiUpdateController) {
+		this.uiUpdateController = uiUpdateController;
 		this.lookupService = new LookupDemoService();
 
 		this.initEsperCOSMAdapter();
@@ -27,6 +29,7 @@ public class CockpitDemoService implements CockpitService {
 
 	private LookupService lookupService;
 	private EsperCOSMAdapter eca;
+	private UIUpdateController uiUpdateController;
 
 	private void initEsperCOSMAdapter() {
 		if (this.eca == null) {
@@ -71,6 +74,8 @@ public class CockpitDemoService implements CockpitService {
 				route.setStatus(RouteStatus.ok);
 			}
 		}
+
+		this.uiUpdateController.update(this.getWorld());
 	}
 
 	private Route getRouteById(String id) {

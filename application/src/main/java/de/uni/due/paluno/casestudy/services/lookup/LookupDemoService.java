@@ -9,8 +9,9 @@ import de.uni.due.paluno.casestudy.model.World;
 
 public class LookupDemoService implements LookupService {
 
-	@Override
-	public World getWorld() {
+	private World world;
+
+	public LookupDemoService() {
 		List<Route> routes = new LinkedList<Route>();
 
 		// Düsseldorf to Essen
@@ -39,9 +40,12 @@ public class LookupDemoService implements LookupService {
 		route.getPoints().add(wayPoint);
 		routes.add(route);
 
-		World world = new World();
-		world.setRoutes(routes);
+		this.world = new World();
+		this.world.setRoutes(routes);
+	}
 
-		return world;
+	@Override
+	public World getWorld() {
+		return this.world;
 	}
 }
