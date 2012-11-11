@@ -38,4 +38,12 @@ public class Route extends AbstractWorldObject {
 	public void setStatus(RouteStatus status) {
 		this.status = status;
 	}
+
+	public WayPoint getStart() {
+		return this.points.get(0);
+	}
+
+	public WayPoint getDestination() {
+		return this.points.get(this.points.size() - 1);
+	}
 }

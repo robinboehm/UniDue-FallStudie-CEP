@@ -3,12 +3,13 @@ package de.uni.due.paluno.casestudy.ui.dto;
 import java.util.Iterator;
 
 import de.uni.due.paluno.casestudy.model.Route;
+import de.uni.due.paluno.casestudy.model.Transport;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 
-public class DTOGenerator {
-	public static MapsComponentDTO getMapsUIDTO(World world) {
-		MapsComponentDTO mui = new MapsComponentDTO();
+public class DTOMapper {
+	public static MapsUIElementDTO getMapsUIElementDTO(World world) {
+		MapsUIElementDTO mui = new MapsUIElementDTO();
 
 		// Routes
 		Iterator<Route> iRoutes = world.getRoutes().iterator();
@@ -38,5 +39,26 @@ public class DTOGenerator {
 		}
 
 		return mui;
+	}
+
+	public static TableUIElementDTO getTableUIElementDTO(World world) {
+		TableUIElementDTO dto = new TableUIElementDTO();
+
+		Iterator<Transport> i = world.getTransports().iterator();
+		while (i.hasNext()) {
+			Transport transport = i.next();
+
+			TransportDTO transportDTO = new TransportDTO();
+			transportDTO.setId(transport.getId());
+			transportDTO.setTemperature(Double.toString(transport.getTruck()
+					.getTemperature()));
+			transportDTO.setStart(transport.getRoute().getStart().getId());
+			transportDTO.setDestination(transport.getRoute().getDestination()
+					.getId());
+
+			dto.getTransports().add(transportDTO);
+		}
+
+		return dto;
 	}
 }

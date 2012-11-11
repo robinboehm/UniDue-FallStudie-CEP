@@ -11,6 +11,15 @@ public class World {
 
 	public List<Route> routes;
 	public List<Truck> trucks;
+	public List<Transport> transports;
+
+	public List<Transport> getTransports() {
+		return transports;
+	}
+
+	public void setTransports(List<Transport> transports) {
+		this.transports = transports;
+	}
 
 	public List<Route> getRoutes() {
 		return routes;
@@ -39,6 +48,7 @@ public class World {
 	public World() {
 		this.trucks = new LinkedList<Truck>();
 		this.routes = new LinkedList<Route>();
+		this.transports = new LinkedList<Transport>();
 	}
 
 	@Override

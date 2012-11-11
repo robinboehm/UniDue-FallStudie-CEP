@@ -31,6 +31,8 @@ public final class Globals {
 	public static final String COMPONENT_LIST_UI = "tableUIElement";
 	public static final Object INITIAL_UI_DATA_REQUEST = "INITIAL_UI_DATA_REQUEST";
 
+	public static final String CLIENT_WEB_CLIENT = "WebClient";
+
 	// Helper methods
 	public static void dump(Class<?> c, String msg) {
 		System.out.println("[" + (new Date()).toString() + "]["

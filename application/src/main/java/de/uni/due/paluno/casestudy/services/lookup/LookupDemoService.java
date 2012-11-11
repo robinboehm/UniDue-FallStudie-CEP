@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.uni.due.paluno.casestudy.model.Route;
+import de.uni.due.paluno.casestudy.model.Transport;
+import de.uni.due.paluno.casestudy.model.Truck;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 
@@ -42,6 +44,22 @@ public class LookupDemoService implements LookupService {
 
 		this.world = new World();
 		this.world.setRoutes(routes);
+
+		Truck truck = new Truck();
+		truck.setId("TR1");
+		truck.setTemperature(20);
+		this.world.trucks.add(truck);
+
+		truck = new Truck();
+		truck.setId("TR2");
+		truck.setTemperature(15);
+		this.world.trucks.add(truck);
+
+		Transport transport = new Transport();
+		transport.setId("1");
+		transport.setRoute(this.world.getRoutes().get(0));
+		transport.setTruck(this.world.getTrucks().get(0));
+		this.world.getTransports().add(transport);
 	}
 
 	@Override
