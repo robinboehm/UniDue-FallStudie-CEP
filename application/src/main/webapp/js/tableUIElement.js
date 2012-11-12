@@ -30,6 +30,7 @@ function createTableComponent() {
 
 	$('#truckTable').dataTable({
 		"bPaginate" : false,
+		"bInfo": false,
 		"aoColumns" : [ {
 			"sTitle" : "Truck ID"
 		}, {
