@@ -6,12 +6,12 @@ import java.util.List;
 public class Route extends AbstractWorldObject {
 
 	public List<WayPoint> points;
-	public RouteStatus status;
+	public TemperatureStatus status;
 
 	public Route() {
 		super();
 		this.points = new LinkedList<WayPoint>();
-		this.status = RouteStatus.ok;
+		this.status = TemperatureStatus.ok;
 	}
 
 	public Route(String id) {
@@ -31,11 +31,11 @@ public class Route extends AbstractWorldObject {
 		this.points = points;
 	}
 
-	public RouteStatus getStatus() {
+	public TemperatureStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(RouteStatus status) {
+	public void setStatus(TemperatureStatus status) {
 		this.status = status;
 	}
 

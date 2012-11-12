@@ -11,7 +11,8 @@ import de.uni.due.paluno.casestudy.control.command.prohibition.WaypointMaxTemper
 import de.uni.due.paluno.casestudy.control.command.release.NoWaypointMaxTemperatureExceededCommand;
 import de.uni.due.paluno.casestudy.control.command.release.RouteAverageNotExceededCommand;
 import de.uni.due.paluno.casestudy.model.Route;
-import de.uni.due.paluno.casestudy.model.RouteStatus;
+import de.uni.due.paluno.casestudy.model.TemperatureStatus;
+import de.uni.due.paluno.casestudy.model.Transport;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cep.EsperCOSMAdapter;
@@ -69,13 +70,28 @@ public class CockpitDemoService implements CockpitService {
 		if (route != null) {
 			if (key.matches(Globals.E_EVENT_ROUTE_AVERAGE_EXCEEDED + "|"
 					+ Globals.E_EVENT_WAYPOINT_MAX_EXCEEDED)) {
-				route.setStatus(RouteStatus.critical);
+				route.setStatus(TemperatureStatus.critical);
+				updateTransportsOnRoute(route.getId(),
+						TemperatureStatus.critical);
 			} else {
-				route.setStatus(RouteStatus.ok);
+				route.setStatus(TemperatureStatus.ok);
+				updateTransportsOnRoute(route.getId(),
+						TemperatureStatus.ok);
 			}
 		}
 
 		this.uiUpdateController.update(this.getWorld());
+	}
+
+	private void updateTransportsOnRoute(String id, TemperatureStatus status) {
+		Iterator<Transport> i = this.getWorld().getTransports().iterator();
+		while (i.hasNext()) {
+			Transport transport = i.next();
+
+			if (transport.getRoute().getId().equals(id)) {
+				transport.setStatus(status);
+			}
+		}
 	}
 
 	private Route getRouteById(String id) {

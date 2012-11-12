@@ -50,11 +50,14 @@ public class DTOMapper {
 
 			TransportDTO transportDTO = new TransportDTO();
 			transportDTO.setId(transport.getId());
-			transportDTO.setTemperature(Double.toString(transport.getTruck()
-					.getTemperature()));
-			transportDTO.setStart(transport.getRoute().getStart().getId());
-			transportDTO.setDestination(transport.getRoute().getDestination()
-					.getId());
+			transportDTO.getAttributes().add(transport.getId());
+			transportDTO.getAttributes().add(
+					(Double.toString(transport.getTruck().getTemperature())));
+			transportDTO.getAttributes().add(
+					(transport.getRoute().getStart().getId()));
+			transportDTO.getAttributes().add(
+					(transport.getRoute().getDestination().getId()));
+			transportDTO.getAttributes().add(transport.getStatus().toString());
 
 			dto.getTransports().add(transportDTO);
 		}

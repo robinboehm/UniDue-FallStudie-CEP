@@ -7,6 +7,9 @@
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script src="DataTables/js/jquery.js"></script>
 <script src="DataTables/js/jquery.dataTables.js"></script>
+<script src="js/control.js"></script>
+<script src="js/mapsUIElement.js"></script>
+<script src="js/tableUIElement.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <style type="text/css">
@@ -36,286 +39,21 @@
 			this.id;
 			this.UIElements = new Array();
 		}
-
+	
 		function UIElement(id, type, reference) {
 			this.id = id;
 			this.type = type;
 			this.reference = reference;
 		}
-
-		function buildRegistration() {
-			var regObj = new ClientObject();
-			regObj.id = "WebClient";
-
-			for (i = 0; i < window.uiElements.length; i++) {
-				var uiElement = new UIElement(window.uiElements[i].id,
-						window.uiElements[i].type, "")
-				regObj.UIElements[i] = uiElement;
-			}
-
-			return regObj;
-		}
-
-		function createGoogleMapsComponent() {
-			// some geo-locations for the markers
-			var latlng = new google.maps.LatLng(51.2277411, 6.7734556);
-			var mapOptions = {
-				zoom : 8,
-				center : latlng,
-				mapTypeId : google.maps.MapTypeId.ROADMAP
-			};
-
-			// creates google maps map
-			var map = new google.maps.Map(document
-					.getElementById("mapUIContainer"), mapOptions);
-
-			// Add to global ui component storage
-			var uiElement = new UIElement("mapUI", "mapsUIElement", map);
-			window.uiElements[window.uiElements.length] = uiElement;
-		}
-
-		function getUIElement(id) {
-			for ( var j = 0; j < window.uiElements.length; j++) {
-				if (window.uiElements[j].id == id) {
-					return window.uiElements[j].reference;
-				}
-			}
-		}
-
+	
 		function initialize() {
 			window.uiElements = new Array();
 			createGoogleMapsComponent();
+			createTableComponent();
 
-			// Create and connect web socket
-			var host = "ws://localhost:8080/world";
-			try {
-
-				socket = new WebSocket(host);
-				socket.onopen = function(msg) {
-					socket.send(JSON.stringify(buildRegistration()));
-				};
-				socket.onmessage = function(msg) {
-					var clientDTO = JSON.parse(msg.data);
-
-					for ( var j = 0; j < clientDTO.uiElements.length; j++) {
-						if (clientDTO.uiElements[j].type == "mapsUIElement") {
-							setMarkers(
-									getUIElement(clientDTO.uiElements[j].id),
-									clientDTO.uiElements[j]);
-							drawColoredRoutes(getUIElement(clientDTO.uiElements[j].id),
-							clientDTO.uiElements[j]);
-						}
-					}
-				};
-				socket.onclose = function(msg) {
-				};
-
-			} catch (ex) {
-				console.log(ex);
-			}
- 			
-			fillTablesUIElement();
-		}
-
-		function fillTablesUIElement() {
-			$('#truckTable')
-					.dataTable(
-							{
-
-								"bPaginate" : false,
-
-								"aaData" : [
-										// sample data set 
-										[ "#MC1", "22° C", "Munich", "Celle",
-												"critical" ],
-										[ "#DR1", "28° C", "Düsseldorf",
-												"Rothenburg", "critical" ],
-										[ "#MC2", "19° C", "Marburg",
-												"Chemnitz", "ok" ],
-										[ "#BR1", "22° C", "Berlin",
-												"Rüsselsheim", "ok" ],
-										[ "#OE1", "12° C", "Oldenburg",
-												"Erfurt", "warning" ],
-										[ "#WD1", "25° C", "Wolfsburg",
-												"Darmstadt", "warning" ],
-										[ "#BR2", "22° C", "Belial", "Rinsal",
-												"warning" ],
-										[ "#PR1", "29° C", "Paderborn", "Reel",
-												"warning" ],
-										[ "#QA1", "17° C", "Quecklinburg",
-												"Aschaffenburg", "critical" ],
-										[ "#HS1", "2° C", "Hameln", "Salzburg",
-												"ok" ],
-										[ "#HS2", "12° C", "Hannover", "Saale",
-												"critical" ],
-										[ "#ET1", "24° C", "Enschede", "Trier",
-												"warning" ] ],
-								"aoColumns" : [ {
-									"sTitle" : "Truck ID"
-								}, {
-									"sTitle" : "Truck Temperature"
-								}, {
-									"sTitle" : "Route Start"
-								}, {
-									"sTitle" : "Route Destination"
-								}, {
-									"sTitle" : "Order Status",
-									"sClass" : "center"
-								} ]
-
-							});
-
-			// iterate over rows and change their color
-			var rows = document.getElementById("truckTable")
-					.getElementsByTagName('tr');
-
-			for ( var j = 1; j < rows.length; j++) {
-				var columns = rows[j].getElementsByTagName('td');
-
-				for ( var i = 0; i < columns.length; i++) {
-					if (jQuery(columns[i]).html() == "critical") {
-						jQuery(columns[i]).css("background-color", "#FF0000");
-					} else if (jQuery(columns[i]).html() == "warning") {
-						jQuery(columns[i]).css("background-color", "#FFFF00");
-					} else if (jQuery(columns[i]).html() == "ok") {
-						jQuery(columns[i]).css("background-color", "#00CC00");
-					}
-				}
-			}
-			;
-		}
-
-		// puts colored temperature markers on the map
-		function setMarkers(map, MapsUIDTO) {
-			// import different marker colors
-			// red marker
-			var pinColorRed = "FF0000";
-			var pinImageRed = new google.maps.MarkerImage(
-					"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
-							+ pinColorRed, new google.maps.Size(21, 34),
-					new google.maps.Point(0, 0), new google.maps.Point(10, 34));
-
-			// yellow marker
-			var pinColorYellow = "FFFF42"
-			var pinImageYellow = new google.maps.MarkerImage(
-					"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
-							+ pinColorYellow, new google.maps.Size(21, 34),
-					new google.maps.Point(0, 0), new google.maps.Point(10, 34));
-
-			// green marker
-			var pinColorGreen = "C6EF8C";
-			var pinImageGreen = new google.maps.MarkerImage(
-					"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"
-							+ pinColorGreen, new google.maps.Size(21, 34),
-					new google.maps.Point(0, 0), new google.maps.Point(10, 34));
-
-			// start marker
-			var pinImageStart = new google.maps.MarkerImage(
-					"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=S|007FFF|0D0608",
-					new google.maps.Size(21, 34), new google.maps.Point(0, 0),
-					new google.maps.Point(10, 34));
-
-			// destination marker
-			var pinImageDestination = new google.maps.MarkerImage(
-					"http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=D|007FFF|0D0608",
-					new google.maps.Size(21, 34), new google.maps.Point(0, 0),
-					new google.maps.Point(10, 34));
-
-			// import marker shadow
-			var pinShadow = new google.maps.MarkerImage(
-					"http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-					new google.maps.Size(40, 37), new google.maps.Point(0, 0),
-					new google.maps.Point(12, 35));
-
-			// declarated here but used in upcoming for-loop
-			var pinImageColor;
-			var titleDynamic;
-
-			// iterates over the markerArray and creates GoogleMaps markers
-			for ( var j = 0; j < MapsUIDTO.routes.length; j++) {
-
-				for ( var i = 0; i < MapsUIDTO.routes[j].waypoints.length; i++) {
-
-					// check for start or destination waypoint
-					if (i == 0) {
-						pinImageColor = pinImageStart;
-						titleDynamic = MapsUIDTO.routes[j].start + "\n"
-								+ MapsUIDTO.routes[j].waypoints[i].temperature
-					} else if (i == MapsUIDTO.routes[j].waypoints.length - 1) {
-						pinImageColor = pinImageDestination;
-						titleDynamic = MapsUIDTO.routes[j].destination + "\n"
-								+ MapsUIDTO.routes[j].waypoints[i].temperature
-					}
-
-					else {
-
-						// controll construct to differentiate between marker colors 
-						if (MapsUIDTO.routes[j].waypoints[i].status == "critical") {
-							pinImageColor = pinImageRed
-							titleDynamic = MapsUIDTO.routes[j].waypoints[i].temperature
-						} else if (MapsUIDTO.routes[j].waypoints[i].status == "warning") {
-							pinImageColor = pinImageYellow
-							titleDynamic = MapsUIDTO.routes[j].waypoints[i].temperature
-						} else if (MapsUIDTO.routes[j].waypoints[i].status == "Ok") {
-							pinImageColor = pinImageGreen
-							titleDynamic = MapsUIDTO.routes[j].waypoints[i].temperature
-						}
-					}
-
-					// actual marker creation
-					var marker = new google.maps.Marker({
-						position : new google.maps.LatLng(
-								MapsUIDTO.routes[j].waypoints[i].x,
-								MapsUIDTO.routes[j].waypoints[i].y),
-						map : map,
-						icon : pinImageColor,
-						shadow : pinShadow,
-						title : titleDynamic
-					});
-				}
-			}
-
-		}
-
-		// draw coloured routes via polylines
-		function drawColoredRoutes(map, MapsUIDTO) {
-			// created for upcoming fill with LatLng data
-			drawnRouteArray = new Array();
-			dummyRouteArray = new Array();
-			var strokeColorVariable;
-			var routePath;
-
-			// loop over markerArray and create waypoints for routes to be drawn
-			for ( var j = 0; j < MapsUIDTO.routes.length; j++) {
-				for ( var i = 0; i < MapsUIDTO.routes[j].waypoints.length; i++) {
-					drawnRouteArray[drawnRouteArray.length] = new google.maps.LatLng(
-							MapsUIDTO.routes[j].waypoints[i].x,
-							MapsUIDTO.routes[j].waypoints[i].y);
-				}
-
-				// determine route color
-				if (MapsUIDTO.routes[j].status == "critical") {
-					strokeColorVariable = "#FF0000";
-				} else if (MapsUIDTO.routes[j].status == "warning") {
-					strokeColorVariable = "#FFFF00";
-				} else if (MapsUIDTO.routes[j].status == "Ok") {
-					strokeColorVariable = "#00FF00";
-				}
-
-				// draw actual route
-				routePath = new google.maps.Polyline({
-					path : drawnRouteArray,
-					strokeColor : strokeColorVariable,
-					strokeOpacity : 1.0,
-					strokeWeight : 2
-				});
-
-				// put it all on the map object
-				routePath.setMap(map);
-				drawnRouteArray = dummyRouteArray;
-
-			}
-
+			window.markers = new Array();
+			window.lines = new Array();
+			initWebSocket();
 		}
 
 		// initializes map-creation function
