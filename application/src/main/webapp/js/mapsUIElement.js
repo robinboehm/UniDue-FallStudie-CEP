@@ -95,7 +95,7 @@ function setMarkers(map, mapsDto) {
 				} else if (mapsDto.routes[j].waypoints[i].status == "warning") {
 					pinImageColor = pinImageYellow
 					titleDynamic = mapsDto.routes[j].waypoints[i].temperature
-				} else if (mapsDto.routes[j].waypoints[i].status == "Ok") {
+				} else if (mapsDto.routes[j].waypoints[i].status == "ok") {
 					pinImageColor = pinImageGreen
 					titleDynamic = mapsDto.routes[j].waypoints[i].temperature
 				}
@@ -138,7 +138,7 @@ function drawColoredRoutes(map, mapsDto) {
 			strokeColorVariable = "#FF0000";
 		} else if (mapsDto.routes[j].status == "warning") {
 			strokeColorVariable = "#FFFF00";
-		} else if (mapsDto.routes[j].status == "Ok") {
+		} else if (mapsDto.routes[j].status == "ok") {
 			strokeColorVariable = "#00FF00";
 		}
 
