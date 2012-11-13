@@ -11,6 +11,13 @@ import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.services.cep.events.RouteEvent;
 import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
 
+/**
+ * Sets the OK-Status of a route in case no waypoint exceeds the general maximum
+ * waypoint temperature.
+ * 
+ * @author saids
+ * 
+ */
 public class NoWaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 
 	public NoWaypointMaxTemperatureExceededCommand(Route route) {

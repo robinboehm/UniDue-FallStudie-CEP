@@ -11,6 +11,13 @@ import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.services.cep.events.RouteEvent;
 import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
 
+/**
+ * Sets the Critical-Status of a route in case a waypoint exceeds the general
+ * maximum waypoint temperature.
+ * 
+ * @author saids
+ * 
+ */
 public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 
 	public WaypointMaxTemperatureExceededCommand(Route route) {
@@ -30,7 +37,8 @@ public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 	public String getEPL() {
 		String epl = "select count(data) as no from "
 				+ Globals.E_TEMPERATURE_ENTITY + " where target in ("
-				+ getWaypoints() + ") having data > " + Globals.MAXIMUM_WAYPOINT_TEMPERATURE;
+				+ getWaypoints() + ") having data > "
+				+ Globals.MAXIMUM_WAYPOINT_TEMPERATURE;
 
 		return epl;
 	}

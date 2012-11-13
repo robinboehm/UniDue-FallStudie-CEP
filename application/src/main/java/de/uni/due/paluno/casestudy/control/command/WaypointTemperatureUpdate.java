@@ -8,7 +8,14 @@ import com.espertech.esper.client.EPRuntime;
 import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
 
-public class ModelUpdateCommand extends ComplexEventCommand {
+/**
+ * Updates the data model with the recently received temperature values
+ * waypoints. No derived logic implemented. Plain delegation of values.
+ * 
+ * @author saids
+ * 
+ */
+public class WaypointTemperatureUpdate extends ComplexEventCommand {
 
 	@Override
 	protected void executeLogic(EPRuntime epr, Map<String, Object> eventParams) {

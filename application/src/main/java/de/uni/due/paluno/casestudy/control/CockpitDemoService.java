@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.uni.due.paluno.casestudy.Globals;
-import de.uni.due.paluno.casestudy.control.command.ModelUpdateCommand;
+import de.uni.due.paluno.casestudy.control.command.WaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.control.command.RouteStatusUpdateCommand;
 import de.uni.due.paluno.casestudy.control.command.prohibition.RouteAverageExceededCommand;
 import de.uni.due.paluno.casestudy.control.command.prohibition.WaypointMaxTemperatureExceededCommand;
@@ -20,6 +20,12 @@ import de.uni.due.paluno.casestudy.services.lookup.LookupDemoService;
 import de.uni.due.paluno.casestudy.services.lookup.LookupService;
 import de.uni.due.paluno.casestudy.servlet.UIUpdateController;
 
+/**
+ * Demo implementation of the CockpitService
+ * 
+ * @author saids
+ * 
+ */
 public class CockpitDemoService implements CockpitService {
 	public CockpitDemoService(UIUpdateController uiUpdateController) {
 		this.uiUpdateController = uiUpdateController;
@@ -32,16 +38,28 @@ public class CockpitDemoService implements CockpitService {
 	private EsperCOSMAdapter eca;
 	private UIUpdateController uiUpdateController;
 
+	/**
+	 * Init ECA based on the underlying data model
+	 */
 	private void initEsperCOSMAdapter() {
 		if (this.eca == null) {
 			this.eca = new EsperCOSMAdapter(this);
 
+			// Generate ECA Trigger configuration
 			this.createRouteTriggers(eca);
 
+			// Init configuration
 			eca.createTriggers();
 		}
 	}
 
+	/**
+	 * Creates event triggers for all routes contained in the underlying data
+	 * model
+	 * 
+	 * @param eca
+	 *            ECA that is configured
+	 */
 	private void createRouteTriggers(EsperCOSMAdapter eca) {
 		List<Route> routes = this.getRoutes();
 
@@ -56,9 +74,14 @@ public class CockpitDemoService implements CockpitService {
 			eca.addToConfig(new NoWaypointMaxTemperatureExceededCommand(route));
 		}
 
-		eca.addToConfig(new ModelUpdateCommand());
+		eca.addToConfig(new WaypointTemperatureUpdate());
 	}
 
+	/**
+	 * Returns all existing routes
+	 * 
+	 * @return List of Routes
+	 */
 	private List<Route> getRoutes() {
 		return this.lookupService.getWorld().getRoutes();
 	}
@@ -75,14 +98,21 @@ public class CockpitDemoService implements CockpitService {
 						TemperatureStatus.critical);
 			} else {
 				route.setStatus(TemperatureStatus.ok);
-				updateTransportsOnRoute(route.getId(),
-						TemperatureStatus.ok);
+				updateTransportsOnRoute(route.getId(), TemperatureStatus.ok);
 			}
 		}
 
 		this.uiUpdateController.update(this.getWorld());
 	}
 
+	/**
+	 * Updates all transports that are affected by the status change of a route
+	 * 
+	 * @param id
+	 *            Id of the route whose status has been changed
+	 * @param status
+	 *            Status to set in the transports
+	 */
 	private void updateTransportsOnRoute(String id, TemperatureStatus status) {
 		Iterator<Transport> i = this.getWorld().getTransports().iterator();
 		while (i.hasNext()) {
@@ -94,6 +124,13 @@ public class CockpitDemoService implements CockpitService {
 		}
 	}
 
+	/**
+	 * Look up a route by id
+	 * 
+	 * @param id
+	 *            Id to look for
+	 * @return Route
+	 */
 	private Route getRouteById(String id) {
 		Iterator<Route> i = this.lookupService.getWorld().getRoutes()
 				.iterator();

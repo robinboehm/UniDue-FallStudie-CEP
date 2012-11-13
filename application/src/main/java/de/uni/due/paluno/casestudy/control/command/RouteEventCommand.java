@@ -6,8 +6,18 @@ import java.util.Map;
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 
+/**
+ * Super class to all commands that deal with status changes of a Route due to
+ * status changes of waypoints.
+ * 
+ * @author saids
+ * 
+ */
 public abstract class RouteEventCommand extends ComplexEventCommand {
 
+	/**
+	 * Route that is observed
+	 */
 	protected Route route;
 
 	public RouteEventCommand(Route route) {
@@ -22,6 +32,12 @@ public abstract class RouteEventCommand extends ComplexEventCommand {
 		this.route = route;
 	}
 
+	/**
+	 * Returns the route's waypoints as a condition that can be used in an EPL
+	 * statement.
+	 * 
+	 * @return
+	 */
 	protected String getWaypoints() {
 		String waypoints = "";
 
@@ -43,5 +59,6 @@ public abstract class RouteEventCommand extends ComplexEventCommand {
 				+ this.getRouteInfoMessage(eventParams);
 	}
 
-	protected abstract String getRouteInfoMessage(Map<String, Object> eventParams);
+	protected abstract String getRouteInfoMessage(
+			Map<String, Object> eventParams);
 }

@@ -11,6 +11,13 @@ import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.services.cep.events.RouteEvent;
 import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
 
+/**
+ * Sets the OK-Status of a route in case the average route temperature is not
+ * exceeded.
+ * 
+ * @author saids
+ * 
+ */
 public class RouteAverageNotExceededCommand extends RouteEventCommand {
 
 	public RouteAverageNotExceededCommand(Route route) {

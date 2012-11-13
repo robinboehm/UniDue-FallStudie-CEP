@@ -18,11 +18,25 @@ import de.uni.due.paluno.casestudy.control.command.ComplexEventCommand;
 import de.uni.due.paluno.casestudy.services.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.services.cosm.event.COSMWebSocketListener;
 
+/**
+ * Translates data updates from COSM into ESPER Events. Configures the
+ * underlying ESPER engine.
+ * 
+ * Therefore the COSMWebSocketListener interface is implemented. Instances of
+ * this class are registered as listeners in the COSMWebSocketEngine.
+ * 
+ * @author saids
+ * 
+ */
 public class EsperCOSMAdapter implements COSMWebSocketListener {
 
 	private Configuration cepConfig;
 	private EPServiceProvider cep;
 	private List<String> eventTypes;
+
+	/**
+	 * List of commands that are used as callback objects in ESPER listeners
+	 */
 	private List<ComplexEventCommand> commands;
 	private CockpitService service;
 
@@ -56,6 +70,16 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 		}
 	}
 
+	/**
+	 * Creates the EPStatement instances that are used by esper. The trigger
+	 * instance, which contains an complex event command as a callback object,
+	 * is configured as the listener object.
+	 * 
+	 * @param epl
+	 *            The EPL statement to configure
+	 * @param et
+	 *            the Trigger (Listener) object
+	 */
 	private void createAndConfigureCEPStatement(String epl, Trigger et) {
 		EPAdministrator cepAdm = this.cep.getEPAdministrator();
 		EPStatement cepStatement = cepAdm.createEPL(epl);
@@ -67,6 +91,10 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 		return cep;
 	}
 
+	/**
+	 * Creates ESPER Listeners based on the list of complex event commands that
+	 * has been provided to the adapter.
+	 */
 	public void createTriggers() {
 		this.cep = EPServiceProviderManager.getProvider("myCEPEngine",
 				this.cepConfig);

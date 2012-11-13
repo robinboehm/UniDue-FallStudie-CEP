@@ -7,6 +7,16 @@ import de.uni.due.paluno.casestudy.control.command.ComplexEventCommand;
 
 import java.util.Map;
 
+/**
+ * Mediator between complex event commands and esper
+ * classes/dependencies/EPStatements
+ * 
+ * Instances of this class are used as the listener objects of the EPStatements
+ * that are created by the EsperCOSMAdapter.
+ * 
+ * @author saids
+ * 
+ */
 public class Trigger implements UpdateListener {
 
 	private ComplexEventCommand ec;
@@ -15,7 +25,7 @@ public class Trigger implements UpdateListener {
 		this.ec = ec;
 	}
 
-	//@Override
+	// @Override
 	public void update(EventBean[] newData, EventBean[] oldData) {
 		Map<String, Object> map = ec.toMap(newData[0]);
 

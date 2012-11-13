@@ -9,6 +9,13 @@ import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.services.cep.events.RouteEvent;
 
+/**
+ * Updates the data model with status changes that have been created by status
+ * listener commands (see prohibition/release subpackage).
+ * 
+ * @author saids
+ * 
+ */
 public class RouteStatusUpdateCommand extends RouteEventCommand {
 
 	public RouteStatusUpdateCommand(Route route) {

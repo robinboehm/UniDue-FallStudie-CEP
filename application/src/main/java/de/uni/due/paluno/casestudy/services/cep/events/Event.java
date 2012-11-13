@@ -2,6 +2,12 @@ package de.uni.due.paluno.casestudy.services.cep.events;
 
 import java.util.Date;
 
+/**
+ * Super class of all classes that are used as events by ESPER
+ * 
+ * @author saids
+ * 
+ */
 public abstract class Event {
 	private String target;
 	private Double data;

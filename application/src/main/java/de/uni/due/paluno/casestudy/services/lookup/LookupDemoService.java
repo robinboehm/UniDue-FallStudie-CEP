@@ -9,6 +9,12 @@ import de.uni.due.paluno.casestudy.model.Truck;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 
+/**
+ * Demo class to generate a static data model
+ * 
+ * @author saids
+ * 
+ */
 public class LookupDemoService implements LookupService {
 
 	private World world;
