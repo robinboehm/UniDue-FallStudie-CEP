@@ -22,6 +22,7 @@ function fillTablesUIElement(transports) {
 }
 
 function clearTablesUIElement() {
+	$('#truckTable').dataTable().fnClearTable();
 }
 
 function createTableComponent() {
