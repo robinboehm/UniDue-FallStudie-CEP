@@ -59,7 +59,7 @@
 
 .dataTables_filter {
 	width: 50%;
-	float: center;
+	float: right;
 	text-align: right;
 }
 
@@ -133,7 +133,10 @@
 table.display {
 	margin: 0 auto;
 	clear: both;
-	width: 100%;
+	width: 34%;
+	float: right;
+
+	
 	
 	/* Note Firefox 3.5 and before have a bug with border-collapse
 	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 ) 
