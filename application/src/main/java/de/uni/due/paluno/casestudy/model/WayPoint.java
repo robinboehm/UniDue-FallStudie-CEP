@@ -5,6 +5,7 @@ public class WayPoint extends AbstractTemperaturedWorldObject {
 	private String x;
 	private String y;
 	private int no;
+	private String name;
 
 	public WayPoint(String id, int no) {
 		super(id);
@@ -40,5 +41,13 @@ public class WayPoint extends AbstractTemperaturedWorldObject {
 			return "critical";
 		else
 			return "Ok";
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

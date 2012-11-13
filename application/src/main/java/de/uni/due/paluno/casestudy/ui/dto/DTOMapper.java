@@ -19,6 +19,8 @@ public class DTOMapper {
 			RouteDTO rDto = new RouteDTO();
 			rDto.setId(currentRoute.getId());
 			rDto.setStatus(currentRoute.getStatus().toString());
+			rDto.setStart(currentRoute.getStart().getName());
+			rDto.setDestination(currentRoute.getDestination().getName());
 
 			// Waypoints
 			Iterator<WayPoint> iWP = currentRoute.getPoints().iterator();
@@ -54,9 +56,9 @@ public class DTOMapper {
 			transportDTO.getAttributes().add(
 					(Double.toString(transport.getTruck().getTemperature())));
 			transportDTO.getAttributes().add(
-					(transport.getRoute().getStart().getId()));
+					(transport.getRoute().getStart().getName()));
 			transportDTO.getAttributes().add(
-					(transport.getRoute().getDestination().getId()));
+					(transport.getRoute().getDestination().getName()));
 			transportDTO.getAttributes().add(transport.getStatus().toString());
 
 			dto.getTransports().add(transportDTO);
