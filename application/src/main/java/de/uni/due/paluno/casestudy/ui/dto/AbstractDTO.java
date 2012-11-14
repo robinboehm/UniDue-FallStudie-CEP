@@ -4,6 +4,13 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Object model that is derived from the business data model. UI specific
+ * transformation steps are performed.
+ * 
+ * @author saids
+ * 
+ */
 public class AbstractDTO {
 
 	private String id;

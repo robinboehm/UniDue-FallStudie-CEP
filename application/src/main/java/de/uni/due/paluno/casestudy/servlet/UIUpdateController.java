@@ -2,6 +2,7 @@ package de.uni.due.paluno.casestudy.servlet;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +10,10 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.catalina.websocket.MessageInbound;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.model.World;
@@ -25,7 +30,14 @@ import de.uni.due.paluno.casestudy.ui.dto.UserInterfaceComponentDTO;
  * 
  */
 public class UIUpdateController {
+	/**
+	 * Websocket connections
+	 */
 	private List<MessageInbound> connections;
+
+	/**
+	 * Registered clients
+	 */
 	private Map<String, List<UIElement>> uiListeners;
 
 	public UIUpdateController() {
@@ -33,12 +45,26 @@ public class UIUpdateController {
 		this.uiListeners = new HashMap<String, List<UIElement>>();
 	}
 
+	/**
+	 * Updates all clients with the provided data model
+	 * 
+	 * @param world
+	 *            Data model
+	 */
 	private void updateClients(World world) {
 		for (MessageInbound inbound : connections) {
 			updateClient(inbound, world);
 		}
 	}
 
+	/**
+	 * Updates the client listening on the inbound channel
+	 * 
+	 * @param inbound
+	 *            Websocket channel
+	 * @param world
+	 *            Data model
+	 */
 	private void updateClient(MessageInbound inbound, World world) {
 		CharBuffer buffer = this.generateClientDTO(Globals.CLIENT_WEB_CLIENT,
 				world);
@@ -49,6 +75,15 @@ public class UIUpdateController {
 		}
 	}
 
+	/**
+	 * Generates DTO objects for the specified client
+	 * 
+	 * @param id
+	 *            Client ID
+	 * @param world
+	 *            data model
+	 * @return JSON String to put in to the websocket
+	 */
 	private CharBuffer generateClientDTO(String id, World world) {
 		ClientDTO clientDTO = new ClientDTO();
 		clientDTO.setId(id);
@@ -86,5 +121,36 @@ public class UIUpdateController {
 
 	public void update(World world) {
 		this.updateClients(world);
+	}
+
+	/**
+	 * Registers clients / ui elements
+	 * 
+	 * @param message
+	 * @throws IOException
+	 * @throws JsonProcessingException
+	 */
+	public void processUIRegistration(CharBuffer message) throws IOException,
+			JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		// Parse inpout
+		JsonNode registration = mapper.readTree(message.toString());
+		String client = registration.get("id").textValue();
+		JsonNode elements = registration.get("UIElements");
+		List<UIElement> uiElements = new ArrayList<UIElement>();
+
+		Iterator<JsonNode> i = elements.iterator();
+		while (i.hasNext()) {
+			JsonNode element = i.next();
+
+			// Create UI Element representations
+			UIElement uiElement = new UIElement();
+			uiElement.setId(element.get("id").textValue());
+			uiElement.setType(element.get("type").textValue());
+			uiElements.add(uiElement);
+		}
+
+		this.addUIListeners(client, uiElements);
 	}
 }

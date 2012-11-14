@@ -23,6 +23,12 @@ import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cosm.COSMWebSocketEngine;
 
+/**
+ * The applications runs as a Servlet in a Servlet Container.
+ * 
+ * @author saids
+ * 
+ */
 @WebServlet(name = "WorldWebSocketServlet", urlPatterns = { "/world" }, loadOnStartup = 1)
 public class WorldWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = -1439435191685551673L;
@@ -99,6 +105,16 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 		return urls;
 	}
 
+	/**
+	 * Starts the COSM Engine
+	 * 
+	 * @param routeURLs
+	 *            URL's to receive Data from (feeds to Waypoints)
+	 * @return Reference to the engine
+	 * @throws IOException
+	 * @throws ExecutionException
+	 * @throws InterruptedException
+	 */
 	private COSMWebSocketEngine createEngine(Set<String> routeURLs)
 			throws IOException, ExecutionException, InterruptedException {
 		COSMWebSocketEngine engine = new COSMWebSocketEngine(routeURLs);

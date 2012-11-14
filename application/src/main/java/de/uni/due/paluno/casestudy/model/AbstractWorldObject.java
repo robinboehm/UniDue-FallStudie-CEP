@@ -1,5 +1,11 @@
 package de.uni.due.paluno.casestudy.model;
 
+/**
+ * Super class to all classes that are part of the data model.
+ * 
+ * @author saids
+ * 
+ */
 public abstract class AbstractWorldObject {
 	public String id;
 

@@ -2,6 +2,12 @@ package de.uni.due.paluno.casestudy;
 
 import java.util.Date;
 
+/**
+ * Contains constants and global helper methods
+ * 
+ * @author saids
+ * 
+ */
 public final class Globals {
 
 	// Application context

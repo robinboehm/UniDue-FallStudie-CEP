@@ -7,7 +7,20 @@ import de.uni.due.paluno.casestudy.model.Transport;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 
+/**
+ * Generates DTO objects based on business data model
+ * 
+ * @author saids
+ * 
+ */
 public class DTOMapper {
+	/**
+	 * Generates DTO for Maps UI Elements
+	 * 
+	 * @param world
+	 *            Data model
+	 * @return DTO
+	 */
 	public static MapsUIElementDTO getMapsUIElementDTO(World world) {
 		MapsUIElementDTO mui = new MapsUIElementDTO();
 
@@ -43,6 +56,13 @@ public class DTOMapper {
 		return mui;
 	}
 
+	/**
+	 * Generates DTO for table UI element
+	 * 
+	 * @param world
+	 *            Data model
+	 * @return DTO
+	 */
 	public static TableUIElementDTO getTableUIElementDTO(World world) {
 		TableUIElementDTO dto = new TableUIElementDTO();
 

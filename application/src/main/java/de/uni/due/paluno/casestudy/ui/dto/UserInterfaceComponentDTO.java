@@ -1,5 +1,11 @@
 package de.uni.due.paluno.casestudy.ui.dto;
 
+/**
+ * Represents an UI Element.
+ * 
+ * @author saids
+ * 
+ */
 public abstract class UserInterfaceComponentDTO extends AbstractDTO {
 	private String type;
 
