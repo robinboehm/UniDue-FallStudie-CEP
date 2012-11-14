@@ -1,3 +1,5 @@
+
+	// fill JQuery datatable
 function fillTablesUIElement(transports) {
 	for ( var j = 0; j < transports.length; j++) {
 		$('#truckTable').dataTable().fnAddData([ transports[j].attributes ]);
@@ -21,10 +23,12 @@ function fillTablesUIElement(transports) {
 	}
 }
 
+	// empty JQuery datatable
 function clearTablesUIElement() {
 	$('#truckTable').dataTable().fnClearTable();
 }
 
+	// initialize JQuery datatable component
 function createTableComponent() {
 	var uiElement = new UIElement("tableUI", "tableUIElement", null);
 	window.uiElements[window.uiElements.length] = uiElement;

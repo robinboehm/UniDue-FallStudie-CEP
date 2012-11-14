@@ -1,5 +1,5 @@
-function createGoogleMapsComponent() {
 	// create the google maps map with starting point
+function createGoogleMapsComponent() {
 	var latlng = new google.maps.LatLng(51.2277411, 6.7734556);
 	var mapOptions = {
 		zoom : 8,
@@ -157,6 +157,7 @@ function drawColoredRoutes(map, mapsDto) {
 	}
 }
 
+		// remove items on google maps map if update occurs
 function removeLinesAndMarkers(markers) {
 	for ( var i = 0; i < window.markers.length; i++) {
 		window.markers[i].setMap(null);

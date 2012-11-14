@@ -1,5 +1,8 @@
+
+	// initialize web socket connection
+	// register world and UIElements
 function initWebSocket() {
-	// Create and connect web socket
+	// create and connect web socket
 	var host = "ws://localhost:8080/world";
 
 	try {
@@ -18,29 +21,33 @@ function initWebSocket() {
 	}
 }
 
+		// execute when messages reach web socket
 function updateUi(msg) {
 	var clientDTO = JSON.parse(msg.data);
 
 	for ( var j = 0; j < clientDTO.uiElements.length; j++) {
 
 		if (clientDTO.uiElements[j].type == "mapsUIElement") {
-			// Clean Up
+			// clean Up
 			removeLinesAndMarkers();
 
-			// Draw Markers
+			// draw Markers
 			setMarkers(getUIElement(clientDTO.uiElements[j].id),
 					clientDTO.uiElements[j]);
 
-			// Draw Routes
+			// draw Routes
 			drawColoredRoutes(getUIElement(clientDTO.uiElements[j].id),
 					clientDTO.uiElements[j]);
 		} else if (clientDTO.uiElements[j].type == "tableUIElement") {
+			// refill table element each time update occurs
 			clearTablesUIElement();
 			fillTablesUIElement(clientDTO.uiElements[j].transports);
 		}
 	}
 }
 
+			// creates registration object which is send to backend
+			// for registration of world-ui-elements
 function buildRegistration() {
 	var regObj = new ClientObject();
 	regObj.id = "WebClient";
