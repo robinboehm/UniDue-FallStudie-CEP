@@ -40,7 +40,7 @@ public class WayPoint extends AbstractTemperaturedWorldObject {
 		if (this.getTemperature() > 40)
 			return "critical";
 		else
-			return "Ok";
+			return "ok";
 	}
 
 	public String getName() {

@@ -1,5 +1,5 @@
 function createGoogleMapsComponent() {
-	// some geo-locations for the markers
+	// create the google maps map with starting point
 	var latlng = new google.maps.LatLng(51.2277411, 6.7734556);
 	var mapOptions = {
 		zoom : 8,
@@ -11,7 +11,7 @@ function createGoogleMapsComponent() {
 	var map = new google.maps.Map(document.getElementById("mapUIContainer"),
 			mapOptions);
 
-	// Add to global ui component storage
+	// add to global ui component storage
 	var uiElement = new UIElement("mapUI", "mapsUIElement", map);
 	window.uiElements[window.uiElements.length] = uiElement;
 }
