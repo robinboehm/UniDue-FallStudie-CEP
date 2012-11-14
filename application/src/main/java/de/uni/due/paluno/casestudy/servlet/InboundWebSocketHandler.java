@@ -35,7 +35,7 @@ public final class InboundWebSocketHandler extends MessageInbound {
 	protected void onTextMessage(CharBuffer message) throws IOException {
 		// Provide initial data to Clients
 		if (message.toString().equals(Globals.INITIAL_UI_DATA_REQUEST))
-			System.out.println("Initial Data Request");
+			this.uiUpdateController.update();
 		// Register UI Elements
 		else
 			this.uiUpdateController.processUIRegistration(message);

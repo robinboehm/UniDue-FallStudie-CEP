@@ -34,8 +34,6 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 
 	private EventListenerList listeners = new EventListenerList();
 
-	// Constants
-
 	public COSMWebSocketEngine(Set<String> dataStreams) throws IOException,
 			ExecutionException {
 		this.config = new AsyncHttpClientConfig.Builder().build();
@@ -46,7 +44,7 @@ public class COSMWebSocketEngine implements WebSocketTextListener {
 
 		webSocketUpgradeHandler = new WebSocketUpgradeHandler.Builder()
 				.addWebSocketListener(this).build();
-		futureWebSocket = client.prepareGet(Globals.API_URL).execute(
+		futureWebSocket = client.prepareGet(Globals.INBOUND_API_URL).execute(
 				webSocketUpgradeHandler);
 	}
 

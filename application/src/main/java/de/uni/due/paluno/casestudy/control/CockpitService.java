@@ -2,6 +2,7 @@ package de.uni.due.paluno.casestudy.control;
 
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cep.EsperCOSMAdapter;
+import de.uni.due.paluno.casestudy.servlet.UIUpdateController;
 
 /**
  * Business Layer containing the functionality to do model/ui updates and
@@ -46,4 +47,11 @@ public interface CockpitService {
 	 * @return Data Model
 	 */
 	public World getWorld();
+
+	/**
+	 * Returns reference to UI Update controller
+	 * 
+	 * @return
+	 */
+	public UIUpdateController getUIUpdateController();
 }

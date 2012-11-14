@@ -1,6 +1,5 @@
-
-	// initialize web socket connection
-	// register world and UIElements
+// initialize web socket connection
+// register world and UIElements
 function initWebSocket() {
 	// create and connect web socket
 	var host = "ws://localhost:8080/world";
@@ -9,6 +8,7 @@ function initWebSocket() {
 		socket = new WebSocket(host);
 		socket.onopen = function(msg) {
 			socket.send(JSON.stringify(buildRegistration()));
+			socket.send("INITIAL_UI_DATA_REQUEST");
 		};
 		socket.onmessage = function(msg) {
 			updateUi(msg);
@@ -21,7 +21,7 @@ function initWebSocket() {
 	}
 }
 
-		// execute when messages reach web socket
+// execute when messages reach web socket
 function updateUi(msg) {
 	var clientDTO = JSON.parse(msg.data);
 
@@ -46,8 +46,8 @@ function updateUi(msg) {
 	}
 }
 
-			// creates registration object which is send to backend
-			// for registration of world-ui-elements
+// creates registration object which is send to backend
+// for registration of world-ui-elements
 function buildRegistration() {
 	var regObj = new ClientObject();
 	regObj.id = "WebClient";

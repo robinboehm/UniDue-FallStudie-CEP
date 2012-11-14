@@ -1,11 +1,12 @@
 package de.uni.due.paluno.casestudy.control;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import de.uni.due.paluno.casestudy.Globals;
-import de.uni.due.paluno.casestudy.control.command.WaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.control.command.RouteStatusUpdateCommand;
+import de.uni.due.paluno.casestudy.control.command.WaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.control.command.prohibition.RouteAverageExceededCommand;
 import de.uni.due.paluno.casestudy.control.command.prohibition.WaypointMaxTemperatureExceededCommand;
 import de.uni.due.paluno.casestudy.control.command.release.NoWaypointMaxTemperatureExceededCommand;
@@ -16,6 +17,9 @@ import de.uni.due.paluno.casestudy.model.Transport;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cep.EsperCOSMAdapter;
+import de.uni.due.paluno.casestudy.services.cep.events.Event;
+import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
+import de.uni.due.paluno.casestudy.services.cosm.COSM;
 import de.uni.due.paluno.casestudy.services.lookup.LookupDemoService;
 import de.uni.due.paluno.casestudy.services.lookup.LookupService;
 import de.uni.due.paluno.casestudy.servlet.UIUpdateController;
@@ -27,16 +31,60 @@ import de.uni.due.paluno.casestudy.servlet.UIUpdateController;
  * 
  */
 public class CockpitDemoService implements CockpitService {
-	public CockpitDemoService(UIUpdateController uiUpdateController) {
-		this.uiUpdateController = uiUpdateController;
-		this.lookupService = new LookupDemoService();
-
-		this.initEsperCOSMAdapter();
-	}
-
 	private LookupService lookupService;
 	private EsperCOSMAdapter eca;
 	private UIUpdateController uiUpdateController;
+	private COSM cosm;
+
+	public CockpitDemoService() {
+		// Init Services
+		this.uiUpdateController = new UIUpdateController(this);
+		this.lookupService = new LookupDemoService();
+
+		// Init ECA
+		this.initEsperCOSMAdapter();
+
+		// Init COSM API
+		this.cosm = new COSM();
+
+		// Enrich data model wit current values form cosm
+		this.initialLoad();
+	}
+
+	private void initialLoad() {
+		// Get a distinct list of waypoints
+		Iterator<Route> i = this.lookupService.getWorld().getRoutes()
+				.iterator();
+
+		List<WayPoint> waypoints = new ArrayList<WayPoint>();
+
+		while (i.hasNext()) {
+			Route r = i.next();
+
+			Iterator<WayPoint> j = r.getPoints().iterator();
+			while (j.hasNext()) {
+				WayPoint wp = j.next();
+
+				if (!waypoints.contains(wp)) {
+					wp.setTemperature(this.cosm.getTemperatureForWayPoint(wp
+							.getId()));
+					waypoints.add(wp);
+				}
+			}
+		}
+
+		// Update model
+		Iterator<WayPoint> j = waypoints.iterator();
+		while (j.hasNext()) {
+			WayPoint wp = j.next();
+
+			Event event = new WaypointTemperatureEvent();
+			event.setData(wp.getTemperature());
+			event.setTarget(wp.getId());
+
+			this.eca.getCEP().getEPRuntime().sendEvent(event);
+		}
+	}
 
 	/**
 	 * Init ECA based on the underlying data model
@@ -102,7 +150,7 @@ public class CockpitDemoService implements CockpitService {
 			}
 		}
 
-		this.uiUpdateController.update(this.getWorld());
+		this.uiUpdateController.update();
 	}
 
 	/**
@@ -169,5 +217,9 @@ public class CockpitDemoService implements CockpitService {
 	@Override
 	public World getWorld() {
 		return this.lookupService.getWorld();
+	}
+
+	public UIUpdateController getUIUpdateController() {
+		return uiUpdateController;
 	}
 }

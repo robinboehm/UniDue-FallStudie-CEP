@@ -25,7 +25,7 @@ public final class Globals {
 
 	// COSM
 	public static final String COSM_API = "http://api.cosm.com/v2";
-	public static final String API_URL = "ws://api.cosm.com:8080";
+	public static final String INBOUND_API_URL = "ws://api.cosm.com:8080";
 	public static final String API_KEY = "5T64pgQVJiKlfgQU2Q9IvH_UyUKSAKxTNjZma1kyQnFsQT0g";
 
 	// Temperature limits

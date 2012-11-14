@@ -34,27 +34,23 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = -1439435191685551673L;
 
 	private CockpitService cockpitService;
-	private UIUpdateController uiUpdateController;
 	private InboundWebSocketHandler inboundWebSocketHandler;
 
 	public WorldWebSocketServlet() throws IOException, ExecutionException,
 			InterruptedException {
-		// Init UI Update Controller
-		this.uiUpdateController = new UIUpdateController();
-
 		// Init Service Layer
-		this.initServiceLayer(this.uiUpdateController);
+		this.initServiceLayer();
 
 		// Init Inbound WebSocket Handler
 		this.inboundWebSocketHandler = new InboundWebSocketHandler(
-				this.uiUpdateController);
+				this.cockpitService.getUIUpdateController());
 
 		// Init WebSocket Engine
 		this.initWebSocketEngine();
 	}
 
-	private void initServiceLayer(UIUpdateController uiUpdateController) {
-		this.cockpitService = new CockpitDemoService(uiUpdateController);
+	private void initServiceLayer() {
+		this.cockpitService = new CockpitDemoService();
 
 		try {
 			Context ic = new InitialContext();

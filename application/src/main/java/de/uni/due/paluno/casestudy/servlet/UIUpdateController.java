@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uni.due.paluno.casestudy.Globals;
+import de.uni.due.paluno.casestudy.control.CockpitService;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.ui.UIElement;
 import de.uni.due.paluno.casestudy.ui.dto.ClientDTO;
@@ -40,7 +41,13 @@ public class UIUpdateController {
 	 */
 	private Map<String, List<UIElement>> uiListeners;
 
-	public UIUpdateController() {
+	/**
+	 * Reference to service layer
+	 */
+	private CockpitService service;
+
+	public UIUpdateController(CockpitService service) {
+		this.service = service;
 		this.connections = new CopyOnWriteArrayList<MessageInbound>();
 		this.uiListeners = new HashMap<String, List<UIElement>>();
 	}
@@ -119,8 +126,8 @@ public class UIUpdateController {
 		this.connections.add(myMessageInbound);
 	}
 
-	public void update(World world) {
-		this.updateClients(world);
+	public void update() {
+		this.updateClients(this.service.getWorld());
 	}
 
 	/**
