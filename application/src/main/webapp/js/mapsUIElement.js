@@ -120,13 +120,14 @@ function setMarkers(map, mapsDto) {
 // draw coloured routes via polylines
 function drawColoredRoutes(map, mapsDto) {
 	// created for upcoming fill with LatLng data
-	drawnRouteArray = new Array();
-	dummyRouteArray = new Array();
+	
+	
 	var strokeColorVariable;
 	var routePath;
 
 	// loop over markerArray and create waypoints for routes to be drawn
 	for ( var j = 0; j < mapsDto.routes.length; j++) {
+		drawnRouteArray = new Array();
 		for ( var i = 0; i < mapsDto.routes[j].waypoints.length; i++) {
 			drawnRouteArray[drawnRouteArray.length] = new google.maps.LatLng(
 					mapsDto.routes[j].waypoints[i].x,
@@ -153,7 +154,7 @@ function drawColoredRoutes(map, mapsDto) {
 
 		// put it all on the map object
 		routePath.setMap(map);
-		drawnRouteArray = dummyRouteArray;
+		
 	}
 }
 
