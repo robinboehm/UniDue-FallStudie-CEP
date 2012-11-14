@@ -134,9 +134,11 @@
  */
 table.display {
 	margin: 0 auto;
+	display: inline; 
 	clear: both;
 	width: 34%;
 	float: right;
+
 
 	
 	
