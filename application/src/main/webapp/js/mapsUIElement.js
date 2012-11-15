@@ -1,4 +1,4 @@
-	// create the google maps map with starting point
+// create the google maps map with starting point
 function createGoogleMapsComponent() {
 	var latlng = new google.maps.LatLng(51.2277411, 6.7734556);
 	var mapOptions = {
@@ -120,13 +120,13 @@ function setMarkers(map, mapsDto) {
 // draw coloured routes via polylines
 function drawColoredRoutes(map, mapsDto) {
 	// created for upcoming fill with LatLng data
-	drawnRouteArray = new Array();
-	dummyRouteArray = new Array();
 	var strokeColorVariable;
 	var routePath;
 
 	// loop over markerArray and create waypoints for routes to be drawn
 	for ( var j = 0; j < mapsDto.routes.length; j++) {
+		drawnRouteArray = new Array();
+
 		for ( var i = 0; i < mapsDto.routes[j].waypoints.length; i++) {
 			drawnRouteArray[drawnRouteArray.length] = new google.maps.LatLng(
 					mapsDto.routes[j].waypoints[i].x,
@@ -153,11 +153,10 @@ function drawColoredRoutes(map, mapsDto) {
 
 		// put it all on the map object
 		routePath.setMap(map);
-		drawnRouteArray = dummyRouteArray;
 	}
 }
 
-		// remove items on google maps map if update occurs
+// remove items on google maps map if update occurs
 function removeLinesAndMarkers(markers) {
 	for ( var i = 0; i < window.markers.length; i++) {
 		window.markers[i].setMap(null);
