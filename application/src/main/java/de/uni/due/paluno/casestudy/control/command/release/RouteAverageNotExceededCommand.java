@@ -37,9 +37,9 @@ public class RouteAverageNotExceededCommand extends RouteEventCommand {
 	@Override
 	public String getEPL() {
 		String epl = "select avg(data) as " + this.getColumns()[0] + " from "
-				+ Globals.E_TEMPERATURE_ENTITY + " where target in ("
-				+ getWaypoints() + ") having count(data) = "
-				+ route.getPoints().size() + " and avg(data) <= "
+				+ Globals.E_TEMPERATURE_ENTITY + ".win:length_batch("
+				+ this.getWaypointCount() + ") where target in ("
+				+ this.getWaypoints() + ") having avg(data) <= "
 				+ Globals.MAXIMUM_AVERAGE;
 
 		return epl;

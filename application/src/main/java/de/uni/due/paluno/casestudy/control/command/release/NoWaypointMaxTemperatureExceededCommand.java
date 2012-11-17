@@ -26,18 +26,22 @@ public class NoWaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 
 	@Override
 	protected void executeLogic(EPRuntime epr, Map<String, Object> eventParams) {
-		RouteEvent routeEvent = new RouteEvent();
-		routeEvent.setTarget(route.getId());
-		routeEvent.setKey(Globals.E_EVENT_WAYPOINT_MAX_NOT_EXCEEDED);
+		if ((Long) eventParams.get("no") == Double.parseDouble(this
+				.getWaypointCount())) {
+			RouteEvent routeEvent = new RouteEvent();
+			routeEvent.setTarget(route.getId());
+			routeEvent.setKey(Globals.E_EVENT_WAYPOINT_MAX_NOT_EXCEEDED);
 
-		epr.sendEvent(routeEvent);
+			epr.sendEvent(routeEvent);
+		}
 	}
 
 	@Override
 	public String getEPL() {
 		String epl = "select count(data) as no from "
-				+ Globals.E_TEMPERATURE_ENTITY + " where target in ("
-				+ getWaypoints() + ") having data <= "
+				+ Globals.E_TEMPERATURE_ENTITY + ".win:length_batch("
+				+ this.getWaypointCount() + ") where target in ("
+				+ getWaypoints() + ") and data <= "
 				+ Globals.MAXIMUM_WAYPOINT_TEMPERATURE;
 
 		return epl;
@@ -55,7 +59,7 @@ public class NoWaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 
 	@Override
 	public String[] getColumns() {
-		return null;
+		return new String[] { "no" };
 	}
 
 	@Override
