@@ -8,6 +8,7 @@ function createGoogleMapsComponent() {
 	};
 
 	// creates google maps map
+    // TODO: Why direct document call? No jQuery usage here?
 	var map = new google.maps.Map(document.getElementById("mapUIContainer"),
 			mapOptions);
 

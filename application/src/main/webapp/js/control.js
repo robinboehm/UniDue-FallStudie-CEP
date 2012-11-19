@@ -6,6 +6,7 @@ function initWebSocket() {
 
 	try {
 		socket = new WebSocket(host);
+        // TODO: Aware of closures and context issues
 		socket.onopen = function(msg) {
 			socket.send(JSON.stringify(buildRegistration()));
 			socket.send("INITIAL_UI_DATA_REQUEST");
@@ -49,6 +50,7 @@ function updateUi(msg) {
 // creates registration object which is send to backend
 // for registration of world-ui-elements
 function buildRegistration() {
+    // TODO: Why dont use constructor Args here?
 	var regObj = new ClientObject();
 	regObj.id = "WebClient";
 
