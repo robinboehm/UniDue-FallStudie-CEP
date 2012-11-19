@@ -61,4 +61,12 @@ public abstract class RouteEventCommand extends ComplexEventCommand {
 
 	protected abstract String getRouteInfoMessage(
 			Map<String, Object> eventParams);
+
+	/**
+	 * 
+	 * @return
+	 */
+	protected String getWaypointCount() {
+		return Integer.toString(this.route.getPoints().size());
+	}
 }
