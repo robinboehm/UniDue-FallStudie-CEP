@@ -41,47 +41,15 @@
 	</div>
 
 
-    <!-- TODO: JS Code should be in external Files for caching -->
 	<script>
-		function ClientObject() {
-			this.id;
-			this.UIElements = new Array();
-		}
+		
 	
-		function UIElement(id, type, reference) {
-			this.id = id;
-			this.type = type;
-			this.reference = reference;
-		}
-	
-		function initialize() {
-			window.uiElements = new Array();
-			createGoogleMapsComponent();
-			createTableComponent();
-
-			window.markers = new Array();
-			window.lines = new Array();
-			initWebSocket();
-		}
+	$(window).load(function () {
+		  initialize();
+		});
 
 
 
-        // TODO: You should use jQuery onLoad Function
-        // http://api.jquery.com/load-event/
-		function addLoadEvent(func) {
-			var oldonload = window.onload;
-			if (typeof window.onload != 'function') {
-				window.onload = func;
-			} else {
-				window.onload = function() {
-					if (oldonload) {
-						oldonload();
-					}
-					func();
-				}
-			}
-		}
-		addLoadEvent(initialize);
 	</script>
 
 </body>

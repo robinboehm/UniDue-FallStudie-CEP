@@ -8,15 +8,14 @@ function createGoogleMapsComponent() {
 	};
 
 	// creates google maps map
-    // TODO: Why direct document call? No jQuery usage here?
-	var map = new google.maps.Map(document.getElementById("mapUIContainer"),
-			mapOptions);
+	var map = new google.maps.Map($('#mapUIContainer').get(0), mapOptions);
 
 	// add to global ui component storage
 	var uiElement = new UIElement("mapUI", "mapsUIElement", map);
 	window.uiElements[window.uiElements.length] = uiElement;
 }
 
+// return UIElements
 function getUIElement(id) {
 	for ( var j = 0; j < window.uiElements.length; j++) {
 		if (window.uiElements[j].id == id) {
@@ -120,8 +119,8 @@ function setMarkers(map, mapsDto) {
 
 // draw coloured routes via polylines
 function drawColoredRoutes(map, mapsDto) {
-	// created for upcoming fill with LatLng data
 
+	// created for upcoming fill with LatLng data
 	var strokeColorVariable;
 	var routePath;
 

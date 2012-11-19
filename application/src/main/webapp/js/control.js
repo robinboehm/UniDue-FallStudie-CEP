@@ -1,3 +1,28 @@
+
+// object for world-registration in service-layer
+function ClientObject(id) {
+	this.id = id;
+	this.UIElements = new Array();
+}
+
+// sub-element of world that also registers in service-layer
+function UIElement(id, type, reference) {
+	this.id = id;
+	this.type = type;
+	this.reference = reference;
+}
+
+// main actions to initialize UI
+function initialize() {
+	window.uiElements = new Array();
+	createGoogleMapsComponent();
+	createTableComponent();
+
+	window.markers = new Array();
+	window.lines = new Array();
+	initWebSocket();
+}
+
 // initialize web socket connection
 // register world and UIElements
 function initWebSocket() {
@@ -6,7 +31,7 @@ function initWebSocket() {
 
 	try {
 		socket = new WebSocket(host);
-        // TODO: Aware of closures and context issues
+		// TODO: Aware of closures and context issues
 		socket.onopen = function(msg) {
 			socket.send(JSON.stringify(buildRegistration()));
 			socket.send("INITIAL_UI_DATA_REQUEST");
@@ -50,9 +75,8 @@ function updateUi(msg) {
 // creates registration object which is send to backend
 // for registration of world-ui-elements
 function buildRegistration() {
-    // TODO: Why dont use constructor Args here?
-	var regObj = new ClientObject();
-	regObj.id = "WebClient";
+
+	var regObj = new ClientObject("WebClient");
 
 	for (i = 0; i < window.uiElements.length; i++) {
 		var uiElement = new UIElement(window.uiElements[i].id,

@@ -32,8 +32,7 @@ function clearTablesUIElement() {
 function createTableComponent() {
 	var uiElement = new UIElement("tableUI", "tableUIElement", null);
 
-    // TODO: Es gibt push und pop in der Array Abstraction der JS Spec
-	window.uiElements[window.uiElements.length] = uiElement;
+	window.uiElements.push(uiElement);
 
 	$('#truckTable').dataTable({
 		"bPaginate" : false,
