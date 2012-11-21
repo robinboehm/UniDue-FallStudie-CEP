@@ -44,7 +44,7 @@ public class DTOMapper {
 				wpDTO.setId(wp.getId());
 				wpDTO.setX(wp.getX());
 				wpDTO.setY(wp.getY());
-				wpDTO.setStatus(wp.getStatus());
+				wpDTO.setStatus(wp.getStatus().toString());
 				wpDTO.setTemperature(Double.toString(wp.getTemperature()));
 
 				rDto.getWaypoints().add(wpDTO);

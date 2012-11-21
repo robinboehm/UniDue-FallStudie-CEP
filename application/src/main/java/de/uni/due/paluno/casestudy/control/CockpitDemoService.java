@@ -196,8 +196,14 @@ public class CockpitDemoService implements CockpitService {
 			while (j.hasNext()) {
 				WayPoint wp = j.next();
 
-				if (wp.getId().equals(id))
+				if (wp.getId().equals(id)) {
 					wp.setTemperature(temperature);
+
+					if (temperature > Globals.MAXIMUM_WAYPOINT_TEMPERATURE)
+						wp.setStatus(TemperatureStatus.critical);
+					else
+						wp.setStatus(TemperatureStatus.ok);
+				}
 			}
 		}
 	}

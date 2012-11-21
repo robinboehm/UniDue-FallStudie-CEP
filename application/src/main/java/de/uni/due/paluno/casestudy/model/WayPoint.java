@@ -6,6 +6,7 @@ public class WayPoint extends AbstractTemperaturedWorldObject {
 	private String y;
 	private int no;
 	private String name;
+	private TemperatureStatus status;
 
 	public WayPoint(String id, int no) {
 		super(id);
@@ -36,18 +37,19 @@ public class WayPoint extends AbstractTemperaturedWorldObject {
 		this.no = no;
 	}
 
-	public String getStatus() {
-		if (this.getTemperature() > 40)
-			return TemperatureStatus.critical.toString();
-		else
-			return TemperatureStatus.ok.toString();
-	}
-
 	public String getName() {
 		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public TemperatureStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TemperatureStatus status) {
+		this.status = status;
 	}
 }
