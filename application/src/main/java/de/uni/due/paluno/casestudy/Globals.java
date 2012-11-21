@@ -14,14 +14,16 @@ public final class Globals {
 	public static String IC_SERVICE_OBJECT = "IC_SERVICE_OBJECT";
 
 	// Esper entities
-	public static String E_TEMPERATURE_ENTITY = "Temperature";
+	public static final String E_TEMPERATURE_ENTITY = "Temperature";
 	public static final String E_ROUTE_ENTITY = "Route";
+	public static final String E_UNCONTROLLED_TEMPERATURE_ENTITY = "UncontrolledTemperature";
 
 	// Events
 	public static final String E_EVENT_WAYPOINT_MAX_EXCEEDED = "E_EVENT_WAYPOINT_MAX_EXCEEDED";
 	public static final String E_EVENT_ROUTE_AVERAGE_EXCEEDED = "E_EVENT_ROUTE_AVERAGE_EXCEEDED";
 	public static final String E_EVENT_WAYPOINT_MAX_NOT_EXCEEDED = "E_EVENT_WAYPOINT_MAX_NOT_EXCEEDED";
 	public static final String E_EVENT_ROUTE_AVERAGE_NOT_EXCEEDED = "E_EVENT_ROUTE_AVERAGE_NOT_EXCEEDED";
+	public static final String E_EVENT_ROUTE_OK = "OK";
 
 	// COSM
 	public static final String COSM_API = "http://api.cosm.com/v2";

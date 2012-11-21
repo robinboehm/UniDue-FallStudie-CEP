@@ -3,8 +3,11 @@ package de.uni.due.paluno.casestudy.control.command;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.espertech.esper.client.EPRuntime;
+
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.WayPoint;
+import de.uni.due.paluno.casestudy.services.cep.events.RouteEvent;
 
 /**
  * Super class to all commands that deal with status changes of a Route due to
@@ -68,5 +71,15 @@ public abstract class RouteEventCommand extends ComplexEventCommand {
 	 */
 	protected String getWaypointCount() {
 		return Integer.toString(this.route.getPoints().size());
+	}
+
+	@Override
+	public String getUniqueEventIdentifier() {
+		return this.route.getId();
+	}
+
+	protected void sendRouteEvent(RouteEvent raee, EPRuntime epr) {
+		Object[] data = new Object[] { raee.getTarget(), raee.getKey() };
+		epr.sendEvent(data, RouteEvent.class.getSimpleName() + raee.getTarget());
 	}
 }

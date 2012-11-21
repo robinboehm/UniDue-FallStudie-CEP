@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uni.due.paluno.casestudy.services.cep.events.Event;
-import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
+import de.uni.due.paluno.casestudy.services.cep.events.UncontrolledWaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.services.cosm.model.cosm.COSMDataStreamBody;
 
 public class COSMHelper {
@@ -37,7 +37,7 @@ public class COSMHelper {
 	}
 
 	public Event createEvent(COSMDataStreamBody dataStreamBody, int streamId) {
-		Event event = new WaypointTemperatureEvent();
+		Event event = new UncontrolledWaypointTemperatureUpdate();
 		event.setData(dataStreamBody.getCurrent_value());
 		event.setTarget(Integer.toString(streamId));
 		return event;

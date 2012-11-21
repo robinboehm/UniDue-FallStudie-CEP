@@ -3,9 +3,7 @@ package de.uni.due.paluno.casestudy.services.cep;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 
-import de.uni.due.paluno.casestudy.control.command.ComplexEventCommand;
-
-import java.util.Map;
+import de.uni.due.paluno.casestudy.control.command.Command;
 
 /**
  * Mediator between complex event commands and esper
@@ -19,17 +17,15 @@ import java.util.Map;
  */
 public class Trigger implements UpdateListener {
 
-	private ComplexEventCommand ec;
+	private Command ec;
 
-	public Trigger(ComplexEventCommand ec) {
+	public Trigger(Command ec) {
 		this.ec = ec;
 	}
 
 	// @Override
 	public void update(EventBean[] newData, EventBean[] oldData) {
-		Map<String, Object> map = ec.toMap(newData[0]);
-
-		ec.execute(map);
+		ec.delegate(newData);
 	}
 
 	public String getCEC() {

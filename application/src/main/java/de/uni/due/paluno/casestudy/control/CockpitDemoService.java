@@ -1,24 +1,24 @@
 package de.uni.due.paluno.casestudy.control;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import de.uni.due.paluno.casestudy.Globals;
-import de.uni.due.paluno.casestudy.control.command.RouteStatusUpdateCommand;
-import de.uni.due.paluno.casestudy.control.command.WaypointTemperatureUpdate;
-import de.uni.due.paluno.casestudy.control.command.prohibition.RouteAverageExceededCommand;
-import de.uni.due.paluno.casestudy.control.command.prohibition.WaypointMaxTemperatureExceededCommand;
-import de.uni.due.paluno.casestudy.control.command.release.NoWaypointMaxTemperatureExceededCommand;
-import de.uni.due.paluno.casestudy.control.command.release.RouteAverageNotExceededCommand;
+import de.uni.due.paluno.casestudy.control.command.RouteTemperatureRetrieveCommand;
+import de.uni.due.paluno.casestudy.control.command.event.NoWaypointMaxTemperatureExceededCommand;
+import de.uni.due.paluno.casestudy.control.command.event.RouteAverageExceededCommand;
+import de.uni.due.paluno.casestudy.control.command.event.RouteAverageNotExceededCommand;
+import de.uni.due.paluno.casestudy.control.command.event.WaypointMaxTemperatureExceededCommand;
+import de.uni.due.paluno.casestudy.control.command.update.RouteStatusUpdateCommand;
+import de.uni.due.paluno.casestudy.control.command.update.WaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.TemperatureStatus;
 import de.uni.due.paluno.casestudy.model.Transport;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cep.EsperCOSMAdapter;
-import de.uni.due.paluno.casestudy.services.cep.events.Event;
-import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
+import de.uni.due.paluno.casestudy.services.cep.events.ControlledWaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.services.cosm.COSM;
 import de.uni.due.paluno.casestudy.services.lookup.LookupDemoService;
 import de.uni.due.paluno.casestudy.services.lookup.LookupService;
@@ -56,8 +56,6 @@ public class CockpitDemoService implements CockpitService {
 		Iterator<Route> i = this.lookupService.getWorld().getRoutes()
 				.iterator();
 
-		List<WayPoint> waypoints = new ArrayList<WayPoint>();
-
 		while (i.hasNext()) {
 			Route r = i.next();
 
@@ -65,24 +63,18 @@ public class CockpitDemoService implements CockpitService {
 			while (j.hasNext()) {
 				WayPoint wp = j.next();
 
-				if (!waypoints.contains(wp)) {
-					wp.setTemperature(this.cosm.getTemperatureForWayPoint(wp
-							.getId()));
-					waypoints.add(wp);
-				}
+				Object[] objectData = new Object[2];
+				objectData[0] = wp.getId();
+				objectData[1] = this.cosm.getTemperatureForWayPoint(wp.getId());
+
+				this.getECA()
+						.getCEP()
+						.getEPRuntime()
+						.sendEvent(
+								objectData,
+								ControlledWaypointTemperatureUpdate.class
+										.getSimpleName() + r.getId());
 			}
-		}
-
-		// Update model
-		Iterator<WayPoint> j = waypoints.iterator();
-		while (j.hasNext()) {
-			WayPoint wp = j.next();
-
-			Event event = new WaypointTemperatureEvent();
-			event.setData(wp.getTemperature());
-			event.setTarget(wp.getId());
-
-			this.eca.getCEP().getEPRuntime().sendEvent(event);
 		}
 	}
 
@@ -120,9 +112,10 @@ public class CockpitDemoService implements CockpitService {
 			eca.addToConfig(new RouteStatusUpdateCommand(route));
 			eca.addToConfig(new RouteAverageNotExceededCommand(route));
 			eca.addToConfig(new NoWaypointMaxTemperatureExceededCommand(route));
+			eca.addToConfig(new WaypointTemperatureUpdate(route));
 		}
 
-		eca.addToConfig(new WaypointTemperatureUpdate());
+		eca.addToConfig(new RouteTemperatureRetrieveCommand());
 	}
 
 	/**
@@ -132,6 +125,22 @@ public class CockpitDemoService implements CockpitService {
 	 */
 	private List<Route> getRoutes() {
 		return this.lookupService.getWorld().getRoutes();
+	}
+
+	/**
+	 * Look up a route by id
+	 * 
+	 * @param id
+	 *            Id to look for
+	 * @return Route
+	 */
+	private Route getRouteById(String id) {
+		return this.lookupService.getRouteById(id);
+	}
+
+	@Override
+	public List<Route> getRoutesForWaypoint(String waypoint) {
+		return this.lookupService.getRoutesForWaypoint(waypoint);
 	}
 
 	@Override
@@ -172,26 +181,6 @@ public class CockpitDemoService implements CockpitService {
 		}
 	}
 
-	/**
-	 * Look up a route by id
-	 * 
-	 * @param id
-	 *            Id to look for
-	 * @return Route
-	 */
-	private Route getRouteById(String id) {
-		Iterator<Route> i = this.lookupService.getWorld().getRoutes()
-				.iterator();
-
-		while (i.hasNext()) {
-			Route current = i.next();
-			if (current.getId().equals(id))
-				return current;
-		}
-
-		return null;
-	}
-
 	@Override
 	public EsperCOSMAdapter getECA() {
 		return this.eca;
@@ -211,7 +200,6 @@ public class CockpitDemoService implements CockpitService {
 					wp.setTemperature(temperature);
 			}
 		}
-
 	}
 
 	@Override
@@ -221,5 +209,10 @@ public class CockpitDemoService implements CockpitService {
 
 	public UIUpdateController getUIUpdateController() {
 		return uiUpdateController;
+	}
+
+	@Override
+	public Map<String, Double> getTemperaturesForRoute(Route route) {
+		return this.cosm.getTemperaturesForRoute(route);
 	}
 }

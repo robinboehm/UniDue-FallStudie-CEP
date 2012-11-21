@@ -1,6 +1,5 @@
-package de.uni.due.paluno.casestudy.control.command.prohibition;
+package de.uni.due.paluno.casestudy.control.command.event;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.espertech.esper.client.EPRuntime;
@@ -8,8 +7,8 @@ import com.espertech.esper.client.EPRuntime;
 import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.control.command.RouteEventCommand;
 import de.uni.due.paluno.casestudy.model.Route;
+import de.uni.due.paluno.casestudy.services.cep.events.ControlledWaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.services.cep.events.RouteEvent;
-import de.uni.due.paluno.casestudy.services.cep.events.WaypointTemperatureEvent;
 
 /**
  * Sets the Critical-Status of a route in case the average route temperature is
@@ -25,34 +24,29 @@ public class RouteAverageExceededCommand extends RouteEventCommand {
 	}
 
 	@Override
-	protected void executeLogic(EPRuntime epr, Map<String, Object> eventParams) {
+	protected void execute(EPRuntime epr, Map<String, Object> eventParams) {
 		RouteEvent raee = new RouteEvent();
 		raee.setTarget(route.getId());
 		raee.setData((Double) eventParams.get(this.getColumns()[0]));
 		raee.setKey(Globals.E_EVENT_ROUTE_AVERAGE_EXCEEDED);
 
-		epr.sendEvent(raee);
+		this.sendRouteEvent(raee, epr);
 	}
 
 	@Override
 	public String getEPL() {
 		String epl = "select avg(data) as " + this.getColumns()[0] + " from "
-				+ Globals.E_TEMPERATURE_ENTITY + ".win:length_batch("
+				+ getEventName() + ".win:length_batch("
 				+ this.getWaypointCount() + ") where target in ("
-				+ getWaypoints() + ") having avg(data) > "
+				+ this.getWaypoints() + ") having avg(data) > "
 				+ Globals.MAXIMUM_AVERAGE;
 
 		return epl;
 	}
 
 	@Override
-	public Map<String, String> getEventTypes() {
-		Map<String, String> eventTypes = new HashMap<String, String>();
-
-		eventTypes.put(Globals.E_TEMPERATURE_ENTITY,
-				WaypointTemperatureEvent.class.getName());
-
-		return eventTypes;
+	protected String getEntity() {
+		return ControlledWaypointTemperatureUpdate.class.getSimpleName();
 	}
 
 	@Override
