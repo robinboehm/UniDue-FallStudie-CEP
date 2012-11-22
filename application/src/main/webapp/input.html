@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<script src="js/input.js"></script>
+<title>Manual Data Input</title>
+</head>
+<body>
+	<div id="container" class="container">
+
+
+		<form onsubmit="updateCOSM()">
+
+			<table class="inputTable">
+				<tr>
+					<td>Route:</td>
+					<td><select id="routes"
+						onChange="routeDropDownOnChange(this.options[this.selectedIndex].value)">
+
+					</select></td>
+				</tr>
+				<tr>
+					<td>Waypoint:</td>
+					<td><select name="Waypoints">
+							<option value="A">A</option>
+							<option value="B">B</option>
+							<option value="C">C</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>Temperature:</td>
+					<td><input type="text" name="temperature" value=""
+						maxlength="3" /></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="Go!" /></td>
+					<td></td>
+				</tr>
+			</table>
+
+
+
+
+
+
+
+			<br /> <br />
+
+		</form>
+
+
+
+
+	</div>
+
+	<script type="text/javascript">
+		window.onload = fillRouteDropdown();
+	</script>
+
+</body>
+</html>

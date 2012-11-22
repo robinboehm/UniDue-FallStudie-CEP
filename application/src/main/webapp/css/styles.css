@@ -13,4 +13,24 @@
     
 }
 
+.container {
+	align: center;
+	position:absolute;
+   	left:30%;
+  	top:30%; 
+	
+	
+}
+
+.inputTable {
+	border:0 ;
+	bordercolor:#FFCC00;
+	background-color: #FFFFFF;
+	width: 100%;
+	cellpadding: 3;
+	cellspacing: 3;
+	
+	
+}
+
 
