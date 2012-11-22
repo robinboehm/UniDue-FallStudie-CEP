@@ -3,18 +3,19 @@ package de.uni.due.paluno.casestudy.services.cep;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPAdministrator;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
-import com.espertech.esper.client.UpdateListener;
 
 import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.control.CockpitService;
-import de.uni.due.paluno.casestudy.control.command.ComplexEventCommand;
+import de.uni.due.paluno.casestudy.control.command.Command;
+import de.uni.due.paluno.casestudy.services.cep.events.ControlledWaypointTemperatureUpdate;
+import de.uni.due.paluno.casestudy.services.cep.events.RouteEvent;
+import de.uni.due.paluno.casestudy.services.cep.events.UncontrolledWaypointTemperatureUpdate;
 import de.uni.due.paluno.casestudy.services.cosm.event.COSMWebSocketEvent;
 import de.uni.due.paluno.casestudy.services.cosm.event.COSMWebSocketListener;
 
@@ -37,37 +38,51 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 	/**
 	 * List of commands that are used as callback objects in ESPER listeners
 	 */
-	private List<ComplexEventCommand> commands;
+	private List<Command> commands;
 	private CockpitService service;
 
 	public EsperCOSMAdapter(CockpitService service) {
 		this.cepConfig = new Configuration();
 		this.eventTypes = new ArrayList<String>();
-		this.commands = new ArrayList<ComplexEventCommand>();
+		this.commands = new ArrayList<Command>();
 		this.service = service;
 	}
 
 	@Override
 	public void handleWebSocketEvent(COSMWebSocketEvent e) {
-		this.cep.getEPRuntime().sendEvent(e.getEvent());
+		Object[] values = new Object[] { e.getEvent().getTarget(),
+				e.getEvent().getData() };
+
+		this.cep.getEPRuntime().sendEvent(values,
+				e.getEvent().getClass().getSimpleName());
 	}
 
-	public void addToConfig(ComplexEventCommand cec) {
+	public void addToConfig(Command cec) {
 		this.commands.add(cec);
 
-		this.addEventTypes(cec.getEventTypes());
+		if (!this.eventTypes.contains(cec.getEventName())) {
+			this.resolveEventType(this.cepConfig, cec.getEventName());
+			this.eventTypes.add(cec.getEventName());
+		}
 	}
 
-	private void addEventTypes(Map<String, String> eventTypes) {
-		Iterator<String> aliases = eventTypes.keySet().iterator();
-		while (aliases.hasNext()) {
-			String alias = aliases.next();
+	private void resolveEventType(Configuration cepConfig, String eventName) {
+		String[] attributes = null;
+		Object[] types = null;
 
-			if (!this.eventTypes.contains(alias)) {
-				this.cepConfig.addEventType(alias, eventTypes.get(alias));
-				this.eventTypes.add(alias);
-			}
+		if (eventName.startsWith(ControlledWaypointTemperatureUpdate.class
+				.getSimpleName())
+				|| eventName
+						.startsWith(UncontrolledWaypointTemperatureUpdate.class
+								.getSimpleName())) {
+			attributes = new String[] { "target", "data" };
+			types = new Object[] { String.class, Double.class };
+		} else if (eventName.startsWith(RouteEvent.class.getSimpleName())) {
+			attributes = new String[] { "target", "key" };
+			types = new Object[] { String.class, String.class };
 		}
+
+		cepConfig.addEventType(eventName, attributes, types);
 	}
 
 	/**
@@ -99,9 +114,9 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 		this.cep = EPServiceProviderManager.getProvider("myCEPEngine",
 				this.cepConfig);
 
-		Iterator<ComplexEventCommand> i = this.commands.iterator();
+		Iterator<Command> i = this.commands.iterator();
 		while (i.hasNext()) {
-			ComplexEventCommand cec = i.next();
+			Command cec = i.next();
 			cec.setService(this.service);
 			cec.setEpr(this.cep.getEPRuntime());
 
@@ -110,22 +125,6 @@ public class EsperCOSMAdapter implements COSMWebSocketListener {
 			createAndConfigureCEPStatement(cec.getEPL(), et);
 
 			Globals.dump(this.getClass(), "Trigger created: " + cec.getEPL());
-		}
-	}
-
-	public void dumpTriggers() {
-		for (int i = 0; i < this.cep.getEPAdministrator().getStatementNames().length; i++) {
-
-			EPStatement cepStatement = this.cep
-					.getEPAdministrator()
-					.getStatement(
-							this.cep.getEPAdministrator().getStatementNames()[i]);
-
-			Iterator<UpdateListener> j = cepStatement.getUpdateListeners();
-			while (j.hasNext()) {
-				UpdateListener ul = j.next();
-				System.out.println(((Trigger) ul).getCEC());
-			}
 		}
 	}
 }

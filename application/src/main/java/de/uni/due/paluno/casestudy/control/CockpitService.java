@@ -1,5 +1,9 @@
 package de.uni.due.paluno.casestudy.control;
 
+import java.util.List;
+import java.util.Map;
+
+import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.servlet.UIUpdateController;
@@ -39,7 +43,7 @@ public interface CockpitService {
 	 * @param key
 	 *            Event key
 	 */
-	void updateRoute(String id, String key);
+	public void updateRoute(String id, String key);
 
 	/**
 	 * Returns the whole data model
@@ -54,4 +58,23 @@ public interface CockpitService {
 	 * @return
 	 */
 	public UIUpdateController getUIUpdateController();
+
+	/**
+	 * Retries all Routes that contain the specified waypoint
+	 * 
+	 * @param waypoint
+	 *            Waypoint that is used in the desired routes
+	 * @return
+	 */
+	public List<Route> getRoutesForWaypoint(String waypoint);
+
+	/**
+	 * Gets the temperature for each waypoint that is part of the specified
+	 * route
+	 * 
+	 * @param route
+	 *            id of the route
+	 * @return Map containg Waypoint->Temperature Elements
+	 */
+	public Map<String, Double> getTemperaturesForRoute(Route route);
 }

@@ -6,5 +6,5 @@ package de.uni.due.paluno.casestudy.services.cep.events;
  * @author saids
  * 
  */
-public class WaypointTemperatureEvent extends Event {
+public class ControlledWaypointTemperatureUpdate extends Event {
 }

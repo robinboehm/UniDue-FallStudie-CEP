@@ -1,5 +1,8 @@
 package de.uni.due.paluno.casestudy.services.lookup;
 
+import java.util.List;
+
+import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.World;
 
 /**
@@ -15,4 +18,8 @@ public interface LookupService {
 	 * @return World object: the data model
 	 */
 	public World getWorld();
+
+	public Route getRouteById(String id);
+
+	public List<Route> getRoutesForWaypoint(String waypoint);
 }
