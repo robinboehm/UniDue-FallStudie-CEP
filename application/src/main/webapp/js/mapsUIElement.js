@@ -78,12 +78,10 @@ function setMarkers(map, mapsDto) {
 			// check for start or destination waypoint
 			if (i == 0) {
 				pinImageColor = pinImageStart;
-				titleDynamic = mapsDto.routes[j].start + "\n"
-						+ mapsDto.routes[j].waypoints[i].temperature
+				titleDynamic = mapsDto.routes[j].waypoints[i].temperature
 			} else if (i == mapsDto.routes[j].waypoints.length - 1) {
 				pinImageColor = pinImageDestination;
-				titleDynamic = mapsDto.routes[j].destination + "\n"
-						+ mapsDto.routes[j].waypoints[i].temperature
+				titleDynamic = mapsDto.routes[j].waypoints[i].temperature
 			}
 
 			else {
@@ -109,13 +107,35 @@ function setMarkers(map, mapsDto) {
 				map : map,
 				icon : pinImageColor,
 				shadow : pinShadow,
-				title : titleDynamic
+				title : refactorTemperature(titleDynamic)
 			});
+			addOnClickMarkerDisplays(marker, map)
 			window.markers[window.markers.length] = marker;
 		}
 	}
 
 }
+
+function refactorTemperature(temperature)
+{
+	var refactoredTemperature = temperature + " \u00B0" + "C";
+	return refactoredTemperature;
+}
+
+
+
+function addOnClickMarkerDisplays(marker, map, temperature) {
+	  var message = marker.title;
+	  var infowindow = new google.maps.InfoWindow(
+	      { content: message,
+	        size: new google.maps.Size(10,5)
+	      });
+	  google.maps.event.addListener(marker, 'click', function() {
+	    infowindow.open(map,marker);
+	  });
+
+}
+
 
 // draw coloured routes via polylines
 function drawColoredRoutes(map, mapsDto) {
