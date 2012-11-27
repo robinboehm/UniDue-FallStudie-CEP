@@ -138,6 +138,7 @@ table.display {
 	clear: both;
 	width: 34%;
 	float: right;
+	font-family: arial;
 
 
 	
@@ -168,7 +169,7 @@ table.display thead th {
 table.display tfoot th {
 	padding: 3px 18px 3px 10px;
 	border-top: 1px solid black;
-/* 	font-weight: bold; */
+
 }
 
 table.display tr.heading2 td {

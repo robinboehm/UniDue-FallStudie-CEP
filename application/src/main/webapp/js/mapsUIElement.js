@@ -116,6 +116,7 @@ function setMarkers(map, mapsDto) {
 
 }
 
+// does some ASCII refactoring to show the degree-sign
 function refactorTemperature(temperature)
 {
 	var refactoredTemperature = temperature + " \u00B0" + "C";
@@ -124,6 +125,7 @@ function refactorTemperature(temperature)
 
 
 
+// shows temperature in separate window if clicked
 function addOnClickMarkerDisplays(marker, map, temperature) {
 	  var message = marker.title;
 	  var infowindow = new google.maps.InfoWindow(
@@ -131,10 +133,23 @@ function addOnClickMarkerDisplays(marker, map, temperature) {
 	        size: new google.maps.Size(10,5)
 	      });
 	  google.maps.event.addListener(marker, 'click', function() {
-	    infowindow.open(map,marker);
+		  if (isInfoWindowOpen(infowindow)){
+			  infowindow.close()
+	    }
+		  else
+			  {
+			  infowindow.open(map,marker);
+			  
+			  }
 	  });
 
 }
+
+// checks if infoWindow is open or closed
+function isInfoWindowOpen(infoWindow){
+    return (infoWindow.getMap()!=null);
+}
+
 
 
 // draw coloured routes via polylines
