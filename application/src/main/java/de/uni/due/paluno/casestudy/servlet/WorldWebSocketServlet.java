@@ -1,20 +1,5 @@
 package de.uni.due.paluno.casestudy.servlet;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.catalina.websocket.StreamInbound;
-import org.apache.catalina.websocket.WebSocketServlet;
-
 import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.control.CockpitDemoService;
 import de.uni.due.paluno.casestudy.control.CockpitService;
@@ -22,6 +7,19 @@ import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cosm.COSMWebSocketEngine;
+import org.apache.catalina.websocket.StreamInbound;
+import org.apache.catalina.websocket.WebSocketServlet;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The applications runs as a Servlet in a Servlet Container.
@@ -34,16 +32,11 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = -1439435191685551673L;
 
 	private CockpitService cockpitService;
-	private InboundWebSocketHandler inboundWebSocketHandler;
 
 	public WorldWebSocketServlet() throws IOException, ExecutionException,
 			InterruptedException {
 		// Init Service Layer
 		this.initServiceLayer();
-
-		// Init Inbound WebSocket Handler
-		this.inboundWebSocketHandler = new InboundWebSocketHandler(
-				this.cockpitService.getUIUpdateController());
 
 		// Init WebSocket Engine
 		this.initWebSocketEngine();
@@ -121,6 +114,7 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 	@Override
 	protected StreamInbound createWebSocketInbound(String subProtocol,
 			HttpServletRequest request) {
-		return this.inboundWebSocketHandler;
+		return new InboundWebSocketHandler(
+                this.cockpitService.getUIUpdateController());
 	}
 }
