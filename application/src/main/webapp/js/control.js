@@ -27,7 +27,7 @@ function initialize() {
 // register world and UIElements
 function initWebSocket() {
 	// create and connect web socket
-	var host = "ws://localhost:8080/world";
+	var host = "ws://"+window.location.host+"/world";
 
 	try {
 		socket = new WebSocket(host);
