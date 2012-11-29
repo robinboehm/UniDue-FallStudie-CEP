@@ -39,7 +39,7 @@ public class RouteAverageNotExceededCommand extends RouteEventCommand {
 				+ getEventName() + ".win:length_batch("
 				+ this.getWaypointCount() + ") where target in ("
 				+ this.getWaypoints() + ") having avg(data) <= "
-				+ Globals.MAXIMUM_AVERAGE;
+				+ Globals.WARNING_LEVEL;
 
 		return epl;
 	}

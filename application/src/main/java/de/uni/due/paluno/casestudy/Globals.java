@@ -21,6 +21,7 @@ public final class Globals {
 	// Events
 	public static final String E_EVENT_WAYPOINT_MAX_EXCEEDED = "E_EVENT_WAYPOINT_MAX_EXCEEDED";
 	public static final String E_EVENT_ROUTE_AVERAGE_EXCEEDED = "E_EVENT_ROUTE_AVERAGE_EXCEEDED";
+	public static final String E_EVENT_ROUTE_AVERAGE_WARNING = "E_EVENT_ROUTE_AVERAGE_WARNING";
 	public static final String E_EVENT_WAYPOINT_MAX_NOT_EXCEEDED = "E_EVENT_WAYPOINT_MAX_NOT_EXCEEDED";
 	public static final String E_EVENT_ROUTE_AVERAGE_NOT_EXCEEDED = "E_EVENT_ROUTE_AVERAGE_NOT_EXCEEDED";
 	public static final String E_EVENT_ROUTE_OK = "OK";
@@ -31,8 +32,10 @@ public final class Globals {
 	public static final String API_KEY = "5T64pgQVJiKlfgQU2Q9IvH_UyUKSAKxTNjZma1kyQnFsQT0g";
 
 	// Temperature limits
-	public static final Double MAXIMUM_WAYPOINT_TEMPERATURE = 40.0;
-	public static final Double MAXIMUM_AVERAGE = 30.0;
+	public static final Double WAYPOINT_CRITICAL_LEVEL = 40.0;
+	public static final Double WAYPOINT_WARNING_LEVEL = 30.0;
+	public static final Double CRITIAL_LEVEL = 30.0;
+	public static final Double WARNING_LEVEL = 25.0;
 
 	// UI Component Type Keys
 	public static final String COMPONENT_MAP_UI = "mapsUIElement";

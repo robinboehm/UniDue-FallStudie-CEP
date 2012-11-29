@@ -37,7 +37,7 @@ public class WaypointMaxTemperatureExceededCommand extends RouteEventCommand {
 		String epl = "select count(data) as no from " + getEventName()
 				+ ".win:length_batch(" + this.getWaypointCount()
 				+ ") where target in (" + getWaypoints() + ") and data > "
-				+ Globals.MAXIMUM_WAYPOINT_TEMPERATURE
+				+ Globals.WAYPOINT_CRITICAL_LEVEL
 				+ " having count(data) > 0";
 
 		return epl;

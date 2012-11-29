@@ -9,6 +9,7 @@ import de.uni.due.paluno.casestudy.control.command.RouteTemperatureRetrieveComma
 import de.uni.due.paluno.casestudy.control.command.event.NoWaypointMaxTemperatureExceededCommand;
 import de.uni.due.paluno.casestudy.control.command.event.RouteAverageExceededCommand;
 import de.uni.due.paluno.casestudy.control.command.event.RouteAverageNotExceededCommand;
+import de.uni.due.paluno.casestudy.control.command.event.RouteAverageWarningCommand;
 import de.uni.due.paluno.casestudy.control.command.event.WaypointMaxTemperatureExceededCommand;
 import de.uni.due.paluno.casestudy.control.command.update.RouteStatusUpdateCommand;
 import de.uni.due.paluno.casestudy.control.command.update.WaypointTemperatureUpdate;
@@ -113,6 +114,7 @@ public class CockpitDemoService implements CockpitService {
 			eca.addToConfig(new RouteAverageNotExceededCommand(route));
 			eca.addToConfig(new NoWaypointMaxTemperatureExceededCommand(route));
 			eca.addToConfig(new WaypointTemperatureUpdate(route));
+			eca.addToConfig(new RouteAverageWarningCommand(route));
 		}
 
 		eca.addToConfig(new RouteTemperatureRetrieveCommand());
@@ -153,6 +155,10 @@ public class CockpitDemoService implements CockpitService {
 				route.setStatus(TemperatureStatus.critical);
 				updateTransportsOnRoute(route.getId(),
 						TemperatureStatus.critical);
+			} else if (key.matches(Globals.E_EVENT_ROUTE_AVERAGE_WARNING)) {
+				route.setStatus(TemperatureStatus.warning);
+				updateTransportsOnRoute(route.getId(),
+						TemperatureStatus.warning);
 			} else {
 				route.setStatus(TemperatureStatus.ok);
 				updateTransportsOnRoute(route.getId(), TemperatureStatus.ok);
@@ -199,7 +205,10 @@ public class CockpitDemoService implements CockpitService {
 				if (wp.getId().equals(id)) {
 					wp.setTemperature(temperature);
 
-					if (temperature > Globals.MAXIMUM_WAYPOINT_TEMPERATURE)
+					if ((temperature < Globals.WAYPOINT_CRITICAL_LEVEL)
+							&& (temperature > Globals.WAYPOINT_WARNING_LEVEL))
+						wp.setStatus(TemperatureStatus.warning);
+					else if (temperature > Globals.WAYPOINT_CRITICAL_LEVEL)
 						wp.setStatus(TemperatureStatus.critical);
 					else
 						wp.setStatus(TemperatureStatus.ok);

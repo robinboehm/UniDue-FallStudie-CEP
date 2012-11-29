@@ -139,7 +139,7 @@ public abstract class Command {
 		return map;
 	}
 
-	private Map<String, Object> toMap(EventBean[] newData) {
+	protected Map<String, Object> toMap(EventBean[] newData) {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 
 		for (int i = 0; i < newData.length; i++) {
