@@ -106,7 +106,6 @@ After a survey of related work in Section \ref{sec:Related Work}.
 The Use-Case is described in section \ref{sec:Use Case} and our design considerations of the different components are part of section \ref{sec:Conceptional Design}.
 The next section \ref{sec:Implementation} contains details about the implementation with a technical stack component overview followed by the conclusion in section \ref{sec:Conclusion}.
 
-
 \begin{itemize}
 	\item aim / contribution / motivation
 		\begin{itemize}
@@ -153,6 +152,20 @@ The next section \ref{sec:Implementation} contains details about the implementat
 
 \section{Basic}
 \label{sec:Basics}
+
+The idea of \textbf{Future Internet} is to enhance the architectures for the current state of the Internet. There are many ideas that are elaborated and discussed. The \textbf{Internet-of-Things} term first used by Kevin Ashton in the year 1999 \cite{•}. He describes the IoT as enhancement from human-entered data to real world data that is captured by machines.
+\begin{quote}
+If we had computers that knew everything there was to know about things - using data they gathered without any help from us - we would be able to track and count everything, and greatly reduce waste, loss and cost. We would know when things needed replacing, repairing or recalling, and whether they were fresh or past their best. 
+\end{quote}
+That is a quote from an article he published 2009 in the RFIDJournal.
+%\cite{That 'Internet of Things' Thing:Ashton}
+There is another concept of FI that could enables us to use all this information that is called \textbf{Internet of Services}. This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
+A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\cite{cosm} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API. The abstraction of data is offered here as an event that you receive in \textbf{real-time}. 
+
+To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
+
+
+
 \begin{itemize}
 	\item Intro
 	\begin{itemize}	
