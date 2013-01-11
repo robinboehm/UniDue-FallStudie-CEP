@@ -92,10 +92,22 @@ Robin B\"ohm\\
 \end{abstract}
 
 \section{Introduction}
+The aim of this project is to combine some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
+The chosen use-case is a business process management in the logistic sector that handles with perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the reducing of the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
+
+We are using the Internet of Things(IoT) and Internet of Services(IoS) concepts to linking the real-world with our business world. So we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations and combine them to more valuable complex events.
+To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events.
+
+We are providing a cockpit for monitoring the business model with some useful visualizations.This cockpit is implemented with modern web technologies so it is usable on many devices out of the box over the specifications. It contains a map that shows the current state of given routes with an rating calculated on the raw events. Also a table that offers information in more textual way.
+
+%\subsection{Structure}
+This paper starts with an introduction about the basics in section \ref{sec:Basics}.
+After a survey of related work in Section \ref{sec:Related Work}. 
+The Use-Case is described in section \ref{sec:Use Case} and our design considerations of the different components are part of section \ref{sec:Conceptional Design}.
+The next section \ref{sec:Implementation} contains details about the implementation with a technical stack component overview followed by the conclusion in section \ref{sec:Conclusion}.
+
 
 \begin{itemize}
-The aim of this project is to combine some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
-The chosen use-case is a business process management in the logistic sector that handles with perishable goods. We focused on the reducing of the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
 	\item aim / contribution / motivation
 		\begin{itemize}
 			\item logistic cockpit prototype
@@ -140,6 +152,7 @@ The chosen use-case is a business process management in the logistic sector that
 
 
 \section{Basic}
+\label{sec:Basics}
 \begin{itemize}
 	\item Intro
 	\begin{itemize}	
@@ -167,10 +180,12 @@ The chosen use-case is a business process management in the logistic sector that
 
 
 \section{Related Work}
+\label{sec:Related Work}
 
 TODO!!
 
 \section{Use Case}
+\label{sec:Use Case}
 
 \begin{itemize}
 	\item Problem
@@ -193,9 +208,12 @@ TODO!!
 	
 \end{itemize}
 
-
+\section{Conceptional Design}
+\label{sec:Conceptional Design}
 
 \section{Implementation}
+\label{sec:Implementation}
+
 \begin{itemize}
 	\item Introduction
 	\item Diagrams
@@ -229,7 +247,8 @@ TODO!!
 \end{itemize}
 
 
-\section{Conclusions}
+\section{Conclusion}
+\label{sec:Conclusion}
 \begin{itemize}
 	\item FI
 	\item State-of-the art technologies
