@@ -85,9 +85,7 @@ Robin B\"ohm\\
 \maketitle
 \begin{abstract}
 
-\begin{itemize}
-	\item abstract
-\end{itemize}
+Lorem ipsum
 
 \end{abstract}
 
@@ -100,7 +98,6 @@ To handle the messaging inside of our prototype we decided to use an Event-drive
 
 We are providing a cockpit for monitoring the business model with some useful visualizations.This cockpit is implemented with modern web technologies so it is usable on many devices out of the box over the specifications. It contains a map that shows the current state of given routes with an rating calculated on the raw events. Also a table that offers information in more textual way.
 
-%\subsection{Structure}
 This paper starts with an introduction about the basics in section \ref{sec:Basics}.
 After a survey of related work in Section \ref{sec:Related Work}. 
 The Use-Case is described in section \ref{sec:Use Case} and our design considerations of the different components are part of section \ref{sec:Conceptional Design}.
@@ -113,12 +110,22 @@ The idea of \textbf{Future Internet} is to enhance the architectures for the cur
 \begin{quote}
 If we had computers that knew everything there was to know about things - using data they gathered without any help from us - we would be able to track and count everything, and greatly reduce waste, loss and cost. We would know when things needed replacing, repairing or recalling, and whether they were fresh or past their best. 
 \end{quote}
-That is a quote from an article he published 2009 in the RFIDJournal.
-%\cite{That 'Internet of Things' Thing:Ashton}
+That is a quote from an article he published 2009 in the RFIDJournal
+\cite{iot_thing:Ashton}.
 There is another concept of FI that could enables us to use all this information that is called \textbf{Internet of Services}. This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
 A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\cite{cosm} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API. The abstraction of data is offered here as an event that you receive in \textbf{real-time}. 
 
 To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
+
+To add some more more meaningful value for some special business case\textbf{Complex Event Processing}(CEP) can be used. CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined that detecting the occurrence of events in a defined time interval.
+
+ 
+tracking
+analyzing
+processing
+combining
+rules
+more valuable events
 
 
 \newpage
