@@ -93,6 +93,19 @@ These events are aggregated and interpreted by an Complex Event Engine(CEP) and 
 Through the chosen architecture the latency between the actual business event and the visualization is nearly real-time.
 \end{abstract}
 
+\newpage
+
+% A category with the (minimum) three required fields
+\category{H.4}{Information Systems Applications}{Miscellaneous}
+%A category including the fourth, optional field follows...
+\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+
+\terms{Theory}
+
+\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
+
+
+
 \section{Introduction}
 The aim of this project is to combine some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
 The chosen use-case is a business process management in the logistic sector that handles with perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the reducing of the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
@@ -125,43 +138,6 @@ To handle this high amount of realt-time data in information systems is likely t
 
 To add some more more meaningful value for some special business case\textbf{Complex Event Processing}(CEP) can be used. CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined that detecting the occurrence of events in a defined time interval.
 
- 
-tracking
-analyzing
-processing
-combining
-rules
-more valuable events
-
-
-\newpage
-
-\begin{itemize}
-	\item Intro
-	\begin{itemize}	
-	\item Hackathron, latency
-	\end{itemize}
-	\item Technologies
-	\begin{itemize}
-	\item Future Internet
-	\item Internet of Service
-	\item Internet of Things
-	\item Cosm
-	\end{itemize}
-	
-	\item Event-Driven Architecture	
-	\begin{itemize}
-	\item Desc
-	\item Other Arch
-	\item Websocket	
-	\item Complex Event Processing	
-	\item Esper
-	\item cockpit?
-	\end{itemize}
-
-\end{itemize}
-
-
 \section{Related Work}
 \label{sec:Related Work}
 
@@ -170,29 +146,18 @@ TODO!!
 \section{Use Case}
 \label{sec:Use Case}
 
-\begin{itemize}
-	\item Problem
-	\begin{itemize}
-		\item logistic industry
-		\item perishable goods in trucks
-		\item planing routes
-		\item alternatives
-		\item planing risk
-	\end{itemize}
-	
-	\item Solution approach
-	\begin{itemize}
-		\item sensors
-		\item cockpit
-		\item different devices
-		\item instant notifications
-		\item sensor level / rating
-	\end{itemize}
-	
-\end{itemize}
-
+Basically our use case is about managing the delivery of perishable goods. This is a high risk business process in the logistic domain. If some goods arriving late or there are some problems with the cooling system it is necessary to get the information of the real-world state as quick as possible to do a trade-off what could be the best action to reduce risk or costs.
+Our scenario comprises the planing and alternatives in escalation situations of the delivery of these perishable goods via trucks over a defined route. These trucks are equipped with sensors that provides us the monitoring data that is used for automated real-time aggregation and interpretation and share the results in a cockpit application like it is described in the Internet-of-Things(IoT) concept. 
+Also the routes are equipped with sensors that enables us to monitor them.
+The overview in such a business monitoring tool is modeled a cockpit with summary of meaningful information that should support the decision. 
+The cockpit provides an ampel-system with the colors green,yellow and red that visualizing the current state of the routes and trucks depending on defined threshold.
+Also the prototype is using complex threshold for combinations of singular states of a route or a truck that currently on this route that are also visualized in a map.
+The cockpit should be available via different devices like on the computer or on smart-phone.
+%Actuality of the information is one of the most valuable criterion
 \section{Conceptional Design}
 \label{sec:Conceptional Design}
+
+
 
 \section{Implementation}
 \label{sec:Implementation}
