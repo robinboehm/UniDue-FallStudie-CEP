@@ -85,8 +85,12 @@ Robin B\"ohm\\
 \maketitle
 \begin{abstract}
 
-Lorem ipsum
+In this project we developed a prototype for an architecture for an event-driven cockpit in the Future Internet(FI) context.
+The prototype is about monitoring a business case of perishable goods in the logistic domain to improve the reaction time issues through the combination of some state-of-the-art technologies.
 
+It uses a service platform that provides sensor event data for things in the real-wold that are provided via the websocket protocol - this platform based on the Internet of Things (IoT) concept. 
+These events are aggregated and interpreted by an Complex Event Engine(CEP) and visualized via an HTML5 cockpit in a web-browser.
+Through the chosen architecture the latency between the actual business event and the visualization is nearly real-time.
 \end{abstract}
 
 \section{Introduction}
@@ -113,7 +117,9 @@ If we had computers that knew everything there was to know about things - using 
 That is a quote from an article he published 2009 in the RFIDJournal
 \cite{iot_thing:Ashton}.
 There is another concept of FI that could enables us to use all this information that is called \textbf{Internet of Services}. This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
-A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\cite{cosm} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API. The abstraction of data is offered here as an event that you receive in \textbf{real-time}. 
+A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\cite{cosm} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API that use the websocket protocol.
+
+The websocket protocol is an http upgrade protocol that enables a two-way communication between a client and a remote host \cite{websocket}. It was developed to provide a mechanism for browser-based applications that need this kind of communication wihout relying on multiple HTTP connections e.g. long polling\cite{long_polling}. 
 
 To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
 
