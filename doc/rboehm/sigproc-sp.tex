@@ -93,18 +93,6 @@ These events are aggregated and interpreted by an Complex Event Engine(CEP) and 
 Through the chosen architecture the latency between the actual business event and the visualization is nearly real-time.
 \end{abstract}
 
-\newpage
-
-% A category with the (minimum) three required fields
-\category{H.4}{Information Systems Applications}{Miscellaneous}
-%A category including the fourth, optional field follows...
-\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
-
-\terms{Theory}
-
-\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
-
-
 
 \section{Introduction}
 The aim of this project is to combine some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
@@ -147,9 +135,11 @@ TODO!!
 \label{sec:Use Case}
 
 Basically our use case is about managing the delivery of perishable goods. This is a high risk business process in the logistic domain. If some goods arriving late or there are some problems with the cooling system it is necessary to get the information of the real-world state as quick as possible to do a trade-off what could be the best action to reduce risk or costs.
+
 Our scenario comprises the planing and alternatives in escalation situations of the delivery of these perishable goods via trucks over a defined route. These trucks are equipped with sensors that provides us the monitoring data that is used for automated real-time aggregation and interpretation and share the results in a cockpit application like it is described in the Internet-of-Things(IoT) concept. 
 Also the routes are equipped with sensors that enables us to monitor them.
 The overview in such a business monitoring tool is modeled a cockpit with summary of meaningful information that should support the decision. 
+
 The cockpit provides an ampel-system with the colors green,yellow and red that visualizing the current state of the routes and trucks depending on defined threshold.
 Also the prototype is using complex threshold for combinations of singular states of a route or a truck that currently on this route that are also visualized in a map.
 The cockpit should be available via different devices like on the computer or on smart-phone.
@@ -157,7 +147,55 @@ The cockpit should be available via different devices like on the computer or on
 \section{Conceptional Design}
 \label{sec:Conceptional Design}
 
+As basic architectural design we are choosing to build an event-driven-architecture(EDA).
+An EDA is loosely coupled and can be used for distribution and scalability of software components. Because every component could have multiple listeners for his own events or act as sender for multiple other components.
+For our prototype we build service components that are loosed coupled and communicating only via events.
+At first we using a connector that receives basic events from the COSM Service API.
+The component connects to the API and subscribe itself to the relevant data-streams that are prepared for this demo-case.
+Once the component is registered to the service-api, it receives an event via push every time a change of state appears at the data-stream. Through the static connection that happens in real-time without any overhead to create a new TCP HTTP connection.
+When the event message is arrived via the socket it get parsed and transformed into the internal event structure and directly send to the components that are listening.
+A registered listener in our system for this COSM-Component Events is the Complex-Event-Processing(CEP) component.
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.5]{Component-Overview.png}
+		\caption[Angiogenetic Switch]{Angiogenetic Switch}
+		\label{fig:AngiogeneticSwitch}
+	\end{center}
+\end{figure}
+
+This component is a processing unit that is programmed with rules that results again in events. This rules are designed for the special use case of our cockpit. It forms one or many events in a temporal context to complex events that also can be the source for new rules. It is a detection for events that could be a derivation for complex events and so we adding new more valuable events than the simple events could do.
+This (complex) events are used by the third component that registered as listener.
+This component contains the business model. The model is updated with every event the component receives. 
+To visualize this data we are providing the information as a service via a websocket api.
+Our javascript client act as visualization unit that could connect to the service component and receive updates via websocket every time a state-change happens at then model site.
+Through this chain of event-processing also the client receives the events triggered by the COSM-API in real-time and can provide this information for multiple clients.
+
+
+
+
+
+\begin{itemize}
+	\item EDA
+	\item loose coupled components
+	\item Add more event sources
+	\item supply more processing units
+	\item event driven architecture is extremely loosely coupled and well distributed
+	\item communication via events
+	\item even the source from other service is pushed via events
+	\item 3 components
+	\item COSM, ESPER, JS FrontEnd
+	\item cosm
+	\item websocket protokol
+	\item cosm API
+	\item transformation
+	\item internal event structure
+	\item 
+\end{itemize}
+
+
+On the conceptual level we have three different components that handle this job.
+At first there is a connector that receive data from the COSM Service via the WebSocket-Protocol. The COSM Services Pushes Data via an defined API and the component forms that messages into Events into our EDA.
 
 \section{Implementation}
 \label{sec:Implementation}
@@ -167,15 +205,29 @@ The cockpit should be available via different devices like on the computer or on
 	\item Diagrams
 	\item Real-Time event monitoring
 	\item Short Desc
+	\item Backend in Java
+	\item Build with Maven
+	\item Tomcat Maven Plugin to easy run
 	\begin{itemize}
 		\item COSM
+		\item Route Model as COSM Sensors
+		\item Implementation COSM
 		\begin{itemize}
+			\item Java
+			\item COSMWebSocketEngine
+			\item Simple Interface
+			\item start,stop,listener
+			\item AsyncHttpClient
 			\item Websocket Protokol
+			\item API
 			\item API Key
+			\item Response, HTTP Resp Wrapper 
+			\item http docs beta socket server 
+			\item SUBSCRIBE to DataStream
+			\item unsuscribe for closing
 			\item Objekt Parsing
-			\item Route Model as COSM Sensors
-			\item Data Manipulation / Event Generation
-			\item Push To Esper
+			\item mapped to events
+			\item Push To Esper via Listener Interface
 		\end{itemize}
 		\item Esper
 		\begin{itemize}
@@ -183,6 +235,7 @@ The cockpit should be available via different devices like on the computer or on
 			\item Complex Events
 			\item Rules
 			\item Listeners
+			\item alternative Siddhi
 		\end{itemize}
 		\item JS Frontend
 		\begin{itemize}
