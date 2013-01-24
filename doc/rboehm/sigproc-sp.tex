@@ -85,7 +85,7 @@ Robin B\"ohm\\
 \maketitle
 \begin{abstract}
 
-In this project we developed a prototype for an architecture for an event-driven cockpit in the Future Internet(FI) context.
+In this project we developed a prototype architecture for an event-driven cockpit in the Future Internet(FI) context.
 The prototype is about monitoring a business case of perishable goods in the logistic domain to improve the reaction time issues through the combination of some state-of-the-art technologies.
 
 It uses a service platform that provides sensor event data for things in the real-wold that are provided via the websocket protocol - this platform based on the Internet of Things (IoT) concept. 
@@ -96,7 +96,7 @@ Through the chosen architecture the latency between the actual business event an
 
 \section{Introduction}
 The aim of this project is to combine some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
-The chosen use-case is a business process management in the logistic sector that handles with perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the reducing of the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
+The chosen use-case is a business process management in the logistic sector that handles with perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
 
 We are using the Internet of Things(IoT) and Internet of Services(IoS) concepts to linking the real-world with our business world. So we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations and combine them to more valuable complex events.
 To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events.
@@ -124,7 +124,7 @@ The websocket protocol is an http upgrade protocol that enables a two-way commun
 
 To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
 
-To add some more more meaningful value for some special business case\textbf{Complex Event Processing}(CEP) can be used. CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined that detecting the occurrence of events in a defined time interval.
+To add some more more meaningful value for some special business case \textbf{Complex Event Processing}(CEP) can be used. CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined that detecting the occurrence of events in a defined time interval.
 
 \section{Related Work}
 \label{sec:Related Work}
@@ -140,27 +140,27 @@ Our scenario comprises the planing and alternatives in escalation situations of 
 Also the routes are equipped with sensors that enables us to monitor them.
 The overview in such a business monitoring tool is modeled a cockpit with summary of meaningful information that should support the decision. 
 
-The cockpit provides an ampel-system with the colors green,yellow and red that visualizing the current state of the routes and trucks depending on defined threshold.
+The cockpit provides an ampel-system with the colors green, yellow and red that visualizing the current state of the routes and trucks depending on defined threshold.
 Also the prototype is using complex threshold for combinations of singular states of a route or a truck that currently on this route that are also visualized in a map.
 The cockpit should be available via different devices like on the computer or on smart-phone.
 %Actuality of the information is one of the most valuable criterion
 \section{Conceptional Design}
 \label{sec:Conceptional Design}
 
-As basic architectural design we are choosing to build an event-driven-architecture(EDA).
+As basic architectural design we are choosing an event-driven-architecture(EDA).
 An EDA is loosely coupled and can be used for distribution and scalability of software components. Because every component could have multiple listeners for his own events or act as sender for multiple other components.
 For our prototype we build service components that are loosed coupled and communicating only via events.
 At first we using a connector that receives basic events from the COSM Service API.
 The component connects to the API and subscribe itself to the relevant data-streams that are prepared for this demo-case.
-Once the component is registered to the service-api, it receives an event via push every time a change of state appears at the data-stream. Through the static connection that happens in real-time without any overhead to create a new TCP HTTP connection.
+Once the component is registered to the service-api, it receives an event via push every time a change of state appears at the data-stream. Through the static connection that happens in real-time without any overhead to create a new connection.
 When the event message is arrived via the socket it get parsed and transformed into the internal event structure and directly send to the components that are listening.
 A registered listener in our system for this COSM-Component Events is the Complex-Event-Processing(CEP) component.
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[scale=0.5]{Component-Overview.png}
-		\caption[Angiogenetic Switch]{Angiogenetic Switch}
-		\label{fig:AngiogeneticSwitch}
+		\includegraphics[scale=0.25]{mvc-architecture.png}
+		\caption[System technical architecture]{System technical architecture}
+		\label{fig:SystemTechnicalArchitecture}
 	\end{center}
 \end{figure}
 
@@ -193,12 +193,69 @@ Through this chain of event-processing also the client receives the events trigg
 	\item 
 \end{itemize}
 
-
-On the conceptual level we have three different components that handle this job.
-At first there is a connector that receive data from the COSM Service via the WebSocket-Protocol. The COSM Services Pushes Data via an defined API and the component forms that messages into Events into our EDA.
-
 \section{Implementation}
 \label{sec:Implementation}
+
+This chapter treats with the different aspects and components of the actual implementation. It begins with an overview about the used technology stack followed by a description of the components.
+
+\subsection{Technology}
+As runtime environment for our backend we used oracles's JavaEE\cite{java6} implementation and as programming language Java 6. As basic application server the Apache Tomcat 7 \cite{tomcat} that provides a HTTP Server and the Servlet API 3.1\cite{servlet31} that enables the websocket support for servlets that is used to communicate with the external COSM Websocket API\cite{cosm}.
+
+For the complex event processing engine we choose the esper engine\cite{esper}
+\footnote{Esper is provided under the open source GPL GNU License, that mean you have to have to distribute your project also as open source project if you want to use this. An alternative is Siddhi\cite{siddhi} that is published under the Apache Software License v2.0.}.
+It provides a high-speed event processing that offers an Domain Specific Language (DSL) that enables us to easily define rules in the Event Processing Language (EPL).
+
+To create the view frontend we using modern webbrowser technologies like HTML5\cite{html5} and ECMA 5.1 better known as JavaScript \cite{ecma}.
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.5]{Component-Overview.png}
+		\caption[Angiogenetic Switch]{Angiogenetic Switch}
+		\label{fig:AngiogeneticSwitch}
+	\end{center}
+\end{figure}
+
+
+\subsection{The COSM Adapter}
+COSM is a online database that offers sensor-data from devices that tracks environment data from objects. It provides an API that allow to push and receive data.
+This data is organized in feeds that is specified as a context-specific collection of measurement data - defined by the creator. This feed contains a set of datastreams, each of this represents an individual sensor. Every datastream must have a unique alphanumeric number. It also can define some user-defined tags.
+
+The COSM API currently based in HTTP requests. It conforms with the principles of RESTful . So you are able to use the HTTP verbs to determine a action on a data-object.
+GET Retrieves the current state of the object,
+PUT : Sets the current state of the object,
+POST : Creates a new object and DELETE : Deletes the object.
+The data-format is JSON what suited to modern web-based applications.
+
+The service is using a API-Key based authentication that can be send via request header or parameter of the URL. If you create an account on their website, you getting an API-Key witch is full-privileged like you account. It is also possible to request new API-Keys for special feeds that could be managed individually.
+
+The websocket support is listed as a beta-feature in the documentation. With this technique you getting an bi-directional communication socket that allows you to send messages without the HTTP overhead for every message.
+Once you are connected to the server, the protocol is wrapped HTTP Request in JSON to send actions to the API. So you are able to use the same GET,PUT,POST and DELETE commands as normal over the HTTP API.
+
+To have a real benefit using the api over the websocket api it is possible to subscribe to every particular feed or datastream you are interested in. When some resource is updated the cosm-server sends immediately datastream representation of the current state via the socket. That enables you to receive real-time push notification about your streams.
+
+
+What is cosm?
+What are datastreams? resources
+API Key
+
+HTTP API / Websocket API
+
+Asynchronous HTTP Client
+Suscribe to an resource
+getting Push Events
+
+
+Wrote a little client to Update the resources via http Request.
+
+Impl
+Listener for internal communication,
+event forwarding to engine
+
+
+The COSM-Adapter Module basically is implemented as an Async-HTTP-Client that connects to the COSM WebSocket API. This API uses an JSON Format that emulating a HTTP-Frame. In this frame you are able to set method, header and body part of the a request.
+
+
 
 \begin{itemize}
 	\item Introduction
@@ -213,6 +270,7 @@ At first there is a connector that receive data from the COSM Service via the We
 		\item Route Model as COSM Sensors
 		\item Implementation COSM
 		\begin{itemize}
+		
 			\item Java
 			\item COSMWebSocketEngine
 			\item Simple Interface
