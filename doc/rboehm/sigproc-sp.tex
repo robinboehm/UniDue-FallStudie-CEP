@@ -84,12 +84,12 @@ Robin B\"ohm\\
 
 \maketitle
 \begin{abstract}
+In this user study we challenge the problems that occurs in the logistic sector in combination with the transport process of perishable goods.
+It treats the problems about providing, receiving and processing information in real-time to improve the reaction time issues.
 
-In this project we developed a prototype architecture for an event-driven cockpit in the Future Internet(FI) context.
-The prototype is about monitoring a business case of perishable goods in the logistic domain to improve the reaction time issues through the combination of some state-of-the-art technologies.
-
-It uses a service platform that provides sensor event data for things in the real-wold that are provided via the websocket protocol - this platform based on the Internet of Things (IoT) concept. 
-These events are aggregated and interpreted by an Complex Event Engine(CEP) and visualized via an HTML5 cockpit in a web-browser.
+We developed a prototype architecture for an event-driven cockpit with the ideas of the Future Internet(FI). It is about monitoring our business case of transporting perishable goods in the logistic domain with concepts of Internet of Things (IoT). 
+It uses a service platform that provides sensor event data for things in the real-wold that are provided via the websocket protocol - this platform based on the 
+These events are aggregated and interpreted by an Complex Event Engine(CEP) and visualized via an cockpit in a web-browser.
 Through the chosen architecture the latency between the actual business event and the visualization is nearly real-time.
 \end{abstract}
 
@@ -136,7 +136,7 @@ TODO!!
 
 Basically our use case is about managing the delivery of perishable goods. This is a high risk business process in the logistic domain. If some goods arriving late or there are some problems with the cooling system it is necessary to get the information of the real-world state as quick as possible to do a trade-off what could be the best action to reduce risk or costs.
 
-Our scenario comprises the planing and alternatives in escalation situations of the delivery of these perishable goods via trucks over a defined route. These trucks are equipped with sensors that provides us the monitoring data that is used for automated real-time aggregation and interpretation and share the results in a cockpit application like it is described in the Internet-of-Things(IoT) concept. 
+Our use case comprises the planing and alternatives in escalation situations of the delivery of these perishable goods via trucks over a defined route. These trucks are equipped with sensors that provides us the monitoring data that is used for automated real-time aggregation and interpretation and share the results in a cockpit application like it is described in the Internet-of-Things(IoT) concept. 
 Also the routes are equipped with sensors that enables us to monitor them.
 The overview in such a business monitoring tool is modeled a cockpit with summary of meaningful information that should support the decision. 
 
@@ -156,11 +156,11 @@ Once the component is registered to the service-api, it receives an event via pu
 When the event message is arrived via the socket it get parsed and transformed into the internal event structure and directly send to the components that are listening.
 A registered listener in our system for this COSM-Component Events is the Complex-Event-Processing(CEP) component.
 
-\begin{figure}
+\begin{figure}[h]
 	\begin{center}
-		\includegraphics[scale=0.25]{mvc-architecture.png}
-		\caption[System technical architecture]{System technical architecture}
-		\label{fig:SystemTechnicalArchitecture}
+		\includegraphics[scale=0.5]{Component-Overview.png}
+		\caption[Angiogenetic Switch]{Angiogenetic Switch}
+		\label{fig:AngiogeneticSwitch}
 	\end{center}
 \end{figure}
 
@@ -170,28 +170,6 @@ This component contains the business model. The model is updated with every even
 To visualize this data we are providing the information as a service via a websocket api.
 Our javascript client act as visualization unit that could connect to the service component and receive updates via websocket every time a state-change happens at then model site.
 Through this chain of event-processing also the client receives the events triggered by the COSM-API in real-time and can provide this information for multiple clients.
-
-
-
-
-
-\begin{itemize}
-	\item EDA
-	\item loose coupled components
-	\item Add more event sources
-	\item supply more processing units
-	\item event driven architecture is extremely loosely coupled and well distributed
-	\item communication via events
-	\item even the source from other service is pushed via events
-	\item 3 components
-	\item COSM, ESPER, JS FrontEnd
-	\item cosm
-	\item websocket protokol
-	\item cosm API
-	\item transformation
-	\item internal event structure
-	\item 
-\end{itemize}
 
 \section{Implementation}
 \label{sec:Implementation}
@@ -208,11 +186,12 @@ It provides a high-speed event processing that offers an Domain Specific Languag
 To create the view frontend we using modern webbrowser technologies like HTML5\cite{html5} and ECMA 5.1 better known as JavaScript \cite{ecma}.
 
 
-\begin{figure}
+
+\begin{figure}[h]
 	\begin{center}
-		\includegraphics[scale=0.5]{Component-Overview.png}
-		\caption[Angiogenetic Switch]{Angiogenetic Switch}
-		\label{fig:AngiogeneticSwitch}
+		\includegraphics[scale=0.25]{mvc-architecture.png}
+		\caption[System technical architecture]{System technical architecture}
+		\label{fig:SystemTechnicalArchitecture}
 	\end{center}
 \end{figure}
 
@@ -235,75 +214,54 @@ Once you are connected to the server, the protocol is wrapped HTTP Request in JS
 To have a real benefit using the api over the websocket api it is possible to subscribe to every particular feed or datastream you are interested in. When some resource is updated the cosm-server sends immediately datastream representation of the current state via the socket. That enables you to receive real-time push notification about your streams.
 
 
-What is cosm?
-What are datastreams? resources
-API Key
-
-HTTP API / Websocket API
-
-Asynchronous HTTP Client
-Suscribe to an resource
-getting Push Events
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.4]{sequence-diagram-cosm.png}
+		\caption[Sequence Diagram of the COSM Adapter]{Sequence Diagram of the COSM Adapter}
+		\label{fig:SequenceDiagram}
+	\end{center}
+\end{figure}
 
 
-Wrote a little client to Update the resources via http Request.
-
-Impl
-Listener for internal communication,
-event forwarding to engine
+So we using a asynchronous http client to register a websocket connection to the cosm api and subscribing us to a list of related datastreams we want to get informed via push.
+Once a event is received by the module, it is parsed through a objectmapper to java objects that could be processed. When a change is detected this is pushed via event to other modules that are interested in this information.
+To register as an listener for the COSM Adapter it provides a interface that could handle objects that implements the event-listener interface.
 
 
-The COSM-Adapter Module basically is implemented as an Async-HTTP-Client that connects to the COSM WebSocket API. This API uses an JSON Format that emulating a HTTP-Frame. In this frame you are able to set method, header and body part of the a request.
+\subsection{Complex Event Processing}
 
+The esper engine is loose coupled via the event-listener interface to the cosm-adapter.
+These events are filled in the CEP-Engine with a timestamp, numeric data and a target field to define the source sensor.
+With this events in the engines database it is possible to define some rules in a Domain Specific Language (DSL) developed by the espertech company and that is called Event Processing Language (EPL). This rules are defined in a sql-like syntax and can define also time windows for time specific definitions.
+Once a definition is added to the system engine, every match results in a new event that is thrown by the engine and could be handled by any interested listener.
 
+In our prototype we using this rules to define the business logic for our use-case.
+So the cockpit service, that represents our model, is registered as listener by the CEP-Engine and get updates through some special rules that are defined in EPL.
+For example we using the raw sensor events from cosm to update our waypoints model.
+Also it is possible to refill this created events back into the engine to use them for more high level rules that could be triggered by combinations of complex events.
+The ampel system  for a complete route defined in section \ref{sec:Use Case} depends on different events combinations that containing self-defined events.
+So we are free to define a arbitrary level of complex events.
 
-\begin{itemize}
-	\item Introduction
-	\item Diagrams
-	\item Real-Time event monitoring
-	\item Short Desc
-	\item Backend in Java
-	\item Build with Maven
-	\item Tomcat Maven Plugin to easy run
-	\begin{itemize}
-		\item COSM
-		\item Route Model as COSM Sensors
-		\item Implementation COSM
-		\begin{itemize}
-		
-			\item Java
-			\item COSMWebSocketEngine
-			\item Simple Interface
-			\item start,stop,listener
-			\item AsyncHttpClient
-			\item Websocket Protokol
-			\item API
-			\item API Key
-			\item Response, HTTP Resp Wrapper 
-			\item http docs beta socket server 
-			\item SUBSCRIBE to DataStream
-			\item unsuscribe for closing
-			\item Objekt Parsing
-			\item mapped to events
-			\item Push To Esper via Listener Interface
-		\end{itemize}
-		\item Esper
-		\begin{itemize}
-			\item General Concept
-			\item Complex Events
-			\item Rules
-			\item Listeners
-			\item alternative Siddhi
-		\end{itemize}
-		\item JS Frontend
+\subsection{UI Front-End}
+Our front-end, also known as cockpit in this paper, is implemented with state-of-the art browser-based web technologies.
+It receives the model via a websocket api that is provided by the cockpit-service.
+Every time the backend model is updated, the new model is published by the api and enables the client to react and rebuild or modify the visualization.
+
+As visualization elements we choose a two component view consisting of a table that shows an quick textual overview about the current state and a map that shows the routes on it to offer an other view point of view for this data. Also the route view provides the different routes in the specific ampel-style that is evaluated by the backend.1
+As this views are updated in real-time the operator has the possibilities to react very quick to occurred events.
+
+The inner architecture contains an controller that act as dispatcher for incoming events and routes them to the different views. With this architecture it is easy to add more view representations for the backend model without changing any code on the server or disable/enable some view components.
+
+JS Frontend
 		\begin{itemize}
 			\item Websocket Event Model
 			\item Short Desc Components
 			\item Google Maps Route
 			\item jQuery Table visualization
 		\end{itemize}
-	\end{itemize}
-\end{itemize}
+		
+		
+\subsection{Wrote a little client to Update the resources via http Request.}
 
 
 \section{Conclusion}
