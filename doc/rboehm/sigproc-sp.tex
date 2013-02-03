@@ -174,18 +174,28 @@ Through this chain of event-processing also the client receives the events trigg
 \section{Implementation}
 \label{sec:Implementation}
 
-This chapter treats with the different aspects and components of the actual implementation. It begins with an overview about the used technology stack followed by a description of the components.
+\subsection{Project Boilerplate}
+To mange our build process and the dependency management we used Apache Maven to handle this tasks. We provide our configuration via a xml file that defines all our  dependencies for example for the CEP components.
+So the build process is automated and can be started by a simple command under different environments like Windows, Unix or Mac OS X.
+To enable us to work distributed in our team we used the version control system git with a private repository at github as host
+\footnote{http://www.github.com}
+that provides us this as service.
+
+Another advantage that is provided by a maven third party plugin that is named Apache Tomcat Maven Plugin
+\footnote{Tomcat Apache maven Plugin Link!!!!!!!!!!!!!!!!!!}.
+It offers a command to bundle our whole project to an jar that starts all our services with one command and can be offered as single executable file for the jvm.
+Also it enables us to run our project on the fly directly from the build process without setting up an manually installed develop environment for every developer.
 
 \subsection{Technology}
 As runtime environment for our backend we used oracles's JavaEE\cite{java6} implementation and as programming language Java 6. As basic application server the Apache Tomcat 7 \cite{tomcat} that provides a HTTP Server and the Servlet API 3.1\cite{servlet31} that enables the websocket support for servlets that is used to communicate with the external COSM Websocket API\cite{cosm}.
+
+The websocket protocol is an http upgrade protocol that enables a two-way communication between a client and a remote host \cite{websocket}. It was developed to provide a mechanism for browser-based applications that need this kind of communication wihout relying on multiple HTTP connections e.g. long polling\cite{long_polling}. 
 
 For the complex event processing engine we choose the esper engine\cite{esper}
 \footnote{Esper is provided under the open source GPL GNU License, that mean you have to have to distribute your project also as open source project if you want to use this. An alternative is Siddhi\cite{siddhi} that is published under the Apache Software License v2.0.}.
 It provides a high-speed event processing that offers an Domain Specific Language (DSL) that enables us to easily define rules in the Event Processing Language (EPL).
 
 To create the view frontend we using modern webbrowser technologies like HTML5\cite{html5} and ECMA 5.1 better known as JavaScript \cite{ecma}.
-
-
 
 \begin{figure}[h]
 	\begin{center}
@@ -194,7 +204,6 @@ To create the view frontend we using modern webbrowser technologies like HTML5\c
 		\label{fig:SystemTechnicalArchitecture}
 	\end{center}
 \end{figure}
-
 
 \subsection{The COSM Adapter}
 COSM is a online database that offers sensor-data from devices that tracks environment data from objects. It provides an API that allow to push and receive data.
