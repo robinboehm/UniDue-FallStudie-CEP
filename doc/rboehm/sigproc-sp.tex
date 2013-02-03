@@ -90,13 +90,17 @@ It treats the problems about providing, receiving and processing information in 
 We developed a prototype architecture for an event-driven cockpit with the ideas of the Future Internet(FI). It is about monitoring our business case of transporting perishable goods in the logistic domain with concepts of Internet of Things (IoT). 
 It uses a service platform that provides sensor event data for things in the real-wold that are provided via the websocket protocol - this platform based on the 
 These events are aggregated and interpreted by an Complex Event Engine(CEP) and visualized via an cockpit in a web-browser.
-Through the chosen architecture the latency between the actual business event and the visualization is nearly real-time.
+Through the chosen architecture the latency between the actual business event and the visualization is nearly real-time and gives an additional benefit to the existing solutions.
 \end{abstract}
 
 
 \section{Introduction}
-The aim of this project is to combine some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
-The chosen use-case is a business process management in the logistic sector that handles with perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
+The transport of perishable goods in the logistic sector is a challenging task. It deals with a huge amount of data and real-time data processing.
+
+
+
+some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
+The chosen use-case is a business process management in the logistic sector that handles  perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
 
 We are using the Internet of Things(IoT) and Internet of Services(IoS) concepts to linking the real-world with our business world. So we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations and combine them to more valuable complex events.
 To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events.
@@ -113,14 +117,10 @@ The next section \ref{sec:Implementation} contains details about the implementat
 
 The idea of \textbf{Future Internet} is to enhance the architectures for the current state of the Internet. There are many ideas that are elaborated and discussed. The \textbf{Internet-of-Things} term first used by Kevin Ashton in the year 1999 \cite{•}. He describes the IoT as enhancement from human-entered data to real world data that is captured by machines.
 \begin{quote}
-If we had computers that knew everything there was to know about things - using data they gathered without any help from us - we would be able to track and count everything, and greatly reduce waste, loss and cost. We would know when things needed replacing, repairing or recalling, and whether they were fresh or past their best. 
+If we had computers that knew everything there was to know about things - using data they gathered without any help from us - we would be able to track and count everything, and greatly reduce waste, loss and cost. We would know when things needed replacing, repairing or recalling, and whether they were fresh or past their best. \cite{iot_thing:Ashton}
 \end{quote}
-That is a quote from an article he published 2009 in the RFIDJournal
-\cite{iot_thing:Ashton}.
 There is another concept of FI that could enables us to use all this information that is called \textbf{Internet of Services}. This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
 A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\cite{cosm} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API that use the websocket protocol.
-
-The websocket protocol is an http upgrade protocol that enables a two-way communication between a client and a remote host \cite{websocket}. It was developed to provide a mechanism for browser-based applications that need this kind of communication wihout relying on multiple HTTP connections e.g. long polling\cite{long_polling}. 
 
 To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
 
@@ -129,7 +129,15 @@ To add some more more meaningful value for some special business case \textbf{Co
 \section{Related Work}
 \label{sec:Related Work}
 
-TODO!!
+The term Internet of Things exists in the Context of Future Internet now about ten years. 
+So many papers where published that deals with this topic.
+C.Winkler from the University Duisburg Essen in Germany developed a sensor network via smartphone sensors that providing data\cite{sense-sation_winkler}.
+He created a platform that manage the incoming events triggered by combination of sensors and their behavior.
+This sensing platform provides a RESTFul web service that offers this sensor event information.
+
+\begin{itemize}
+	\item SENSE-SATION Christian Winkler
+\end{itemize}
 
 \section{Use Case}
 \label{sec:Use Case}
