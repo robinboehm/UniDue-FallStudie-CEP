@@ -260,62 +260,43 @@ As visualization elements we choose a two component view consisting of a table t
 As this views are updated in real-time the operator has the possibilities to react very quick to occurred events.
 
 The inner architecture contains an controller that act as dispatcher for incoming events and routes them to the different views. With this architecture it is easy to add more view representations for the backend model without changing any code on the server or disable/enable some view components.
-
-JS Frontend
-		\begin{itemize}
-			\item Websocket Event Model
-			\item Short Desc Components
-			\item Google Maps Route
-			\item jQuery Table visualization
-		\end{itemize}
-		
 		
 \subsection{Wrote a little client to Update the resources via http Request.}
 
 \section{Learning Outcome}
+During this project we learned a lot about the future-internet thoughts and the state-of-the-art technologies that are used to realize this ideas.
+Due my work beside the university projects i already used some of the technologies where i am developing an monitoring system that also deals with events and visualization of data.
 
-\begin{itemize}
-	\item praktically work
-	\item websocket
-	\item events in monitoring system
-\end{itemize}
+We learned a lot about some future-internet concepts like Internet of Things and Internet of Services and how they used in real world projects. That open us some new views on projects and problems that are currently growing. For many domains this concepts could bring a great benefit for their business cases.
 
-\begin{itemize}
-	\item IoT IoS
-	\item projecting rules for event processing CEP
-	\item Event driven architecure 
-	\item real-time processing
-	\item scalability
-\end{itemize}
+The usage of a Complex-Event-Processing-Engine to deal with business events was a really interesting experience that offers new useful possibilities for other projects i am currently working at. It needs other strategies and approaches to solve this like the definition of an domain specific language for the rules that are defined in these engines.
+The usage of an event driven architecture was a good step to use the benefits of every component that deals with real-time events. Also it enabled us to work complete distributed by defining decoupled components. This was a great experience for then whole team because it reduces the effort of many merges and refactoring iterations.
 
-\begin{itemize}
-	\item HTML5 Frontend
-	\item Multi-Device Support HTML5
-	\item projecting rules for event processing
-	\item Event driven architecure 
-	\item real-time processing
-\end{itemize}
+Especially the usage of the websocket protocol with an external api showed me the power but also the problem of these kind of communication protocol. When using the websocket  to communicate you need to define an own inner protocol to handle the messages. 
+That could be a wrapped HTTP frame like it is done by COSM or a complete self-designed specification.
 
+In Regular meetings we where able to combine our skills and helped each other through code reviews and analyses of commits. In this point we learned that the usage of a version control system needs some rules that should be clear for all team members. For example a commit should represent a small single task and is tagged with a meaningful commit message that every other team mate could work with this information. The team should define what is a small task and a meaningful commit for this project.
 
-\begin{itemize}
-	\item programming in a team
-	\item decoupeld components for distributed work
-	\item meaningful commit messages
-	\item regular meetings, planing
-	\item code reviewing
-\end{itemize}
+The usage of maven as build management tool was a great choice. After a initial phase of configuration that took a few hours, every teammate could build, pack and start the system per one command at their own development environments. Even our executable package for the appendix is created by one simple command. Including an configured Tomcat with our webapp deployed in it.
 
+Also we learned a lot by working on the front-end design with HTML5 and Javascript.
+The usage of javascript what is an functional programming language affords a switch in thinking about problems and how to solve them in a elegant way.
+For our project this functional approach was a perfect match to our event driven architecture what enabled us very quick to handle this.
+Another great experience was the multi-device support. we tested our application on a normal web-browser and a iPad 3 - it works perfect in both cases.
 
 \section{Conclusion}
 \label{sec:Conclusion}
-\begin{itemize}
-	\item FI
-	\item State-of-the art technologies
-	\item real time events
-	\item Logistic Information System / Business Process Management
-	\item Multi-Device Support HTML5
-	
-\end{itemize}
+This case study shows that the concepts of the future internet and especially the Internet of Thing concept could be used to solve some problems that occurs in the logistic sector.
+This prototype shows the possibilities of such an architecture and technology stack and can be used in various domains with a similar problem. 
+We using a sensor network that provides real-time data that is aggregated by COSM Service. This service also provides a websocket api that enables us to get this data in realtime for processing in our application. Inside our application we using the a CEP Engine to combine events an create more meaningful complex events that are used to update our business model. Finally we build a front-end application cockpit that visualizes  this business model.
+All these components are build with in an event-driven-architecture that enables us to transport this events in real-time.
+
+There are a lot possibilities to extend and optimize this prototype. We could connect other IoT Platforms to improve the sensor-data input. Also defining more business events for our CEP engine that helps to identify complex event combinations. These could be used for new visualization elements that could be added into the frontend layer.
+With our chosen decoupled architecture this extensions would be easy to add into the existing system.
+
+We think that this project has successfully shown that this kind of architecture is a benefit for applications with informational real-time challenges. This first prototype worked very good in our tests. The composition of technologies fits very good together and make it easy to extend for commercial usage. Using HTML5 as technology for the frontend could enable companies to use one implementation for many devices. 
+With this prototype as blueprint it is possible to create an valuable software for this kind of domains with related challenges.
+
 %\end{document}  % This is where a 'short' article might terminate
 
 %
