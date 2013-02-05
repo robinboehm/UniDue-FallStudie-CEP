@@ -1,29 +1,21 @@
 package de.uni.due.paluno.casestudy.control;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import de.uni.due.paluno.casestudy.Globals;
 import de.uni.due.paluno.casestudy.control.command.RouteTemperatureRetrieveCommand;
-import de.uni.due.paluno.casestudy.control.command.event.NoWaypointMaxTemperatureExceededCommand;
-import de.uni.due.paluno.casestudy.control.command.event.RouteAverageExceededCommand;
-import de.uni.due.paluno.casestudy.control.command.event.RouteAverageNotExceededCommand;
-import de.uni.due.paluno.casestudy.control.command.event.RouteAverageWarningCommand;
-import de.uni.due.paluno.casestudy.control.command.event.WaypointMaxTemperatureExceededCommand;
+import de.uni.due.paluno.casestudy.control.command.event.*;
 import de.uni.due.paluno.casestudy.control.command.update.RouteStatusUpdateCommand;
 import de.uni.due.paluno.casestudy.control.command.update.WaypointTemperatureUpdate;
-import de.uni.due.paluno.casestudy.model.Route;
-import de.uni.due.paluno.casestudy.model.TemperatureStatus;
-import de.uni.due.paluno.casestudy.model.Transport;
-import de.uni.due.paluno.casestudy.model.WayPoint;
-import de.uni.due.paluno.casestudy.model.World;
+import de.uni.due.paluno.casestudy.model.*;
 import de.uni.due.paluno.casestudy.services.cep.EsperCOSMAdapter;
 import de.uni.due.paluno.casestudy.services.cep.events.ControlledWaypointTemperatureUpdate;
-import de.uni.due.paluno.casestudy.services.cosm.COSM;
+import de.uni.due.paluno.casestudy.services.cosm.COSMWebSocketHelper;
 import de.uni.due.paluno.casestudy.services.lookup.LookupDemoService;
 import de.uni.due.paluno.casestudy.services.lookup.LookupService;
 import de.uni.due.paluno.casestudy.servlet.UIUpdateController;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Demo implementation of the CockpitService
@@ -35,7 +27,7 @@ public class CockpitDemoService implements CockpitService {
 	private LookupService lookupService;
 	private EsperCOSMAdapter eca;
 	private UIUpdateController uiUpdateController;
-	private COSM cosm;
+	private COSMWebSocketHelper cosm;
 
 	public CockpitDemoService() {
 		// Init Services
@@ -46,7 +38,7 @@ public class CockpitDemoService implements CockpitService {
 		this.initEsperCOSMAdapter();
 
 		// Init COSM API
-		this.cosm = new COSM();
+		this.cosm = new COSMWebSocketHelper();
 
 		// Enrich data model wit current values form cosm
 		this.initialLoad();

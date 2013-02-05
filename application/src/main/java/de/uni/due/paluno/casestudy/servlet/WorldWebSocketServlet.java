@@ -7,6 +7,7 @@ import de.uni.due.paluno.casestudy.model.Route;
 import de.uni.due.paluno.casestudy.model.WayPoint;
 import de.uni.due.paluno.casestudy.model.World;
 import de.uni.due.paluno.casestudy.services.cosm.COSMWebSocketEngine;
+import de.uni.due.paluno.casestudy.services.cosm.impl.COSMWebSocketEngineImpl;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 
@@ -64,7 +65,7 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 
 	private void initCOSMWebSocketEngine(Set<String> routeURLs)
 			throws IOException, ExecutionException, InterruptedException {
-		COSMWebSocketEngine engine = createEngine(routeURLs);
+        COSMWebSocketEngine engine = createEngine(routeURLs);
 
 		// Feed event engine with events
 		engine.addListener(this.cockpitService.getECA());
@@ -106,7 +107,7 @@ public class WorldWebSocketServlet extends WebSocketServlet {
 	 */
 	private COSMWebSocketEngine createEngine(Set<String> routeURLs)
 			throws IOException, ExecutionException, InterruptedException {
-		COSMWebSocketEngine engine = new COSMWebSocketEngine(routeURLs);
+        COSMWebSocketEngine engine = new COSMWebSocketEngineImpl(routeURLs);
 		engine.start();
 		return engine;
 	}
