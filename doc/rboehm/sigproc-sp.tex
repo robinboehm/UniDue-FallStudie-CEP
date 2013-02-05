@@ -96,14 +96,12 @@ Through the chosen architecture the latency between the actual business event an
 
 \section{Introduction}
 The transport of perishable goods in the logistic sector is a challenging task. It deals with a huge amount of data and real-time data processing.
-The current development of some state-of-the-art Future Internet(FI) technologies shows a great potential to improve this business processes.
+The current development of some state-of-the-art \textbf{Future Internet} technologies shows a great potential to improve this business processes.
 
 The chosen use-case is a business process management in the logistic sector that handles  perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
 
-We are using the Internet of Things(IoT) and Internet of Services(IoS) concepts to linking the real-world with our business world. So we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations and combine them to more valuable complex events.
-To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events.
-
-We are providing a cockpit for monitoring the business model with some useful visualizations.This cockpit is implemented with modern web technologies so it is usable on many devices out of the box over the specifications. It contains a map that shows the current state of given routes with an rating calculated on the raw events. Also a table that offers information in more textual way.
+We are using the \textbf{Internet of Things} and \textbf{Internet of Services} concepts to linking the real-world with our business world. So we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations and combine them to more valuable complex events. 
+Figure \ref{fig:Project overview} show the overview about the the project with the Future Internet concepts in a very general way. 
 
 \begin{figure}[h]
 	\begin{center}
@@ -112,6 +110,11 @@ We are providing a cockpit for monitoring the business model with some useful vi
 		\label{fig:Project overview}
 	\end{center}
 \end{figure}
+
+
+To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events.
+
+We are providing a cockpit for monitoring the business model with some useful visualizations.This cockpit is implemented with modern web technologies so it is usable on many devices out of the box over the specifications. It contains a map that shows the current state of given routes with an rating calculated on the raw events. Also a table that offers information in more textual way.
 
 This paper starts with an introduction about the basics in section \ref{sec:Basics}.
 After a survey of related work in Section \ref{sec:Related Work}. 
@@ -122,18 +125,18 @@ The next section \ref{sec:Implementation} contains details about the implementat
 \label{sec:Basics}
 
 The idea of \textbf{Future Internet} is to enhance the architectures for the current state of the Internet. There are many ideas that are elaborated and discussed. It is a superset of different paradigms and developments. 
-One of the most interesting ideas is defined by the \textbf{Internet-of-Things} term that first used by Kevin Ashton in the year 1999 \cite{•}. He describes the IoT as enhancement from human-entered data to real world data that is captured by machines.
+One of the most interesting ideas is defined by the \textbf{Internet-of-Things} term that first used by Kevin Ashton in the year 1999. He describes the IoT as enhancement from human-entered data to real world data that is captured by machines.
 \begin{quote}
 If we had computers that knew everything there was to know about things - using data they gathered without any help from us - we would be able to track and count everything, and greatly reduce waste, loss and cost. We would know when things needed replacing, repairing or recalling, and whether they were fresh or past their best. \cite{iot_thing:Ashton}
 \end{quote}
 So IoT can described as global sensor network of object and things that providing information about their current state. This is a big deal for informational processing and could be used in very different ways, for example to improve business processes.
 There is another concept of FI that could enables us to use all this information that is called \textbf{Internet of Services}. This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
-A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\cite{cosm} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API that use the websocket protocol.
-It acts as gateway between the connected sensor devices and the consumer that using this information via the api.
+A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\footnote{http://www.cosm.com} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API that use the websocket protocol.
+It acts as gateway between the connected sensor devices and the consumer that using this information via the api. 
 
 To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
 
-To add some more more meaningful value for some special business case \textbf{Complex Event Processing}(CEP) can be used. CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined that detecting the occurrence of events in a defined time interval.
+To add some more more meaningful value for some special business case \textbf{Complex Event Processing}(CEP) can be used. CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined for detecting the occurrence of events in a defined time interval.
 
 \section{Related Work}
 \label{sec:Related Work}
@@ -211,12 +214,14 @@ It offers a command to bundle our whole project to an jar that starts all our se
 Also it enables us to run our project on the fly directly from the build process without setting up an manually installed develop environment for every developer.
 
 \subsection{Technology}
-As runtime environment for our backend we used oracles's JavaEE\cite{java6} implementation and as programming language Java 6. As basic application server the Apache Tomcat 7 \cite{tomcat} that provides a HTTP Server and the Servlet API 3.1\cite{servlet31} that enables the websocket support for servlets that is used to communicate with the external COSM Websocket API\cite{cosm}.
+As runtime environment for our backend we used oracles's JavaEE implementation and as programming language Java 6. As basic application server the Apache Tomcat 7 \footnote{http://tomcat.apache.org} that provides a HTTP Server and the Servlet API 3.1 that enables the websocket support for servlets that is used to communicate with the external COSM Websocket API\cite{cosm}.
 
-The websocket protocol is an http upgrade protocol that enables a two-way communication between a client and a remote host \cite{websocket}. It was developed to provide a mechanism for browser-based applications that need this kind of communication wihout relying on multiple HTTP connections e.g. long polling\cite{long_polling}. 
+The websocket protocol is an http upgrade protocol that enables a two-way communication between a client and a remote host
+\footnote{Offical Websocket RFC, http://tools.ietf.org/html/rfc6455}. It was developed to provide a mechanism for browser-based applications that need this kind of communication wihout relying on multiple HTTP connections e.g. long polling. 
 
 For the complex event processing engine we choose the esper engine\cite{esper}
-\footnote{Esper is provided under the open source GPL GNU License, that mean you have to have to distribute your project also as open source project if you want to use this. An alternative is Siddhi\cite{siddhi} that is published under the Apache Software License v2.0.}.
+%\footnote{
+%Esper is provided under the open source GPL GNU License, that mean you have to have to distribute your project also as open source project if you want to use this. An alternative is Siddhi\cite{siddhi} that is published under the Apache Software License v2.0.}.
 It provides a high-speed event processing that offers an Domain Specific Language (DSL) that enables us to easily define rules in the Event Processing Language (EPL).
 
 To create the view frontend we using modern webbrowser technologies like HTML5\cite{html5} and ECMA 5.1 better known as JavaScript \cite{ecma}.
@@ -268,13 +273,14 @@ These events are filled in the CEP-Engine with a timestamp, numeric data and a t
 With this events in the engines database it is possible to define some rules in a Domain Specific Language (DSL) developed by the espertech company and that is called Event Processing Language (EPL). This rules are defined in a sql-like syntax and can define also time windows for time specific definitions.
 Once a definition is added to the system engine, every match results in a new event that is thrown by the engine and could be handled by any interested listener.
 
-In our prototype we using this rules to define the business logic for our use-case.
+In our prototype we use this rules to define the business logic for our use-case.
 So the cockpit service, that represents our model, is registered as listener by the CEP-Engine and get updates through some special rules that are defined in EPL.
 For example we using the raw sensor events from cosm to update our waypoints model.
 Also it is possible to refill this created events back into the engine to use them for more high level rules that could be triggered by combinations of complex events.
 The ampel system  for a complete route defined in section \ref{sec:Use Case} depends on different events combinations that containing self-defined events.
 So we are free to define a arbitrary level of complex events.
 
+\newpage 
 \subsection{UI Front-End}
 Our front-end, also known as cockpit in this paper, is implemented with state-of-the art browser-based web technologies.
 It receives the model via a websocket api that is provided by the cockpit-service.
@@ -285,8 +291,6 @@ As this views are updated in real-time the operator has the possibilities to rea
 
 The inner architecture contains an controller that act as dispatcher for incoming events and routes them to the different views. With this architecture it is easy to add more view representations for the backend model without changing any code on the server or disable/enable some view components.
 		
-\subsection{Wrote a little client to Update the resources via http Request.}
-
 \section{Learning Outcome}
 During this project we learned a lot about the future-internet thoughts and the state-of-the-art technologies that are used to realize this ideas.
 Due my work beside the university projects i already used some of the technologies where i am developing an monitoring system that also deals with events and visualization of data.
@@ -338,6 +342,6 @@ With this prototype as blueprint it is possible to create an valuable software f
 %
 %APPENDICES are optional
 %\balancecolumns
-\appendix
+%\appendix
 %Appendix A
 \end{document}
