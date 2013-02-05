@@ -96,16 +96,22 @@ Through the chosen architecture the latency between the actual business event an
 
 \section{Introduction}
 The transport of perishable goods in the logistic sector is a challenging task. It deals with a huge amount of data and real-time data processing.
+The current development of some state-of-the-art Future Internet(FI) technologies shows a great potential to improve this business processes.
 
-
-
-some of the state-of-the-art Future Internet(FI) technologies and using them to implement a prototype for a specific use-case that bring out the advantages of such a system.
 The chosen use-case is a business process management in the logistic sector that handles  perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
 
 We are using the Internet of Things(IoT) and Internet of Services(IoS) concepts to linking the real-world with our business world. So we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations and combine them to more valuable complex events.
 To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events.
 
 We are providing a cockpit for monitoring the business model with some useful visualizations.This cockpit is implemented with modern web technologies so it is usable on many devices out of the box over the specifications. It contains a map that shows the current state of given routes with an rating calculated on the raw events. Also a table that offers information in more textual way.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.5]{overview.png}
+		\caption[Project overview]{Project overview}
+		\label{fig:Project overview}
+	\end{center}
+\end{figure}
 
 This paper starts with an introduction about the basics in section \ref{sec:Basics}.
 After a survey of related work in Section \ref{sec:Related Work}. 
@@ -115,12 +121,15 @@ The next section \ref{sec:Implementation} contains details about the implementat
 \section{Basic}
 \label{sec:Basics}
 
-The idea of \textbf{Future Internet} is to enhance the architectures for the current state of the Internet. There are many ideas that are elaborated and discussed. The \textbf{Internet-of-Things} term first used by Kevin Ashton in the year 1999 \cite{•}. He describes the IoT as enhancement from human-entered data to real world data that is captured by machines.
+The idea of \textbf{Future Internet} is to enhance the architectures for the current state of the Internet. There are many ideas that are elaborated and discussed. It is a superset of different paradigms and developments. 
+One of the most interesting ideas is defined by the \textbf{Internet-of-Things} term that first used by Kevin Ashton in the year 1999 \cite{•}. He describes the IoT as enhancement from human-entered data to real world data that is captured by machines.
 \begin{quote}
 If we had computers that knew everything there was to know about things - using data they gathered without any help from us - we would be able to track and count everything, and greatly reduce waste, loss and cost. We would know when things needed replacing, repairing or recalling, and whether they were fresh or past their best. \cite{iot_thing:Ashton}
 \end{quote}
+So IoT can described as global sensor network of object and things that providing information about their current state. This is a big deal for informational processing and could be used in very different ways, for example to improve business processes.
 There is another concept of FI that could enables us to use all this information that is called \textbf{Internet of Services}. This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
 A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\cite{cosm} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API that use the websocket protocol.
+It acts as gateway between the connected sensor devices and the consumer that using this information via the api.
 
 To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
 
@@ -174,7 +183,7 @@ A registered listener in our system for this COSM-Component Events is the Comple
 \begin{figure}[h]
 	\begin{center}
 		\includegraphics[scale=0.5]{Component-Overview.png}
-		\caption[Angiogenetic Switch]{Angiogenetic Switch}
+		\caption[Component Overview]{Component Overview}
 		\label{fig:AngiogeneticSwitch}
 	\end{center}
 \end{figure}
@@ -214,7 +223,7 @@ To create the view frontend we using modern webbrowser technologies like HTML5\c
 
 \begin{figure}[h]
 	\begin{center}
-		\includegraphics[scale=0.25]{mvc-architecture.png}
+		\includegraphics[scale=0.5]{sta.png}
 		\caption[System technical architecture]{System technical architecture}
 		\label{fig:SystemTechnicalArchitecture}
 	\end{center}
