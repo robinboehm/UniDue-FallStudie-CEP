@@ -131,13 +131,20 @@ To add some more more meaningful value for some special business case \textbf{Co
 
 The term Internet of Things exists in the Context of Future Internet now about ten years. 
 So many papers where published that deals with this topic.
+A good introduction into the Internet of Things Vision is given by Vermesan in his research roadmap. At the beginning he describe the Future Internet version with all the paradigms that exists in this category\cite{vermesan2009internet}. Later he focus on the Internet of Things paradigm and explain some current developments and mentioned about technological trends.
+He also talks about the current analyses of a European Commission estimate that it would be 16 billion connected IoT devices in the year 2020\cite{sundmaeker2010vision}.
+
+In the article from Luigi Atzori he wrote a survey about enabling technologies in telecommunications, informatics and electronics. He talks about the important development of the last years like Radio-Frequency IDentification tags or mobile phones with enable us to generate unique addressing schemes for things or objects that enable us to interact and cooperate with this things\cite{atzori2010internet}.
 C.Winkler from the University Duisburg Essen in Germany developed a sensor network via smartphone sensors that providing data\cite{sense-sation_winkler}.
 He created a platform that manage the incoming events triggered by combination of sensors and their behavior.
 This sensing platform provides a RESTFul web service that offers this sensor event information.
 
-\begin{itemize}
-	\item SENSE-SATION Christian Winkler
-\end{itemize}
+Jaroensutasinee used Pachube, later renamed to COSM, as cloud sensor platform in the paper of the CREON group. They collected these outputs, decide if this event may has a global  and delivered them to other services like 'Twitter' or for monitoring \cite{jaroensutasineecreon}.
+This project is important because it is very similar to our project challenges.
+They also using a sensor platform to aggregate data, interpreting them and make them usable notices for humans.
+
+The FINEST Project is about researching in the transport and logistic sector. As Metzger shown at the SRII conference they using the potential of the future internet development to improve logistic control systems. They describing the work with real-time data and describing the collaboration with could- and service-based platforms to solve this problems. \cite{metzger2012predictive}
+
 
 \section{Use Case}
 \label{sec:Use Case}
@@ -182,7 +189,7 @@ Through this chain of event-processing also the client receives the events trigg
 \section{Implementation}
 \label{sec:Implementation}
 
-\subsection{Project Boilerplate}
+\subsection{Environment}
 To mange our build process and the dependency management we used Apache Maven to handle this tasks. We provide our configuration via a xml file that defines all our  dependencies for example for the CEP components.
 So the build process is automated and can be started by a simple command under different environments like Windows, Unix or Mac OS X.
 To enable us to work distributed in our team we used the version control system git with a private repository at github as host
@@ -190,7 +197,7 @@ To enable us to work distributed in our team we used the version control system 
 that provides us this as service.
 
 Another advantage that is provided by a maven third party plugin that is named Apache Tomcat Maven Plugin
-\footnote{Tomcat Apache maven Plugin Link!!!!!!!!!!!!!!!!!!}.
+\footnote{http://tomcat.apache.org/maven-plugin.html}.
 It offers a command to bundle our whole project to an jar that starts all our services with one command and can be offered as single executable file for the jvm.
 Also it enables us to run our project on the fly directly from the build process without setting up an manually installed develop environment for every developer.
 
