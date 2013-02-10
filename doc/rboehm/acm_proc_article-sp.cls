@@ -158,6 +158,7 @@
 
 \skip\footins 8.1pt plus 4pt minus 2pt  % Space between last line of text and
                                         % top of first footnote.
+                                        
 \floatsep 11pt plus 2pt minus 2pt       % Space between adjacent floats moved
                                         % to top or bottom of text page.
 \textfloatsep 18pt plus 2pt minus 4pt   % Space between main text and floats
@@ -467,7 +468,7 @@
     style}\@eha}
 
 \def\l@part#1#2{\addpenalty{\@secpenalty}
-   \addvspace{2.25em plus 1pt}  % space above part line
+   \addvspace{1.25em plus 1pt}  % space above part line
    \begingroup
    \@tempdima 3em       % width of box holding part number, used by
      \parindent \z@ \rightskip \@pnumwidth      %% \numberline
@@ -831,16 +832,8 @@
 %%% caption).
 %%%
 \newtoks\copyrightnotice
-\def\ftype@copyrightbox{8}
-\def\@copyrightspace{
-\@float{copyrightbox}[b]
-\begin{center}
-\setlength{\unitlength}{1pc}
-\begin{picture}(20,6) %Space for copyright notice
-\put(0,-0.95){\crnotice{\@toappear}}
-\end{picture}
-\end{center}
-\end@float}
+\def\ftype@copyrightbox{1}
+\def\@copyrightspace{}
 
 \def\@toappear{} % Default setting blank - commands below change this.
 \long\def\toappear#1{\def\@toappear{\parbox[b]{20pc}{\baselineskip 9pt#1}}}
