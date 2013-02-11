@@ -84,11 +84,14 @@ Robin B\"ohm\\
 
 \maketitle
 \begin{abstract}
-In this user study we challenge the problems that occurs in the logistic sector in combination with the transport process of perishable goods.
+In this case study we challenge the problems that occur in the logistic sector in combination with the transport process of perishable goods.
 It treats the problems about providing, receiving and processing information in real-time to improve the reaction time issues.
 
-We developed a prototype architecture for an event-driven cockpit with the ideas of the Future Internet(FI). It is about monitoring our business case of transporting perishable goods in the logistic domain with concepts of Internet of Things (IoT). 
-It uses a service platform that provides sensor event data for things in the real-wold that are provided via the websocket protocol - this platform based on the 
+We developed a prototype architecture for an event-driven cockpit with the ideas using concepts from the future internet(FI) domain. It is about monitoring our business case of transporting perishable goods in the logistic domain with concepts of Internet of Things (IoT). 
+
+A use case from the logistic domain is used to demonstrate the potential behind FI and cockpits. The use case deals with the delivery of perishable goods.
+It uses a service platform named COSM that provides sensor event data for things in the real-wold that are provided via the defined protocol.
+We created an adapter that consumes these events as gateway for our event driven architecture(EDA).
 These events are aggregated and interpreted by an Complex Event Engine(CEP) and visualized via an cockpit in a web-browser.
 Through the chosen architecture the latency between the actual business event and the visualization is nearly real-time and gives an additional benefit to the existing solutions.
 \end{abstract}
@@ -96,25 +99,29 @@ Through the chosen architecture the latency between the actual business event an
 
 \section{Introduction}
 The transport of perishable goods in the logistic sector is a challenging task. It deals with a huge amount of data and real-time data processing.
-The current development of some state-of-the-art \textbf{Future Internet} technologies shows a great potential to improve this business processes.
+The whole logistic network is a complex interaction of different teams, processes and companies.
+There are continuous changes of orders, problems with the transport routes, failures of machines or many other things that effect the process.
+There are so many in-transparent processes and data that has to be aggregated and evaluated to reorganize the plan.
+Like Hackathorn says in his article about the term 'real-time', the time from the actual event to the reaction defines the real value of this data\cite{Hackathorn:real_time_to_real_value}.
 
-The chosen use-case is a business process management in the logistic sector that handles  perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events and increase the value of this information as shown by Hackathorn\cite{hackathron:real_time_to_real_value}.
+The chosen use-case is a business process management in the logistic sector that handles  perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events as shown by Hackathorn\cite{Hackathorn:real_time_to_real_value}.
 
-We are using the \textbf{Internet of Things} and \textbf{Internet of Services} concepts to linking the real-world with our business world. So we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations and combine them to more valuable complex events. 
+We are using the concepts from \textbf{Internet of Things} and \textbf{Internet of Services} domain to linking the real-world with our business world. Therefor we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations in comparison to current systems at the logistic networks and combine them to more valuable complex events.
 Figure \ref{fig:Project overview} show the overview about the the project with the Future Internet concepts in a very general way. 
 
 \begin{figure}[h]
 	\begin{center}
 		\includegraphics[scale=0.5]{overview.png}
-		\caption[Project overview]{Project overview}
-		\label{fig:Project overview}
+		\caption[Conceptual overview]{Conceptual overview}
+		\label{fig:Conceptual overview}
 	\end{center}
 \end{figure}
 
 
-To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events.
+To handle the messaging inside of our prototype we decided to use an Event-driven-Architecture(EDA) in combination with an Complex-Event-Processing(CEP) Engine to defining the rules for our complex events. We choose this architecture to reduce the time between the actual event and the business event that is shown in the frontend visualization to update these in real-time as reaction on an sensor change.
 
-We are providing a cockpit for monitoring the business model with some useful visualizations.This cockpit is implemented with modern web technologies so it is usable on many devices out of the box over the specifications. It contains a map that shows the current state of given routes with an rating calculated on the raw events. Also a table that offers information in more textual way.
+We are providing a cockpit for monitoring the business model with some useful visualizations.
+This cockpit is implemented with modern web technologies so it is usable on many devices out of the box.
 
 This paper starts with an introduction about the basics in section \ref{sec:Basics}.
 After a survey of related work in Section \ref{sec:Related Work}. 
@@ -129,22 +136,28 @@ One of the most interesting ideas is defined by the \textbf{Internet-of-Things} 
 \begin{quote}
 If we had computers that knew everything there was to know about things - using data they gathered without any help from us - we would be able to track and count everything, and greatly reduce waste, loss and cost. We would know when things needed replacing, repairing or recalling, and whether they were fresh or past their best. \cite{iot_thing:Ashton}
 \end{quote}
-So IoT can described as global sensor network of object and things that providing information about their current state. This is a big deal for informational processing and could be used in very different ways, for example to improve business processes.
-There is another concept of FI that could enables us to use all this information that is called \textbf{Internet of Services}. This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
+So IoT can described as global sensor network of object and things that provides information about their current state. This is a big deal for informational processing and could be used in very different ways, for example to improve business processes.
+There is another concept of FI that could enables us to use all this information in real-time without any self hosted infrastructure that is called \textbf{Internet of Services}. 
+This is a concept that describes next-generation services that are world-wide available and could be used. They are highly adaptive and can be integrated in own services \cite{future_Internet:shenker}.
+The usage of these services is estimated in most cases by actual use - so you only pay what you use. Most services using the most common web technologies so they can easily communicate with each other or can be replaced by another server that does a similar job to maybe a better price or better quality.
+
 A service platform that is named COSM and described itself as `Internet of Things Platform' on the website\footnote{http://www.cosm.com} is implementing this kind of idea. This platform enables developers and companies to connect devices and exchange data over an defined API that use the websocket protocol.
 It acts as gateway between the connected sensor devices and the consumer that using this information via the api. 
 
-To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly real-time changes in business conditions.\cite{EDA:Taylor}
+To handle this high amount of realt-time data in information systems is likely to use an \textbf{event-driven-architecture} (EDA). An EDA is defined as one that has the ability to detect events and react intelligently on them. Also its designed to handle real-time or nearly-real-time data changes.\cite{EDA:Taylor}
 
-To add some more more meaningful value for some special business case \textbf{Complex Event Processing}(CEP) can be used. CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined for detecting the occurrence of events in a defined time interval.
+The core of such a system is often a \textbf{Complex Event Processing}(CEP) Engine.
+CEP is a method that tracks and analyses events and combine them to more valuable complex events. A complex event can be defined through rules and combined, integrate or aggregate other events. Also temporal rules can be defined for detecting the occurrence of events in a defined time interval.
 
 \section{Related Work}
 \label{sec:Related Work}
 
-The term Internet of Things exists in the Context of Future Internet now about ten years. 
-So many papers where published that deals with this topic.
-A good introduction into the Internet of Things Vision is given by Vermesan in his research roadmap. At the beginning he describe the Future Internet version with all the paradigms that exists in this category\cite{vermesan2009internet}. Later he focus on the Internet of Things paradigm and explain some current developments and mentioned about technological trends.
-He also talks about the current analyses of a European Commission estimate that it would be 16 billion connected IoT devices in the year 2020\cite{sundmaeker2010vision}.
+The term Internet of Things exists in the Context of Future Internet has been used for ten years by now.Many papers where published that deals with this topic.
+A good introduction into the Internet of Things is given by Vermesan in his research roadmap. At the beginning he describe the Future Internet version with all the paradigms that exists in this category\cite{vermesan2009internet}. Later he focus on the Internet of Things paradigm and explain some current developments and mentioned about technological trends.
+He also talks about the current analyses of a European Commission estimate that it would be 16 billion connected IoT devices in the year 2020.
+In his Strategic Research Roadmap he explain the IoT as vesion to connect anything with anyone at anytime, at any place with any service via any network.
+A estimation he mentioned in his paper is that the share of Internet-connectable consumer household devices will be more and more dominated by control systems like entertainment or air condition systems.
+Standards like the wireless communication technologies(like RFID or GSM) are the key enablers for the success.\cite{sundmaeker2010vision} 
 
 In the article from Luigi Atzori he wrote a survey about enabling technologies in telecommunications, informatics and electronics. He talks about the important development of the last years like Radio-Frequency IDentification tags or mobile phones with enable us to generate unique addressing schemes for things or objects that enable us to interact and cooperate with this things\cite{atzori2010internet}.
 C.Winkler from the University Duisburg Essen in Germany developed a sensor network via smartphone sensors that providing data\cite{sense-sation_winkler}.
@@ -155,25 +168,31 @@ Jaroensutasinee used Pachube, later renamed to COSM, as cloud sensor platform in
 This project is important because it is very similar to our project challenges.
 They also using a sensor platform to aggregate data, interpreting them and make them usable notices for humans.
 
-The FINEST Project is about researching in the transport and logistic sector. As Metzger shown at the SRII conference they using the potential of the future internet development to improve logistic control systems. They describing the work with real-time data and describing the collaboration with could- and service-based platforms to solve this problems. \cite{metzger2012predictive}
+The FINEST Project is about researching in the transport and logistic sector. As Metzger shown at the SRII conference they using the potential of the future internet development to improve logistic control systems. They describing the work with real-time data and describing the collaboration with cloud- and service-based platforms to solve this problems. \cite{metzger2012predictive}
 
+All this projects show that the relevance in a variety of research domains. Especially the research of FINEST in the logistic domain has great potential for using this FI concepts to optimize their processes. System and concepts in the related projects could be combined to create an additional value in this domain.
 
 \section{Use Case}
 \label{sec:Use Case}
+To set up our case study we need a realistic use case in the logistic domain. It should be contain time-critical process to show the key benefits of a real-time end to end monitoring system. Such a system need a physically highly distributed information network that offers sensor data for relevant objects of the process.
+To handle this big amount of data we need a complex processing engine that automated analyses and aggregates the information. 
 
-Basically our use case is about managing the delivery of perishable goods. This is a high risk business process in the logistic domain. If some goods arriving late or there are some problems with the cooling system it is necessary to get the information of the real-world state as quick as possible to do a trade-off what could be the best action to reduce risk or costs.
+So our use case of the logistic domain is basically about managing the delivery of perishable goods. This is a high risk business process in the logistic domain. If some goods arriving late or there are some problems with the cooling system it is necessary to get the information of the real-world state as quick as possible to do a trade-off what could be the best action to reduce risk or costs.
 
-Our use case comprises the planing and alternatives in escalation situations of the delivery of these perishable goods via trucks over a defined route. These trucks are equipped with sensors that provides us the monitoring data that is used for automated real-time aggregation and interpretation and share the results in a cockpit application like it is described in the Internet-of-Things(IoT) concept. 
+Our use case comprises the planing and alternatives in escalation situations of the delivery of these perishable goods via trucks over a defined route. These trucks are equipped with sensors that provides us the monitoring data that is used for automated real-time aggregation and interpretation and share the results in a cockpit application.
+This application visualizes a big amount of data of distributed objects that are equipped with sensors that providing information about their state, like it is described in the Internet-of-Things(IoT) concept. 
 Also the routes are equipped with sensors that enables us to monitor them.
 The overview in such a business monitoring tool is modeled a cockpit with summary of meaningful information that should support the decision. 
+The cockpit should be available via different devices like on the computer or on smart-phone to enable the use of the cockpit in a static cockpit or a mobile device.
 
-The cockpit provides an ampel-system with the colors green, yellow and red that visualizing the current state of the routes and trucks depending on defined threshold.
-Also the prototype is using complex threshold for combinations of singular states of a route or a truck that currently on this route that are also visualized in a map.
-The cockpit should be available via different devices like on the computer or on smart-phone.
+%The cockpit provides an ampel-system with the colors green, yellow and red that visualizing the current state of the routes and trucks depending on defined threshold.
+%Also the prototype is using complex threshold for combinations of singular states of a route or a truck that currently on this route that are also visualized in a map.
+
+
 %Actuality of the information is one of the most valuable criterion
 \section{Conceptional Design}
 \label{sec:Conceptional Design}
-
+The prototype can be split into two main layers. The front-end layer that contains the visualization and the back-end layer that contains the data-storage and the processing of these data.
 As basic architectural design we are choosing an event-driven-architecture(EDA).
 An EDA is loosely coupled and can be used for distribution and scalability of software components. Because every component could have multiple listeners for his own events or act as sender for multiple other components.
 For our prototype we build service components that are loosed coupled and communicating only via events.
@@ -214,7 +233,8 @@ It offers a command to bundle our whole project to an jar that starts all our se
 Also it enables us to run our project on the fly directly from the build process without setting up an manually installed develop environment for every developer.
 
 \subsection{Technology}
-As runtime environment for our backend we used oracles's JavaEE implementation and as programming language Java 6. As basic application server the Apache Tomcat 7 \footnote{http://tomcat.apache.org} that provides a HTTP Server and the Servlet API 3.1 that enables the websocket support for servlets that is used to communicate with the external COSM Websocket API\cite{cosm}.
+As runtime environment for our processing backend we used oracles's JavaEE implementation and as programming language Java 6. As basic application server the Apache Tomcat 7 \footnote{http://tomcat.apache.org} that provides a HTTP Server and the Servlet API 3.1 that enables the websocket support for servlets that is used to communicate with the external COSM Websocket API
+\footnote{https://cosm.com/}
 
 The websocket protocol is an http upgrade protocol that enables a two-way communication between a client and a remote host
 \footnote{Offical Websocket RFC, http://tools.ietf.org/html/rfc6455}. It was developed to provide a mechanism for browser-based applications that need this kind of communication wihout relying on multiple HTTP connections e.g. long polling. 
@@ -224,7 +244,7 @@ For the complex event processing engine we choose the esper engine\cite{esper}
 %Esper is provided under the open source GPL GNU License, that mean you have to have to distribute your project also as open source project if you want to use this. An alternative is Siddhi\cite{siddhi} that is published under the Apache Software License v2.0.}.
 It provides a high-speed event processing that offers an Domain Specific Language (DSL) that enables us to easily define rules in the Event Processing Language (EPL).
 
-To create the view frontend we using modern webbrowser technologies like HTML5\cite{html5} and ECMA 5.1 better known as JavaScript \cite{ecma}.
+To create the view layer we using modern webbrowser technologies like HTML5 and ECMA 5.1 better known as JavaScript.
 
 \begin{figure}[h]
 	\begin{center}
@@ -237,6 +257,10 @@ To create the view frontend we using modern webbrowser technologies like HTML5\c
 \subsection{The COSM Adapter}
 COSM is a online database that offers sensor-data from devices that tracks environment data from objects. It provides an API that allow to push and receive data.
 This data is organized in feeds that is specified as a context-specific collection of measurement data - defined by the creator. This feed contains a set of datastreams, each of this represents an individual sensor. Every datastream must have a unique alphanumeric number. It also can define some user-defined tags.
+
+To connect to this service we need an adapter that transform the event stream of the COSM API to our internal processing model. As component of an EDA it consumes the event data objects from COSM in JSON
+\footnote{JSON - JavaScript Object Notation. Open standard for human readable data interchange.} format and transforms it into a plain java object encapsulated in an event object.
+This event-object can be used by all registered listeners to do further actions.
 
 The COSM API currently based in HTTP requests. It conforms with the principles of RESTful . So you are able to use the HTTP verbs to determine a action on a data-object.
 GET Retrieves the current state of the object,
@@ -280,7 +304,7 @@ Also it is possible to refill this created events back into the engine to use th
 The ampel system  for a complete route defined in section \ref{sec:Use Case} depends on different events combinations that containing self-defined events.
 So we are free to define a arbitrary level of complex events.
 
-\newpage 
+
 \subsection{UI Front-End}
 Our front-end, also known as cockpit in this paper, is implemented with state-of-the art browser-based web technologies.
 It receives the model via a websocket api that is provided by the cockpit-service.
@@ -292,22 +316,22 @@ As this views are updated in real-time the operator has the possibilities to rea
 The inner architecture contains an controller that act as dispatcher for incoming events and routes them to the different views. With this architecture it is easy to add more view representations for the backend model without changing any code on the server or disable/enable some view components.
 		
 \section{Learning Outcome}
-During this project we learned a lot about the future-internet thoughts and the state-of-the-art technologies that are used to realize this ideas.
+During this project i learned a lot about the future-internet thoughts and the state-of-the-art technologies that are used to realize this ideas.
 Due my work beside the university projects i already used some of the technologies where i am developing an monitoring system that also deals with events and visualization of data.
 
-We learned a lot about some future-internet concepts like Internet of Things and Internet of Services and how they used in real world projects. That open us some new views on projects and problems that are currently growing. For many domains this concepts could bring a great benefit for their business cases.
+I learned a lot about future-internet concepts like Internet of Things and Internet of Services and how they used in real world projects. That open us some new views on projects and problems that are currently growing. For many domains this concepts could bring a great benefit for their business cases.
 
-The usage of a Complex-Event-Processing-Engine to deal with business events was a really interesting experience that offers new useful possibilities for other projects i am currently working at. It needs other strategies and approaches to solve this like the definition of an domain specific language for the rules that are defined in these engines.
+The usage of a Complex-Event-Processing-Engine to deal with business events was a really interesting experience that offers new useful possibilities for other projects i am currently working at. It uses other strategies and approaches to solve event processing like the definition of an domain specific language for the rules that are defined in these engines.
 The usage of an event driven architecture was a good step to use the benefits of every component that deals with real-time events. Also it enabled us to work complete distributed by defining decoupled components. This was a great experience for then whole team because it reduces the effort of many merges and refactoring iterations.
 
 Especially the usage of the websocket protocol with an external api showed me the power but also the problem of these kind of communication protocol. When using the websocket  to communicate you need to define an own inner protocol to handle the messages. 
 That could be a wrapped HTTP frame like it is done by COSM or a complete self-designed specification.
 
-In Regular meetings we where able to combine our skills and helped each other through code reviews and analyses of commits. In this point we learned that the usage of a version control system needs some rules that should be clear for all team members. For example a commit should represent a small single task and is tagged with a meaningful commit message that every other team mate could work with this information. The team should define what is a small task and a meaningful commit for this project.
+In Regular meetings we where able to combine our skills and helped each other through code reviews and analyses of commits. In this point i learned that the usage of a version control system needs some rules that should be clear for all team members. For example a commit should represent a small single task and is tagged with a meaningful commit message that every other team mate could work with this information. The team should define what is a small task and a meaningful commit for this project.
 
 The usage of maven as build management tool was a great choice. After a initial phase of configuration that took a few hours, every teammate could build, pack and start the system per one command at their own development environments. Even our executable package for the appendix is created by one simple command. Including an configured Tomcat with our webapp deployed in it.
 
-Also we learned a lot by working on the front-end design with HTML5 and Javascript.
+Also i learned a lot by working on the front-end design with HTML5 and Javascript.
 The usage of javascript what is an functional programming language affords a switch in thinking about problems and how to solve them in a elegant way.
 For our project this functional approach was a perfect match to our event driven architecture what enabled us very quick to handle this.
 Another great experience was the multi-device support. we tested our application on a normal web-browser and a iPad 3 - it works perfect in both cases.
@@ -315,12 +339,14 @@ Another great experience was the multi-device support. we tested our application
 \section{Conclusion}
 \label{sec:Conclusion}
 This case study shows that the concepts of the future internet and especially the Internet of Thing concept could be used to solve some problems that occurs in the logistic sector.
-This prototype shows the possibilities of such an architecture and technology stack and can be used in various domains with a similar problem. 
+This prototype introduces a conceptual and technical architecture and can be used in various domains with a similar problem. 
 We using a sensor network that provides real-time data that is aggregated by COSM Service. This service also provides a websocket api that enables us to get this data in realtime for processing in our application. Inside our application we using the a CEP Engine to combine events an create more meaningful complex events that are used to update our business model. Finally we build a front-end application cockpit that visualizes  this business model.
 All these components are build with in an event-driven-architecture that enables us to transport this events in real-time.
 
 There are a lot possibilities to extend and optimize this prototype. We could connect other IoT Platforms to improve the sensor-data input. Also defining more business events for our CEP engine that helps to identify complex event combinations. These could be used for new visualization elements that could be added into the frontend layer.
 With our chosen decoupled architecture this extensions would be easy to add into the existing system.
+
+
 
 We think that this project has successfully shown that this kind of architecture is a benefit for applications with informational real-time challenges. This first prototype worked very good in our tests. The composition of technologies fits very good together and make it easy to extend for commercial usage. Using HTML5 as technology for the frontend could enable companies to use one implementation for many devices. 
 With this prototype as blueprint it is possible to create an valuable software for this kind of domains with related challenges.
