@@ -107,7 +107,7 @@ Like Hackathorn says in his article about the term 'real-time', the time from th
 The chosen use-case is a business process management in the logistic sector that handles  perishable goods. To manage this task it is necessary to manage trucks, routes and have an overview about the current state of the deliveries. We focused on the task of reducing the latency between the actual business event and the delivery of the information to improve the possibility to react quickly to this events as shown by Hackathorn\cite{Hackathorn:real_time_to_real_value}.
 
 We are using the concepts from \textbf{Internet of Things} and \textbf{Internet of Services} domain to linking the real-world with our business world. Therefor we are able to use real-time sensor events to create our virtual model. We are able increase the amount and quality of event-data that can be used for calculations in comparison to current systems at the logistic networks and combine them to more valuable complex events.
-Figure \ref{fig:Project overview} show the overview about the the project with the Future Internet concepts in a very general way. 
+Figure \ref{fig:Conceptual overview} show the overview about the the project with the Future Internet concepts in a very general way. 
 
 \begin{figure}[h]
 	\begin{center}
@@ -202,13 +202,13 @@ Once the component is registered to the service-api, it receives an event via pu
 When the event message is arrived via the socket it get parsed and transformed into the internal event structure and directly send to the components that are listening.
 A registered listener in our system for this COSM-Component Events is the Complex-Event-Processing(CEP) component.
 
-\begin{figure}[h]
-	\begin{center}
-		\includegraphics[scale=0.5]{Component-Overview.png}
-		\caption[Component Overview]{Component Overview}
-		\label{fig:AngiogeneticSwitch}
-	\end{center}
-\end{figure}
+%\begin{figure}[h]
+%	\begin{center}
+%		\includegraphics[scale=0.5]{Component-Overview.png}
+%		\caption[Component Overview]{Component Overview}
+%		\label{fig:AngiogeneticSwitch}
+%	\end{center}
+%\end{figure}
 
 This component is a processing unit that is programmed with rules that results again in events. This rules are designed for the special use case of our cockpit. It forms one or many events in a temporal context to complex events that also can be the source for new rules. It is a detection for events that could be a derivation for complex events and so we adding new more valuable events than the simple events could do.
 This (complex) events are used by the third component that registered as listener.
@@ -239,7 +239,7 @@ As runtime environment for our processing backend we used oracles's JavaEE imple
 The websocket protocol is an http upgrade protocol that enables a two-way communication between a client and a remote host
 \footnote{Offical Websocket RFC, http://tools.ietf.org/html/rfc6455}. It was developed to provide a mechanism for browser-based applications that need this kind of communication wihout relying on multiple HTTP connections e.g. long polling. 
 
-For the complex event processing engine we choose the esper engine\cite{esper}
+For the complex event processing engine we choose the esper engine
 %\footnote{
 %Esper is provided under the open source GPL GNU License, that mean you have to have to distribute your project also as open source project if you want to use this. An alternative is Siddhi\cite{siddhi} that is published under the Apache Software License v2.0.}.
 It provides a high-speed event processing that offers an Domain Specific Language (DSL) that enables us to easily define rules in the Event Processing Language (EPL).
@@ -346,9 +346,9 @@ All these components are build with in an event-driven-architecture that enables
 There are a lot possibilities to extend and optimize this prototype. We could connect other IoT Platforms to improve the sensor-data input. Also defining more business events for our CEP engine that helps to identify complex event combinations. These could be used for new visualization elements that could be added into the frontend layer.
 With our chosen decoupled architecture this extensions would be easy to add into the existing system.
 
+The used technologies could improve the processing time of current business processes in the logistic domain. The Internet of Things paradigm could be a big benefit for the analyses and real-time tracking of such systems. A cockpit as a front end metaphor is a good way to interact with the system in a quite natural way. It could be used as basic board where you can plug virtual devices to extend or customize the view your needs.
 
-
-We think that this project has successfully shown that this kind of architecture is a benefit for applications with informational real-time challenges. This first prototype worked very good in our tests. The composition of technologies fits very good together and make it easy to extend for commercial usage. Using HTML5 as technology for the frontend could enable companies to use one implementation for many devices. 
+We think that this project has successfully shown that this kind of architecture is a benefit for applications with informational real-time challenges. This first prototype worked very good in our tests. The composition of technologies fits very good together and make it easy to extend for commercial usage. Using web-technologies like HTML5 for the view-layer could enable companies to use one implementation for many devices. 
 With this prototype as blueprint it is possible to create an valuable software for this kind of domains with related challenges.
 
 %\end{document}  % This is where a 'short' article might terminate
